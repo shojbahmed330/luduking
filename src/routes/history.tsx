@@ -221,29 +221,25 @@ function HistoryPage() {
             </div>
           ) : (
             filteredMatches.map(match => (
-              <div key={match.id} className="rounded-3xl bg-white p-5 shadow-sm border-2 border-muted group relative">
+              <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground font-bold text-sm">
-                    <Calendar className="h-4 w-4" />
-                    {format(parseISO(match.match_date), "PPP")}
+                  <div className="flex items-center gap-2 text-muted-foreground font-black text-xs uppercase tracking-widest">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {format(parseISO(match.match_date), "MMM d, yyyy")}
                   </div>
                   <div className="flex gap-1">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 rounded-full text-ludu-blue hover:bg-ludu-blue/10"
+                    <button 
+                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
                       onClick={() => navigate({ to: "/add-match", search: { editId: match.id } })}
                     >
                       <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 rounded-full text-ludu-red hover:bg-ludu-red/10"
+                    </button>
+                    <button 
+                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-red/5 text-ludu-red active-scale border border-ludu-red/10"
                       onClick={() => setDeleteConfirm({ type: "matches", id: match.id })}
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </div>
                 </div>
                 
