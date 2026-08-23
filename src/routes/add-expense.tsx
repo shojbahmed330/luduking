@@ -131,81 +131,87 @@ function AddExpense() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="flex flex-col gap-6 pb-24"
     >
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate({ to: editId ? "/history" : "/" })}
-          className="rounded-full bg-white p-2 shadow-sm border text-muted-foreground"
+          className="rounded-full bg-white p-2.5 shadow-sm border-2 border-muted active-scale text-muted-foreground"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-extrabold text-foreground">{editId ? "Edit Expense" : "Add Expense"}</h1>
+        <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2">
+          <Coffee className="h-6 w-6 text-ludu-red" />
+          {editId ? "Edit Expense" : "Add Expense"}
+        </h1>
       </div>
 
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-muted-foreground flex items-center gap-2">
-            <Calendar className="h-4 w-4" /> Expense Date
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
+            <Calendar className="h-3.5 w-3.5" /> Expense Date
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-lg font-bold outline-none focus:border-ludu-blue transition-colors"
+            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-lg font-black outline-none focus:border-ludu-red transition-colors shadow-sm"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-muted-foreground">
-            Amount Spent (Taka)
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-1">
+            Amount Spent (৳)
           </label>
-          <input
-            type="number"
-            inputMode="numeric"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="e.g. 50"
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-2xl font-black text-ludu-red outline-none focus:border-ludu-red transition-colors"
-            required
-            min="1"
-            step="1"
-          />
+          <div className="relative">
+            <input
+              type="number"
+              inputMode="numeric"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0"
+              className="w-full rounded-2xl border-2 border-muted bg-white p-4 pl-12 text-3xl font-black text-ludu-red outline-none focus:border-ludu-red transition-colors shadow-sm"
+              required
+              min="1"
+              step="1"
+            />
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-black text-muted-foreground/30">৳</span>
+          </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-muted-foreground">
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-1">
             Note (optional)
           </label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="biscuits and tea for evening session"
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-base font-medium outline-none focus:border-ludu-gold transition-colors resize-none h-24"
+            placeholder="e.g. Biscuits and tea for evening session"
+            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-base font-bold outline-none focus:border-ludu-gold transition-colors resize-none h-28 shadow-sm"
           />
         </div>
 
-        <div className="rounded-3xl bg-white p-6 shadow-sm border-2 border-muted space-y-4">
+        <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-muted-foreground">Current Fund Balance</span>
+            <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Balance Now</span>
             <span className="text-lg font-black text-foreground">
-              {currentBalance !== null ? `${currentBalance} Taka` : "Loading..."}
+              {currentBalance !== null ? `${currentBalance} ৳` : "..."}
             </span>
           </div>
           
           <div className="flex justify-between items-center pt-2 border-t border-dashed">
-            <span className="text-sm font-bold text-muted-foreground">After this expense</span>
+            <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">After Expense</span>
             <span className={cn(
               "text-xl font-black transition-colors",
               isNegative ? "text-ludu-red" : "text-ludu-green"
             )}>
-              {afterBalance !== null ? `${afterBalance} Taka` : "—"}
+              {afterBalance !== null ? `${afterBalance} ৳` : "—"}
             </span>
           </div>
 

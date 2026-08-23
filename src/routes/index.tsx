@@ -13,13 +13,16 @@ import {
   Star,
   Frown,
   PlusCircle,
-  LayoutDashboard
+  LayoutDashboard,
+  ChevronDown,
+  Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/ludu/StatCard";
 import { PositionBadge } from "@/components/ludu/PositionBadge";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
+import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -148,12 +151,13 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-8 animate-pulse">
-        <div className="h-16 w-full bg-muted rounded-2xl" />
-        <div className="grid grid-cols-2 gap-4">
-          <div className="h-32 bg-muted rounded-3xl" />
-          <div className="h-32 bg-muted rounded-3xl" />
-          <div className="h-32 col-span-2 bg-muted rounded-3xl" />
+      <div className="flex flex-col gap-6 animate-pulse pt-2">
+        <div className="h-14 w-full bg-muted/40 rounded-2xl" />
+        <div className="h-28 w-full bg-muted/40 rounded-3xl" />
+        <div className="h-12 w-full bg-muted/20 rounded-2xl mt-4" />
+        <div className="grid grid-cols-2 gap-4 mt-2">
+          <div className="h-28 bg-muted/30 rounded-3xl" />
+          <div className="h-28 bg-muted/30 rounded-3xl" />
         </div>
       </div>
     );
@@ -169,19 +173,47 @@ function Dashboard() {
       {/* Fixed Top Section */}
       <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-30">
         <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2 px-1">
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
             <Calendar className="h-3 w-3" /> Select Period
           </label>
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className="w-full rounded-2xl border-2 border-muted bg-white px-4 py-3 text-base font-black outline-none focus:border-ludu-gold transition-colors appearance-none shadow-sm"
+          <BottomDrawer
+            title="Choose Period"
+            description="Filter dashboard data by month or view all history."
+            trigger={
+              <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-5 py-3.5 text-base font-black active-scale shadow-sm text-left">
+                <span className="flex items-center gap-2">
+                  {selectedMonth === "All-Time" ? "All-Time History" : selectedMonth}
+                </span>
+                <ChevronDown className="h-5 w-5 text-muted-foreground" />
+              </button>
+            }
           >
-            <option value="All-Time">All-Time History</option>
-            {availableMonths.map(m => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </select>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => setSelectedMonth("All-Time")}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
+                  selectedMonth === "All-Time" ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                )}
+              >
+                All-Time History
+                {selectedMonth === "All-Time" && <Check className="h-5 w-5" />}
+              </button>
+              {availableMonths.map(m => (
+                <button
+                  key={m}
+                  onClick={() => setSelectedMonth(m)}
+                  className={cn(
+                    "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
+                    selectedMonth === m ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                  )}
+                >
+                  {m}
+                  {selectedMonth === m && <Check className="h-5 w-5" />}
+                </button>
+              ))}
+            </div>
+          </BottomDrawer>
         </div>
 
         <StatCard 

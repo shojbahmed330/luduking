@@ -27,7 +27,7 @@ export function PlayerAvatar({ name, className, size = "md" }: PlayerAvatarProps
   const bgColor = bgColors[charCode % bgColors.length];
 
   return (
-    <Avatar className={cn(sizeClasses[size], "border-2 border-white shadow-sm", className)}>
+    <Avatar className={cn(sizeClasses[size], "border-2 border-white card-shadow", className)}>
       <AvatarFallback className={cn("text-white font-black", bgColor)}>
         {initial}
       </AvatarFallback>

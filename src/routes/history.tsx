@@ -9,11 +9,14 @@ import {
   Trash2, 
   Dice5, 
   Coffee,
-  ChevronRight
+  ChevronRight,
+  ChevronDown,
+  Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PositionBadge, type Position } from "@/components/ludu/PositionBadge";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
+import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { 
   Dialog, 
   DialogContent, 
@@ -111,12 +114,12 @@ function HistoryPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-6 animate-pulse">
-        <div className="h-8 w-32 bg-muted rounded-lg" />
-        <div className="h-12 w-full bg-muted rounded-2xl" />
-        <div className="h-10 w-full bg-muted rounded-2xl" />
+      <div className="flex flex-col gap-6 p-4">
+        <div className="h-8 w-32 bg-muted/40 animate-pulse rounded-lg" />
+        <div className="h-14 w-full bg-muted/40 animate-pulse rounded-2xl" />
+        <div className="h-12 w-full bg-muted/40 animate-pulse rounded-2xl" />
         {[1, 2, 3].map(i => (
-          <div key={i} className="h-32 w-full bg-muted rounded-3xl" />
+          <div key={i} className="h-40 w-full bg-muted/40 animate-pulse rounded-3xl" />
         ))}
       </div>
     );
@@ -124,23 +127,24 @@ function HistoryPage() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="flex flex-col gap-6 pb-24"
     >
       <div className="flex items-center gap-2 px-1">
-        <HistoryIcon className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-black text-foreground">History</h1>
+        <HistoryIcon className="h-6 w-6 text-ludu-blue" />
+        <h1 className="text-2xl font-black text-foreground tracking-tight">Match History</h1>
       </div>
 
       {/* Tabs */}
-      <div className="flex p-1 bg-muted rounded-2xl">
+      <div className="flex p-1 bg-muted/40 rounded-2xl">
         <button
           onClick={() => setActiveTab("matches")}
           className={cn(
-            "flex-1 py-3 rounded-xl font-bold text-sm transition-all",
-            activeTab === "matches" ? "bg-white shadow-sm text-primary" : "text-muted-foreground"
+            "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
+            activeTab === "matches" ? "bg-white shadow-sm text-ludu-gold ring-1 ring-black/5" : "text-muted-foreground/60"
           )}
         >
           Matches
@@ -148,8 +152,8 @@ function HistoryPage() {
         <button
           onClick={() => setActiveTab("expenses")}
           className={cn(
-            "flex-1 py-3 rounded-xl font-bold text-sm transition-all",
-            activeTab === "expenses" ? "bg-white shadow-sm text-primary" : "text-muted-foreground"
+            "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
+            activeTab === "expenses" ? "bg-white shadow-sm text-ludu-red ring-1 ring-black/5" : "text-muted-foreground/60"
           )}
         >
           Expenses
@@ -158,16 +162,45 @@ function HistoryPage() {
 
       {/* Month Selector */}
       <div className="flex flex-col gap-2">
-        <select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          className="w-full rounded-2xl border-2 border-muted bg-white p-3 text-sm font-bold outline-none focus:border-ludu-gold transition-colors appearance-none"
+        <BottomDrawer
+          title="Filter History"
+          description="View entries for a specific month or all history."
+          trigger={
+            <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-4 py-3 text-sm font-black active-scale shadow-sm">
+              <span className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                {selectedMonth === "All-Time" ? "All-Time History" : selectedMonth}
+              </span>
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </button>
+          }
         >
-          <option value="All-Time">All-Time History</option>
-          {availableMonths.map(m => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => setSelectedMonth("All-Time")}
+              className={cn(
+                "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
+                selectedMonth === "All-Time" ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+              )}
+            >
+              All-Time History
+              {selectedMonth === "All-Time" && <Check className="h-5 w-5" />}
+            </button>
+            {availableMonths.map(m => (
+              <button
+                key={m}
+                onClick={() => setSelectedMonth(m)}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
+                  selectedMonth === m ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                )}
+              >
+                {m}
+                {selectedMonth === m && <Check className="h-5 w-5" />}
+              </button>
+            ))}
+          </div>
+        </BottomDrawer>
       </div>
 
       {/* List Content */}
@@ -179,39 +212,34 @@ function HistoryPage() {
                 <Dice5 className="h-12 w-12 text-muted-foreground/30" />
               </div>
               <p className="text-muted-foreground font-bold">No matches logged yet — tap Add Match to get started! 🎲</p>
-              <Button 
-                variant="outline" 
-                className="mt-4 rounded-xl border-ludu-gold text-ludu-gold font-bold"
+              <button 
+                className="mt-6 w-full rounded-2xl bg-ludu-gold text-white font-black py-4 shadow-lg shadow-ludu-gold/20 active-scale"
                 onClick={() => navigate({ to: "/add-match" })}
               >
                 Add Match
-              </Button>
+              </button>
             </div>
           ) : (
             filteredMatches.map(match => (
-              <div key={match.id} className="rounded-3xl bg-white p-5 shadow-sm border-2 border-muted group relative">
+              <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground font-bold text-sm">
-                    <Calendar className="h-4 w-4" />
-                    {format(parseISO(match.match_date), "PPP")}
+                  <div className="flex items-center gap-2 text-muted-foreground font-black text-xs uppercase tracking-widest">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {format(parseISO(match.match_date), "MMM d, yyyy")}
                   </div>
                   <div className="flex gap-1">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 rounded-full text-ludu-blue hover:bg-ludu-blue/10"
+                    <button 
+                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
                       onClick={() => navigate({ to: "/add-match", search: { editId: match.id } })}
                     >
                       <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 rounded-full text-ludu-red hover:bg-ludu-red/10"
+                    </button>
+                    <button 
+                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-red/5 text-ludu-red active-scale border border-ludu-red/10"
                       onClick={() => setDeleteConfirm({ type: "matches", id: match.id })}
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </div>
                 </div>
                 
@@ -224,8 +252,8 @@ function HistoryPage() {
                       <PlayerAvatar name={result.players?.name || "Unknown"} size="sm" />
                       <span className="font-bold text-sm flex-1">{result.players?.name}</span>
                       {result.fine_amount > 0 && (
-                        <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2 py-0.5 rounded-full uppercase">
-                          {result.fine_amount} Taka
+                        <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                          {result.fine_amount} ৳
                         </span>
                       )}
                     </div>
@@ -241,49 +269,44 @@ function HistoryPage() {
                 <Coffee className="h-12 w-12 text-muted-foreground/30" />
               </div>
               <p className="text-muted-foreground font-bold">No expenses logged yet — tap Add Expense to get started! ☕</p>
-              <Button 
-                variant="outline" 
-                className="mt-4 rounded-xl border-ludu-red text-ludu-red font-bold"
+              <button 
+                className="mt-6 w-full rounded-2xl bg-ludu-red text-white font-black py-4 shadow-lg shadow-ludu-red/20 active-scale"
                 onClick={() => navigate({ to: "/add-expense" })}
               >
                 Add Expense
-              </Button>
+              </button>
             </div>
           ) : (
             filteredExpenses.map(expense => (
-              <div key={expense.id} className="rounded-3xl bg-white p-5 shadow-sm border-2 border-muted group relative">
+              <div key={expense.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
                 <div className="flex justify-between items-start">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-muted-foreground font-bold text-sm">
-                      <Calendar className="h-4 w-4" />
-                      {format(parseISO(expense.expense_date), "PPP")}
+                  <div className="space-y-2 flex-1">
+                    <div className="flex items-center gap-2 text-muted-foreground font-black text-xs uppercase tracking-widest">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {format(parseISO(expense.expense_date), "MMM d, yyyy")}
                     </div>
-                    <div className="text-2xl font-black text-ludu-red">
-                      {expense.amount} Taka
+                    <div className="text-3xl font-black text-ludu-red tracking-tight">
+                      {expense.amount} <span className="text-xl">৳</span>
                     </div>
                     {expense.note && (
-                      <p className="text-sm font-medium text-muted-foreground bg-muted/30 p-2 rounded-xl border-l-4 border-ludu-gold">
+                      <p className="text-sm font-bold text-muted-foreground/80 bg-muted/20 p-3 rounded-2xl border-l-4 border-ludu-gold leading-snug">
                         {expense.note}
                       </p>
                     )}
                   </div>
-                  <div className="flex gap-1">
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 rounded-full text-ludu-blue hover:bg-ludu-blue/10"
+                  <div className="flex gap-2 ml-2">
+                    <button 
+                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
                       onClick={() => navigate({ to: "/add-expense", search: { editId: expense.id } })}
                     >
                       <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-8 w-8 rounded-full text-ludu-red hover:bg-ludu-red/10"
+                    </button>
+                    <button 
+                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-red/5 text-ludu-red active-scale border border-ludu-red/10"
                       onClick={() => setDeleteConfirm({ type: "expenses", id: expense.id })}
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -302,22 +325,20 @@ function HistoryPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-row gap-3 mt-4">
-            <Button 
-              variant="outline" 
-              className="flex-1 rounded-xl py-6 font-bold"
+            <button 
+              className="flex-1 rounded-2xl py-4 font-black bg-muted/40 text-muted-foreground active-scale transition-colors"
               onClick={() => setDeleteConfirm(null)}
               disabled={isDeleting}
             >
               Cancel
-            </Button>
-            <Button 
-              variant="destructive" 
-              className="flex-1 rounded-xl py-6 font-bold"
+            </button>
+            <button 
+              className="flex-1 rounded-2xl py-4 font-black bg-ludu-red text-white shadow-lg shadow-ludu-red/20 active-scale transition-colors"
               onClick={handleDelete}
               disabled={isDeleting}
             >
               {isDeleting ? "Deleting..." : "Yes, Delete"}
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
