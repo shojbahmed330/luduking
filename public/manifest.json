@@ -1,0 +1,16 @@
+{
+  "name": "Ludu Hisab",
+  "short_name": "Ludu Hisab",
+  "description": "Shared score & expense tracker for Ludu friends.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F9F5",
+  "theme_color": "#F5B301",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

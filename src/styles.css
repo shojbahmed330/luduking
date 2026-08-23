@@ -84,7 +84,35 @@
   --ludu-red: #E14545;
   
   --font-baloo: "Baloo 2", cursive;
+
+  /* Safe Area Variables */
+  --sab: env(safe-area-inset-bottom);
+  --sat: env(safe-area-inset-top);
 }
+
+/* PWA Polish */
+html, body {
+  overscroll-behavior-y: none; /* Disable pull-to-refresh */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; /* Disable text selection by default */
+}
+
+input, textarea {
+  user-select: text; /* Re-enable for inputs */
+}
+
+/* Touch targets & feedback */
+button, [role="button"], a {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+.active-scale:active {
+  transform: scale(0.96);
+  transition: transform 0.1s ease;
+}
+
 
 .dark {
   --background: oklch(0.129 0.042 264.695);

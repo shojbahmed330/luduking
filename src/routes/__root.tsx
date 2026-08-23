@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { BottomNavBar } from "@/components/layout/BottomNavBar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -78,15 +79,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
+      { title: "Ludu Hisab" },
+      { name: "description", content: "Shared score & expense tracker for Ludu friends." },
+      { name: "author", content: "Ludu Friends" },
+      { name: "theme-color", content: "#F8F9F5" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { property: "og:title", content: "Ludu Hisab" },
+      { property: "og:description", content: "Shared score & expense tracker for Ludu friends." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -99,7 +103,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "manifest", href: "/manifest.json" },
     ],
   }),
   shellComponent: RootShell,
@@ -127,8 +132,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background pb-20">
-        <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md px-6 py-4">
+      <div className="flex min-h-screen flex-col bg-background pb-[calc(5rem+var(--sab))] pt-[var(--sat)]">
+        <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md px-6 py-4 pt-[calc(1rem+var(--sat))]">
           <div className="flex items-center gap-2">
             <span className="text-2xl" role="img" aria-label="dice">
               🎲
@@ -137,7 +142,9 @@ function RootComponent() {
           </div>
         </header>
         <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <Outlet />
+          </AnimatePresence>
         </main>
         <BottomNavBar />
       </div>

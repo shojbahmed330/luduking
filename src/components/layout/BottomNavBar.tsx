@@ -13,8 +13,8 @@ export function BottomNavBar() {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 z-50 w-full border-t bg-white/80 backdrop-blur-md pb-safe">
-      <div className="mx-auto flex h-16 max-w-md items-center justify-around px-2">
+    <nav className="fixed bottom-0 left-0 z-50 w-full border-t bg-white/80 backdrop-blur-md pb-[var(--sab)]">
+      <div className="mx-auto flex h-20 max-w-md items-center justify-around px-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.to;
           return (
@@ -22,7 +22,7 @@ export function BottomNavBar() {
               key={item.label}
               to={item.to}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 text-muted-foreground transition-colors hover:text-primary active:scale-90",
+                "flex flex-col items-center justify-center gap-1 text-muted-foreground transition-all hover:text-primary active:scale-90 min-w-[64px] min-h-[64px]",
                 isActive ? "text-primary" : ""
               )}
             >

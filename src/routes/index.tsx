@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
 import { 
   Trophy, 
@@ -145,11 +146,25 @@ function Dashboard() {
   }, [filteredData, periodStats]);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading Dashboard...</div>;
+    return (
+      <div className="flex flex-col gap-8 animate-pulse">
+        <div className="h-16 w-full bg-muted rounded-2xl" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="h-32 bg-muted rounded-3xl" />
+          <div className="h-32 bg-muted rounded-3xl" />
+          <div className="h-32 col-span-2 bg-muted rounded-3xl" />
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-8 pb-24 animate-in fade-in duration-500">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-8 pb-24"
+    >
       {/* Month Selector */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
@@ -333,6 +348,6 @@ function Dashboard() {
           </div>
         )}
       </section>
-    </div>
+    </motion.div>
   );
 }

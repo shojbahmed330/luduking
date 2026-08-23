@@ -190,12 +190,24 @@ function AddMatch() {
   };
 
   if (isLoadingEdit) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading Match...</div>;
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="h-8 w-48 bg-muted rounded-lg" />
+        <div className="h-2 w-full bg-muted rounded-full" />
+        <div className="h-64 w-full bg-muted rounded-3xl" />
+      </div>
+    );
   }
 
 
   return (
-    <div className="space-y-6 pb-10">
+    <motion.div 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-6 pb-10"
+    >
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-extrabold tracking-tight">Add Match</h2>
         <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/" })} className="text-muted-foreground">
@@ -435,6 +447,6 @@ function AddMatch() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

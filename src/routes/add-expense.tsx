@@ -115,7 +115,14 @@ function AddExpense() {
   };
 
   if (isLoadingEdit) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading Expense...</div>;
+    return (
+      <div className="flex flex-col gap-6 animate-pulse">
+        <div className="h-8 w-48 bg-muted rounded-lg" />
+        <div className="h-16 w-full bg-muted rounded-2xl" />
+        <div className="h-16 w-full bg-muted rounded-2xl" />
+        <div className="h-32 w-full bg-muted rounded-2xl" />
+      </div>
+    );
   }
 
   const amountVal = parseInt(amount) || 0;
@@ -123,7 +130,13 @@ function AddExpense() {
   const isNegative = afterBalance !== null && afterBalance < 0;
 
   return (
-    <div className="flex flex-col gap-6 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <motion.div 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-6 pb-24"
+    >
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate({ to: editId ? "/history" : "/" })}
@@ -219,6 +232,6 @@ function AddExpense() {
           {isSubmitting ? "Saving..." : "Save Expense ☕"}
         </PrimaryButton>
       </form>
-    </div>
+    </motion.div>
   );
 }

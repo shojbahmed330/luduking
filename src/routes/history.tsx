@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
 import { 
   History as HistoryIcon, 
@@ -109,11 +110,25 @@ function HistoryPage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading History...</div>;
+    return (
+      <div className="flex flex-col gap-6 animate-pulse">
+        <div className="h-8 w-32 bg-muted rounded-lg" />
+        <div className="h-12 w-full bg-muted rounded-2xl" />
+        <div className="h-10 w-full bg-muted rounded-2xl" />
+        {[1, 2, 3].map(i => (
+          <div key={i} className="h-32 w-full bg-muted rounded-3xl" />
+        ))}
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-24 animate-in fade-in duration-500">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-6 pb-24"
+    >
       <div className="flex items-center gap-2 px-1">
         <HistoryIcon className="h-6 w-6 text-primary" />
         <h1 className="text-2xl font-black text-foreground">History</h1>
@@ -306,6 +321,6 @@ function HistoryPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }
