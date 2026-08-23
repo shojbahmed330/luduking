@@ -114,12 +114,12 @@ function HistoryPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-6 animate-pulse">
-        <div className="h-8 w-32 bg-muted rounded-lg" />
-        <div className="h-12 w-full bg-muted rounded-2xl" />
-        <div className="h-10 w-full bg-muted rounded-2xl" />
+      <div className="flex flex-col gap-6 p-4">
+        <div className="h-8 w-32 bg-muted/40 animate-pulse rounded-lg" />
+        <div className="h-14 w-full bg-muted/40 animate-pulse rounded-2xl" />
+        <div className="h-12 w-full bg-muted/40 animate-pulse rounded-2xl" />
         {[1, 2, 3].map(i => (
-          <div key={i} className="h-32 w-full bg-muted rounded-3xl" />
+          <div key={i} className="h-40 w-full bg-muted/40 animate-pulse rounded-3xl" />
         ))}
       </div>
     );
