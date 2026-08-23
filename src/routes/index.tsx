@@ -284,10 +284,10 @@ function Dashboard() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase text-ludu-red/60 tracking-wider">💸 Biggest Contributor</p>
-                  <p className="font-bold text-foreground">{contributionLeaderboard[0].name}</p>
+                  <p className="font-bold text-foreground">{contributionLeaderboard[0]?.name || 'N/A'}</p>
                 </div>
               </div>
-              <p className="text-lg font-black text-ludu-red">{contributionLeaderboard[0].totalFine} ৳</p>
+              <p className="text-lg font-black text-ludu-red">{contributionLeaderboard[0]?.totalFine || 0} ৳</p>
             </div>
             
             <div className="flex items-center justify-between p-4 rounded-2xl bg-ludu-green/5 border-2 border-ludu-green/20">
@@ -297,10 +297,10 @@ function Dashboard() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase text-ludu-green/60 tracking-wider">🎉 Luckiest Player</p>
-                  <p className="font-bold text-foreground">{contributionLeaderboard[contributionLeaderboard.length - 1].name}</p>
+                  <p className="font-bold text-foreground">{contributionLeaderboard[contributionLeaderboard.length - 1]?.name || 'N/A'}</p>
                 </div>
               </div>
-              <p className="text-lg font-black text-ludu-green">{contributionLeaderboard[contributionLeaderboard.length - 1].totalFine} ৳</p>
+              <p className="text-lg font-black text-ludu-green">{contributionLeaderboard[contributionLeaderboard.length - 1]?.totalFine || 0} ৳</p>
             </div>
           </div>
         )}
