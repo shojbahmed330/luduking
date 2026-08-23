@@ -248,45 +248,56 @@ function HistoryPage() {
               </button>
             </div>
           ) : (
-            filteredMatches.map(match => (
-              <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-2 text-muted-foreground font-black text-xs uppercase tracking-widest">
-                    <Calendar className="h-3.5 w-3.5" />
-                    {format(parseISO(match.match_date), "MMM d, yyyy")}
-                  </div>
-                  <div className="flex gap-1">
-                    <button 
-                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
-                      onClick={() => navigate({ to: "/add-match", search: { editId: match.id } })}
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </button>
-                    <button 
-                      className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-red/5 text-ludu-red active-scale border border-ludu-red/10"
-                      onClick={() => setDeleteConfirm({ type: "matches", id: match.id })}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
+            matchesGroupedByDay.map(([day, dayMatches]) => (
+              <div key={day} className="space-y-3">
+                <div className="flex items-center gap-2 px-1 sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2">
+                  <div className="h-px flex-1 bg-muted" />
+                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/40 px-2 py-0.5 rounded-full">
+                    {format(parseISO(day), "EEEE, MMM d")}
+                  </span>
+                  <div className="h-px flex-1 bg-muted" />
                 </div>
-                
-                <div className="grid grid-cols-1 gap-2">
-                  {match.match_results.sort((a: any, b: any) => a.position - b.position).map((result: any) => (
-                    <div key={result.id} className="flex items-center gap-3">
-                      <div className="w-24 shrink-0">
-                        <PositionBadge position={result.position as Position} />
+                {dayMatches.map(match => (
+                  <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
+                        <Dice5 className="h-3 w-3 text-ludu-gold" />
+                        Match #{match.id.slice(0, 4)}
                       </div>
-                      <PlayerAvatar name={result.players?.name || "Unknown"} size="sm" />
-                      <span className="font-bold text-sm flex-1">{result.players?.name}</span>
-                      {result.fine_amount > 0 && (
-                        <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
-                          {result.fine_amount} ৳
-                        </span>
-                      )}
+                      <div className="flex gap-1">
+                        <button 
+                          className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
+                          onClick={() => navigate({ to: "/add-match", search: { editId: match.id } })}
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </button>
+                        <button 
+                          className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-red/5 text-ludu-red active-scale border border-ludu-red/10"
+                          onClick={() => setDeleteConfirm({ type: "matches", id: match.id })}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    
+                    <div className="grid grid-cols-1 gap-2">
+                      {match.match_results.sort((a: any, b: any) => a.position - b.position).map((result: any) => (
+                        <div key={result.id} className="flex items-center gap-3">
+                          <div className="w-24 shrink-0">
+                            <PositionBadge position={result.position as Position} />
+                          </div>
+                          <PlayerAvatar name={result.players?.name || "Unknown"} size="sm" />
+                          <span className="font-bold text-sm flex-1">{result.players?.name}</span>
+                          {result.fine_amount > 0 && (
+                            <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                              {result.fine_amount} ৳
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             ))
           )
