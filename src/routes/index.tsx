@@ -185,10 +185,7 @@ function Dashboard() {
       <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-40">
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
-            <Calendar className="h-3 w-3" /> 
-            {`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-
-Image er mark kora likha ta dekho, oita home page a kano? delete koro`}
+            <Calendar className="h-3 w-3" /> Select Period
           </label>
           <BottomDrawer
             title="Choose Period"
