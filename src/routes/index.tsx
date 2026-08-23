@@ -356,12 +356,12 @@ function Dashboard() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar">
+      <div className="relative flex p-1.5 bg-muted/40 rounded-[2rem] shrink-0 overflow-x-auto no-scrollbar glass-morphism">
         <div 
-          className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
+          className="absolute h-[calc(100%-12px)] bg-white rounded-2xl shadow-md ring-1 ring-black/5 transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) z-0"
           style={{
-            width: `calc(16.66% - 2px)`,
-            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 4px)`
+            width: `calc(16.66% - 3px)`,
+            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 6px)`
           }}
         />
         {[
@@ -376,14 +376,18 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "relative z-10 flex-1 min-w-[60px] flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl text-[10px] font-black transition-all active-scale",
+              "relative z-10 flex-1 min-w-[65px] flex flex-col items-center justify-center gap-1.5 px-1 py-3.5 rounded-2xl text-[10px] font-black transition-all active-scale",
               activeTab === tab.id 
                 ? "text-ludu-gold" 
-                : "text-muted-foreground hover:bg-white/30"
+                : "text-muted-foreground/70 hover:bg-white/40"
             )}
           >
-            <tab.icon className={cn("h-4 w-4", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground")} />
-            {tab.label}
+            <motion.div
+              animate={activeTab === tab.id ? { scale: 1.2, rotate: [0, -10, 10, 0] } : { scale: 1, rotate: 0 }}
+            >
+              <tab.icon className={cn("h-5 w-5", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground/60")} />
+            </motion.div>
+            <span className={cn(activeTab === tab.id ? "scale-105" : "scale-100")}>{tab.label}</span>
           </button>
         ))}
       </div>
