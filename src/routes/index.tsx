@@ -465,7 +465,17 @@ function Dashboard() {
                       <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
                           <Dice5 className="h-3 w-3 text-ludu-gold" />
-                          Match #{match.id.slice(0, 4)}
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
+                              <Dice5 className="h-3 w-3 text-ludu-gold" />
+                              Match #{match.id.slice(0, 4)}
+                            </div>
+                            {(match as any).created_by_name && (
+                              <span className="text-[7px] font-black text-muted-foreground/60 uppercase tracking-tighter">
+                                By: {(match as any).created_by_name}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-2 py-0.5 rounded-full">
                           {format(parseISO(match.match_date), "MMM d, yyyy")}
