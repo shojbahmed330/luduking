@@ -47,13 +47,13 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Eita lugu games er code, ei code emon vabe bosao jeno games a gele live ludu khela jai",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami just games section ta change korte bolchilam, but tumi history and index o edit korle kano? just answer dao tmi",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Eita lugu games er code, ei code emon vabe bosao jeno games a gele live ludu khela jai" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami just games section ta change korte bolchilam, but tumi history and index o edit korle kano? just answer dao tmi" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Ludu Hisab — Dashboard" },
-      { name: "twitter:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Eita lugu games er code, ei code emon vabe bosao jeno games a gele live ludu khela jai" },
+      { name: "twitter:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami just games section ta change korte bolchilam, but tumi history and index o edit korle kano? just answer dao tmi" },
 
 
       { property: "og:type", content: "website" },
