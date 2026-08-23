@@ -15,6 +15,7 @@ import {
   PlusCircle,
   LayoutDashboard,
   ChevronDown,
+  ChevronRight,
   Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
