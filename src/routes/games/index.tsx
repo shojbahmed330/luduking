@@ -1,71 +1,131 @@
-import { createFileRoute } from "@tanstack/react-router";
-import luduAsset from "@/assets/ludu-king-v2.html.asset.json";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { Gamepad2, Plus, Users, Play, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Share2, ArrowLeft } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/games/")({
-  head: () => ({
-    meta: [
-      { title: "Ludu Hisab — Ludu King Virtual Arena" },
-      {
-        name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami just games section ta change korte bolchilam, but tumi history and index o edit korle kano? just answer dao tmi",
-      },
-      { property: "og:title", content: "Ludu Hisab — Ludu King Virtual Arena" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami just games section ta change korte bolchilam, but tumi history and index o edit korle kano? just answer dao tmi" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: LuduKingGame,
+  component: GamesLobby,
 });
 
-function LuduKingGame() {
-  const shareGame = () => {
-    const url = window.location.origin + "/games";
-    navigator.clipboard.writeText(url);
-    toast.success("Game link copied!");
-  };
+function GamesLobby() {
+  const navigate = useNavigate();
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    fetchRooms();
+  }, []);
+
+  async function fetchRooms() {
+    // @ts-ignore - game_rooms table is dynamic
+    const { data, error } = await supabase
+      .from("game_rooms" as any)
+      .select("*")
+      .eq("status", "waiting")
+      .order("created_at", { ascending: false });
+    
+    if (!error) setRooms(data || []);
+    setLoading(false);
+  }
+
+  async function createRoom() {
+    if (!user) return;
+    setCreating(true);
+    try {
+      // @ts-ignore - game_rooms table is dynamic
+      const { data, error } = await (supabase
+        .from("game_rooms" as any)
+        .insert({
+          created_by: user.id,
+          status: "waiting",
+          players_data: [{
+            id: user.id,
+            name: user.user_metadata?.full_name || user.email?.split("@")[0],
+            color: "red",
+            joined_at: new Date().toISOString()
+          }]
+        })
+        .select()
+        .single() as any);
+
+      if (error) throw error;
+      // Navigate using typed route when generated, but cast for now to fix build
+      (navigate as any)({ to: `/games/${data.id}` });
+    } catch (error: any) {
+      toast.error("Failed to create room: " + error.message);
+    } finally {
+      setCreating(false);
+    }
+  }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-theme(spacing.20))] -mt-6 -mx-4 overflow-hidden rounded-t-3xl">
-      {/* Top Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white/80 backdrop-blur-md border-b border-muted z-10 shadow-sm">
-        <motion.button 
-          whileTap={{ scale: 0.9 }}
-          onClick={() => window.history.back()}
-          className="h-9 w-9 bg-white rounded-full border border-muted flex items-center justify-center shadow-sm"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </motion.button>
-        <div className="flex flex-col items-center">
-          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Ludu King</span>
-          <span className="font-black text-sm">Virtual Arena</span>
+    <div className="flex flex-col gap-6 pb-24">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Gamepad2 className="h-6 w-6 text-ludu-gold" />
+          <h1 className="text-2xl font-black tracking-tight">Game Lobby</h1>
         </div>
-        <motion.button 
-          whileTap={{ scale: 0.9 }}
-          onClick={shareGame}
-          className="h-9 w-9 bg-ludu-gold rounded-full border border-white flex items-center justify-center text-white shadow-md"
+      </div>
+
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="bg-white rounded-3xl p-6 border-2 border-muted card-shadow space-y-4"
+      >
+        <div className="space-y-2">
+          <h2 className="text-lg font-black">Start a New Game</h2>
+          <p className="text-sm text-muted-foreground font-bold">Create a room and invite your friends to play Ludu King style.</p>
+        </div>
+        <PrimaryButton 
+          onClick={createRoom} 
+          disabled={creating}
+          className="w-full bg-ludu-gold text-white flex items-center justify-center gap-2 py-6 rounded-2xl shadow-lg shadow-ludu-gold/20"
         >
-          <Share2 className="h-4 w-4" />
-        </motion.button>
-      </div>
+          {creating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Plus className="h-5 w-5" />}
+          <span className="text-lg font-black uppercase tracking-wider">Create Private Room</span>
+        </PrimaryButton>
+      </motion.div>
 
-      {/* Game Frame */}
-      <div className="flex-1 relative bg-[#2b1d14]">
-        <iframe 
-          src={luduAsset.url} 
-          className="w-full h-full border-none shadow-inner"
-          title="Ludu King"
-          allow="autoplay; clipboard-write; fullscreen"
-        />
-      </div>
-
-      {/* Mobile Interaction Tip */}
-      <div className="px-4 py-2 bg-white/50 backdrop-blur-sm text-center border-t border-muted/20">
-        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-tighter">
-          Tip: Play in landscape mode for a wider view 🎲
-        </p>
+      <div className="space-y-4">
+        <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-1">Waiting for Players</h3>
+        
+        {loading ? (
+          <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-muted" /></div>
+        ) : rooms.length === 0 ? (
+          <div className="text-center py-12 bg-muted/20 rounded-3xl border-2 border-dashed border-muted">
+            <p className="text-sm text-muted-foreground font-bold">No active rooms found.</p>
+          </div>
+        ) : (
+          <div className="grid gap-3">
+            {rooms.map(room => (
+              <motion.div 
+                key={room.id}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => (navigate as any)({ to: `/games/${room.id}` })}
+                className="bg-white p-4 rounded-2xl border-2 border-muted shadow-sm flex items-center justify-between cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 bg-muted/30 rounded-xl flex items-center justify-center">
+                    <Users className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <div>
+                    <div className="font-black text-sm">Room #{room.id.slice(0, 6)}</div>
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase">
+                      {room.players_data.length} Players Waiting
+                    </div>
+                  </div>
+                </div>
+                <Play className="h-5 w-5 text-ludu-gold" />
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
