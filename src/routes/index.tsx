@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Comparism a just dui joner nam kano? jar sathe jar icche comparism kora jabe, name select korle tader majhe comparism hobe. And Finally koita match khelche eitao thabe kintu sob jaigai. Total match",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Pin option ta tule dao, oita lagbe na. Login option rakho, email and name diye connect with google option rakho, and j edit korbe tar name edit log a rakbe, jeno sobai dekte pai.",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Comparism a just dui joner nam kano? jar sathe jar icche comparism kora jabe, name select korle tader majhe comparism hobe. And Finally koita match khelche eitao thabe kintu sob jaigai. Total match" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Pin option ta tule dao, oita lagbe na. Login option rakho, email and name diye connect with google option rakho, and j edit korbe tar name edit log a rakbe, jeno sobai dekte pai." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -59,9 +59,9 @@ export const Route = createFileRoute("/")({
 });
 
 type Player = { id: string; name: string };
-type Match = { id: string; match_date: string };
+type Match = { id: string; match_date: string; created_by_name: string | null };
 type MatchResult = { match_id: string; player_id: string; position: number; fine_amount: number };
-type Expense = { amount: number; expense_date: string };
+type Expense = { amount: number; expense_date: string; note: string | null; created_by_name: string | null };
 
 function Dashboard() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -463,9 +463,16 @@ function Dashboard() {
                   .map(match => (
                     <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted">
                       <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
-                          <Dice5 className="h-3 w-3 text-ludu-gold" />
-                          Match #{match.id.slice(0, 4)}
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
+                            <Dice5 className="h-3 w-3 text-ludu-gold" />
+                            Match #{match.id.slice(0, 4)}
+                          </div>
+                          {match.created_by_name && (
+                            <span className="text-[7px] font-black text-muted-foreground/60 uppercase tracking-tighter">
+                              By: {match.created_by_name}
+                            </span>
+                          )}
                         </div>
                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-2 py-0.5 rounded-full">
                           {format(parseISO(match.match_date), "MMM d, yyyy")}
@@ -643,6 +650,26 @@ function Dashboard() {
                 <div className="flex justify-between items-center pt-2 border-t border-dashed">
                   <span className="text-sm font-bold text-muted-foreground">Avg. Daily Spend</span>
                   <span className="font-black text-ludu-blue">{Math.round(expenseSummary.avgSpend)} ৳</span>
+                </div>
+                <div className="pt-4 space-y-3">
+                  <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">Recent Expenses</h3>
+                  <div className="space-y-2">
+                    {filteredData.expenses
+                      .sort((a, b) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime())
+                      .slice(0, 5)
+                      .map((exp, idx) => (
+                        <div key={idx} className="bg-muted/20 rounded-2xl p-3 flex justify-between items-center">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-black">{exp.amount} ৳</span>
+                            <span className="text-[8px] font-bold text-muted-foreground">
+                              {format(parseISO(exp.expense_date), "MMM d")} 
+                              {exp.created_by_name ? ` • By ${exp.created_by_name}` : ''}
+                            </span>
+                          </div>
+                          {exp.note && <span className="text-[9px] font-medium text-muted-foreground italic truncate max-w-[100px]">{exp.note}</span>}
+                        </div>
+                      ))}
+                  </div>
                 </div>
               </div>
             )}

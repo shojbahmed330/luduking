@@ -1,87 +1,87 @@
 import { useState, useEffect } from "react";
-import { Lock, ShieldCheck, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { LogIn, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 import { PrimaryButton } from "./ludu/PrimaryButton";
-import { cn } from "@/lib/utils";
-
-const GROUP_PASSWORD = "ludu"; // The secret
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const authStatus = localStorage.getItem("ludu_auth");
-    if (authStatus === "true") {
-      setIsAuthenticated(true);
-    }
-    setLoading(false);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const handleAuth = () => {
-    if (password.toLowerCase() === GROUP_PASSWORD) {
-      localStorage.setItem("ludu_auth", "true");
-      setIsAuthenticated(true);
-      setError(false);
-    } else {
-      setError(true);
-      setPassword("");
+  const handleGoogleLogin = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign in with Google");
     }
   };
 
-  if (loading) return null;
-
-  if (isAuthenticated) {
-    return <>{children}</>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="h-12 w-12 border-4 border-ludu-gold border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 px-4">
-      <motion.div 
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-sm bg-white rounded-3xl p-8 border-2 border-muted card-shadow text-center space-y-6"
-      >
-        <div className="h-16 w-16 bg-ludu-gold/10 rounded-2xl flex items-center justify-center text-ludu-gold mx-auto">
-          <Lock className="h-8 w-8" />
-        </div>
-        
-        <div className="space-y-2">
-          <h2 className="text-2xl font-black text-foreground">Restricted Access</h2>
-          <p className="text-sm font-bold text-muted-foreground">Enter the group password to proceed.</p>
-        </div>
-
-        <div className="space-y-4">
-          <div className="relative">
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Group Password"
-              className={cn(
-                "w-full px-6 py-4 rounded-2xl border-2 bg-muted/30 font-bold text-center transition-all focus:outline-none focus:ring-2 focus:ring-ludu-gold/20",
-                error ? "border-ludu-red animate-shake" : "border-muted"
-              )}
-              onKeyDown={(e) => e.key === 'Enter' && handleAuth()}
-            />
-            {error && (
-              <motion.span 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-[10px] font-black text-ludu-red uppercase tracking-widest mt-2 block"
-              >
-                Incorrect Password
-              </motion.span>
-            )}
+  if (!session) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 px-4">
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-full max-w-sm bg-white rounded-3xl p-8 border-2 border-muted card-shadow text-center space-y-6"
+        >
+          <div className="h-16 w-16 bg-ludu-gold/10 rounded-2xl flex items-center justify-center text-ludu-gold mx-auto">
+            <LogIn className="h-8 w-8" />
           </div>
           
-          <PrimaryButton onClick={handleAuth} className="w-full">
-            Unlock
-          </PrimaryButton>
-        </div>
-      </motion.div>
-    </div>
-  );
+          <div className="space-y-2">
+            <h2 className="text-2xl font-black text-foreground">Sign In Required</h2>
+            <p className="text-sm font-bold text-muted-foreground truncate">
+              Connect to access Ludu Hisab
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <PrimaryButton 
+              onClick={handleGoogleLogin} 
+              className="w-full bg-white border-2 border-muted text-foreground flex items-center justify-center gap-2 hover:bg-muted/10"
+            >
+              <img src="https://www.google.com/favicon.ico" alt="Google" className="h-4 w-4" />
+              <span>Connect with Google</span>
+            </PrimaryButton>
+            
+            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+              Secured by Lovable Cloud
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 }

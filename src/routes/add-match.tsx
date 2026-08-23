@@ -121,12 +121,16 @@ function AddMatch() {
   const handleSave = async () => {
     setIsSubmitting(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userName = (user?.user_metadata?.["full_name"] as string) || user?.email || "Unknown User";
+
       if (editId) {
         // UPDATE Existing Match
         const { error: matchError } = await supabase
           .from("matches")
           .update({
             match_date: format(date, "yyyy-MM-dd"),
+            updated_by_name: userName,
           })
           .eq("id", editId);
 
@@ -160,6 +164,8 @@ function AddMatch() {
           .from("matches")
           .insert({
             match_date: format(date, "yyyy-MM-dd"),
+            created_by_name: userName,
+            user_id: user?.id ?? null,
           })
           .select()
           .single();
@@ -202,7 +208,7 @@ function AddMatch() {
 
 
   return (
-    <AuthGuard>
+    <>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -452,6 +458,6 @@ function AddMatch() {
         )}
       </AnimatePresence>
       </motion.div>
-    </AuthGuard>
+    </>
   );
 }

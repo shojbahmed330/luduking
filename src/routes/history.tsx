@@ -37,10 +37,10 @@ export const Route = createFileRoute("/history")({
       { title: "Ludu Hisab — History" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Pin option ta tule dao, oita lagbe na. Login option rakho, email and name diye connect with google option rakho, and j edit korbe tar name edit log a rakbe, jeno sobai dekte pai.",
       },
       { property: "og:title", content: "Ludu Hisab — History" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Pin option ta tule dao, oita lagbe na. Login option rakho, email and name diye connect with google option rakho, and j edit korbe tar name edit log a rakbe, jeno sobai dekte pai." },
     ],
   }),
   component: HistoryPage,
@@ -172,7 +172,7 @@ function HistoryPage() {
   }
 
   return (
-    <AuthGuard>
+    <>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -336,6 +336,22 @@ function HistoryPage() {
                         </div>
                       ))}
                     </div>
+                    {(match.created_by_name || match.updated_by_name) && (
+                      <div className="mt-4 pt-4 border-t border-dashed border-muted flex items-center gap-2">
+                        <div className="flex flex-col">
+                          {match.created_by_name && (
+                            <span className="text-[8px] font-black text-muted-foreground uppercase tracking-tighter">
+                              Added by: {match.created_by_name}
+                            </span>
+                          )}
+                          {match.updated_by_name && (
+                            <span className="text-[8px] font-black text-ludu-blue uppercase tracking-tighter">
+                              Last edit by: {match.updated_by_name}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -397,6 +413,22 @@ function HistoryPage() {
                         </button>
                       </div>
                     </div>
+                    {(expense.created_by_name || expense.updated_by_name) && (
+                      <div className="mt-4 pt-4 border-t border-dashed border-muted flex items-center gap-2">
+                        <div className="flex flex-col">
+                          {expense.created_by_name && (
+                            <span className="text-[8px] font-black text-muted-foreground uppercase tracking-tighter">
+                              Added by: {expense.created_by_name}
+                            </span>
+                          )}
+                          {expense.updated_by_name && (
+                            <span className="text-[8px] font-black text-ludu-blue uppercase tracking-tighter">
+                              Last edit by: {expense.updated_by_name}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -433,6 +465,6 @@ function HistoryPage() {
         </DialogContent>
       </Dialog>
       </motion.div>
-    </AuthGuard>
+    </>
   );
 }

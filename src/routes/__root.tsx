@@ -7,10 +7,13 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { LogOut } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BottomNavBar } from "@/components/layout/BottomNavBar";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "sonner";
+import { AuthGuard } from "@/components/AuthGuard";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -81,13 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
       { title: "Ludu Hisab" },
-      { name: "description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Comparism a just dui joner nam kano? jar sathe jar icche comparism kora jabe, name select korle tader majhe comparism hobe. And Finally koita match khelche eitao thabe kintu sob jaigai. Total match" },
+      { name: "description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Pin option ta tule dao, oita lagbe na. Login option rakho, email and name diye connect with google option rakho, and j edit korbe tar name edit log a rakbe, jeno sobai dekte pai." },
       { name: "author", content: "Ludu Friends" },
       { name: "theme-color", content: "#F8F9F5" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { property: "og:title", content: "Ludu Hisab" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Comparism a just dui joner nam kano? jar sathe jar icche comparism kora jabe, name select korle tader majhe comparism hobe. And Finally koita match khelche eitao thabe kintu sob jaigai. Total match" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Pin option ta tule dao, oita lagbe na. Login option rakho, email and name diye connect with google option rakho, and j edit korbe tar name edit log a rakbe, jeno sobai dekte pai." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
 
@@ -127,6 +130,47 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function AuthStatus() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!user) return null;
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex flex-col items-end mr-1">
+        <span className="text-[10px] font-black text-foreground truncate max-w-[80px]">
+          {(user.user_metadata?.["full_name"] as string) || user.email?.split('@')[0]}
+        </span>
+        <button 
+          onClick={() => supabase.auth.signOut()}
+          className="text-[8px] font-black text-ludu-red uppercase tracking-widest hover:opacity-80 transition-opacity"
+        >
+          Logout
+        </button>
+      </div>
+      {user.user_metadata?.["avatar_url"] ? (
+        <img 
+          src={user.user_metadata["avatar_url"]} 
+          alt="Avatar" 
+          className="h-8 w-8 rounded-full border-2 border-white shadow-sm"
+        />
+      ) : (
+        <div className="h-8 w-8 rounded-full bg-ludu-gold/10 flex items-center justify-center text-ludu-gold text-xs font-black border-2 border-white shadow-sm">
+          {user.email?.[0].toUpperCase()}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
@@ -134,17 +178,22 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col bg-background pb-[calc(4rem+var(--sab))] pt-[var(--sat)]">
         <header className="sticky top-0 z-40 w-full glass-header px-6 py-4 pt-[calc(0.5rem+var(--sat))]">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl active-scale" role="img" aria-label="dice">
-              🎲
-            </span>
-            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Ludu Hisab</span>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl active-scale" role="img" aria-label="dice">
+                🎲
+              </span>
+              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Ludu Hisab</span>
+            </div>
+            <AuthStatus />
           </div>
         </header>
         <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
-          <AnimatePresence mode="wait">
-            <Outlet />
-          </AnimatePresence>
+          <AuthGuard>
+            <AnimatePresence mode="wait">
+              <Outlet />
+            </AnimatePresence>
+          </AuthGuard>
         </main>
         <BottomNavBar />
       </div>

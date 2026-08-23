@@ -18,23 +18,32 @@ export type Database = {
         Row: {
           amount: number
           created_at: string
+          created_by_name: string | null
           expense_date: string
           id: string
           note: string | null
+          updated_by_name: string | null
+          user_id: string | null
         }
         Insert: {
           amount: number
           created_at?: string
+          created_by_name?: string | null
           expense_date: string
           id?: string
           note?: string | null
+          updated_by_name?: string | null
+          user_id?: string | null
         }
         Update: {
           amount?: number
           created_at?: string
+          created_by_name?: string | null
           expense_date?: string
           id?: string
           note?: string | null
+          updated_by_name?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -83,18 +92,27 @@ export type Database = {
       matches: {
         Row: {
           created_at: string
+          created_by_name: string | null
           id: string
           match_date: string
+          updated_by_name: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
+          created_by_name?: string | null
           id?: string
           match_date: string
+          updated_by_name?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
+          created_by_name?: string | null
           id?: string
           match_date?: string
+          updated_by_name?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
