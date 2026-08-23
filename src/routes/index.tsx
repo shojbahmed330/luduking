@@ -1,4 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { PrimaryButton } from "@/components/ludu/PrimaryButton";
+import { PlusCircle } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,11 +33,16 @@ function Index() {
         </span>
       </div>
       <h1 className="text-4xl font-extrabold tracking-tight text-foreground mb-2">
-        Ready for the next step
+        Ludu Hisab
       </h1>
-      <p className="text-lg text-muted-foreground">
-        Visual design system established. Reusable components ready.
+      <p className="text-lg text-muted-foreground mb-8">
+        Track your scores, fines, and tea expenses.
       </p>
+      <Link to="/add-match" className="w-full">
+        <PrimaryButton>
+          <PlusCircle className="mr-2 h-5 w-5" /> Add New Match
+        </PrimaryButton>
+      </Link>
     </div>
   );
 }
