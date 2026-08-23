@@ -465,7 +465,7 @@ function Dashboard() {
             </div>
           </motion.div>
         )}
-        )}
+
 
         {activeTab === 'matches' && (
           <motion.div 
