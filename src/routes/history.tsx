@@ -253,8 +253,8 @@ function HistoryPage() {
                       <PlayerAvatar name={result.players?.name || "Unknown"} size="sm" />
                       <span className="font-bold text-sm flex-1">{result.players?.name}</span>
                       {result.fine_amount > 0 && (
-                        <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2 py-0.5 rounded-full uppercase">
-                          {result.fine_amount} Taka
+                        <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                          {result.fine_amount} ৳
                         </span>
                       )}
                     </div>
