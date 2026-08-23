@@ -185,13 +185,13 @@ function Dashboard() {
       <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-40">
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
-            <Calendar className="h-3 w-3" /> '''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
-                                        
-                                            
-                                            For the code present, I get the error below.
+            <Calendar className="h-3 w-3" /> 
+            {`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+
+For the code present, I get the error below.
 
 Please think step-by-step in order to resolve it.
-```
+\`\`\`
 Error: aborted
 
 {
@@ -200,10 +200,10 @@ Error: aborted
   "filename": "Unknown file",
   "lineno": 0,
   "colno": 0,
-  "stack": "Error: aborted\n    at abortIncoming (node:_http_server:838:17)\n    at socketOnClose (node:_http_server:832:3)\n    at Socket.emit (node:events:531:35)\n    at TCP.<anonymous> (node:net:346:12)\n    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)",
+  "stack": "Error: aborted\\n    at abortIncoming (node:_http_server:838:17)\\n    at socketOnClose (node:_http_server:832:3)\\n    at Socket.emit (node:events:531:35)\\n    at TCP.<anonymous> (node:net:346:12)\\n    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)",
   "has_blank_screen": true
 }
-```
+\`\`\``}
           </label>
           <BottomDrawer
             title="Choose Period"
