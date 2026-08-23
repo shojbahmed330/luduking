@@ -145,7 +145,16 @@ function Dashboard() {
   }, [filteredData, periodStats]);
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading Dashboard...</div>;
+    return (
+      <div className="flex flex-col gap-8 animate-pulse">
+        <div className="h-16 w-full bg-muted rounded-2xl" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="h-32 bg-muted rounded-3xl" />
+          <div className="h-32 bg-muted rounded-3xl" />
+          <div className="h-32 col-span-2 bg-muted rounded-3xl" />
+        </div>
+      </div>
+    );
   }
 
   return (

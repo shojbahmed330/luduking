@@ -6,7 +6,7 @@ export function PrimaryButton({ className, children, ...props }: ButtonProps) {
   return (
     <Button
       className={cn(
-        "w-full rounded-2xl py-6 text-lg font-bold transition-transform active:scale-95 shadow-md",
+        "w-full rounded-2xl py-7 text-lg font-bold transition-all active:scale-[0.98] active:brightness-95 shadow-md min-h-[56px]",
         className
       )}
       {...props}

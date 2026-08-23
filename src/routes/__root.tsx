@@ -102,7 +102,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "manifest", href: "/manifest.json" },
     ],
   }),
   shellComponent: RootShell,
@@ -130,8 +131,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background pb-20">
-        <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md px-6 py-4">
+      <div className="flex min-h-screen flex-col bg-background pb-[calc(5rem+var(--sab))] pt-[var(--sat)]">
+        <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md px-6 py-4 pt-[calc(1rem+var(--sat))]">
           <div className="flex items-center gap-2">
             <span className="text-2xl" role="img" aria-label="dice">
               🎲

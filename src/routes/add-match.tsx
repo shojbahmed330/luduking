@@ -190,7 +190,13 @@ function AddMatch() {
   };
 
   if (isLoadingEdit) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading Match...</div>;
+    return (
+      <div className="space-y-6 animate-pulse">
+        <div className="h-8 w-48 bg-muted rounded-lg" />
+        <div className="h-2 w-full bg-muted rounded-full" />
+        <div className="h-64 w-full bg-muted rounded-3xl" />
+      </div>
+    );
   }
 
 

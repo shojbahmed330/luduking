@@ -109,7 +109,16 @@ function HistoryPage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading History...</div>;
+    return (
+      <div className="flex flex-col gap-6 animate-pulse">
+        <div className="h-8 w-32 bg-muted rounded-lg" />
+        <div className="h-12 w-full bg-muted rounded-2xl" />
+        <div className="h-10 w-full bg-muted rounded-2xl" />
+        {[1, 2, 3].map(i => (
+          <div key={i} className="h-32 w-full bg-muted rounded-3xl" />
+        ))}
+      </div>
+    );
   }
 
   return (

@@ -115,7 +115,14 @@ function AddExpense() {
   };
 
   if (isLoadingEdit) {
-    return <div className="flex items-center justify-center min-h-[50vh]">Loading Expense...</div>;
+    return (
+      <div className="flex flex-col gap-6 animate-pulse">
+        <div className="h-8 w-48 bg-muted rounded-lg" />
+        <div className="h-16 w-full bg-muted rounded-2xl" />
+        <div className="h-16 w-full bg-muted rounded-2xl" />
+        <div className="h-32 w-full bg-muted rounded-2xl" />
+      </div>
+    );
   }
 
   const amountVal = parseInt(amount) || 0;
