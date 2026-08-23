@@ -1,5 +1,4 @@
 import * as React from "react";
-import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -30,14 +29,14 @@ function Calendar({
           "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 transition-opacity absolute right-1"
         ),
         month_grid: "w-full border-collapse space-y-1",
-        head_row: "flex",
-        head_cell:
+        weekdays: "flex",
+        weekday:
           "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-        row: "flex w-full mt-2",
+        weeks: "flex flex-col w-full mt-2",
+        week: "flex w-full mt-2",
         day: cn(
           "h-9 w-9 p-0 font-bold aria-selected:opacity-100 rounded-xl hover:bg-muted/50 transition-colors"
         ),
-        day_range_end: "day-range-end",
         selected:
           "bg-ludu-gold text-white hover:bg-ludu-gold hover:text-white focus:bg-ludu-gold focus:text-white",
         today: "bg-muted text-accent-foreground",
