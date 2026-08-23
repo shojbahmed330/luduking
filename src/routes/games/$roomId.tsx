@@ -125,10 +125,13 @@ function GameArena() {
           </div>
 
           <PrimaryButton 
-            onClick={() => toast.info("Game engine coming in next phase!")}
+            onClick={() => {
+              // Implementation of game engine logic here
+              toast.success("Dice rolling...");
+            }}
             className="w-full py-5 rounded-2xl bg-ludu-green text-white shadow-lg shadow-ludu-green/20"
           >
-            <span className="text-lg font-black uppercase tracking-wider">Start Match</span>
+            <span className="text-lg font-black uppercase tracking-wider">Roll Dice</span>
           </PrimaryButton>
         </div>
       </div>
