@@ -424,9 +424,9 @@ function Dashboard() {
                         <p className="font-black text-lg text-foreground">{player.name}</p>
                         <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Player Rankings</p>
                       </div>
-                      <div className="flex items-center gap-1 bg-ludu-gold/10 px-3 py-1 rounded-full">
+                      <div className="flex items-center gap-1 bg-ludu-gold/10 px-2 py-0.5 rounded-full shrink-0">
                         <Star className="h-3 w-3 text-ludu-gold fill-ludu-gold" />
-                        <span className="text-xs font-black text-ludu-gold">{player.counts[1] || 0} Wins</span>
+                        <span className="text-[10px] font-black text-ludu-gold">{player.counts[1] || 0} Wins</span>
                       </div>
                     </div>
                     
