@@ -72,6 +72,8 @@ function Dashboard() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "analytics">("overview");
   const [loading, setLoading] = useState(true);
+  const [comparisonPlayer1Id, setComparisonPlayer1Id] = useState<string | null>(null);
+  const [comparisonPlayer2Id, setComparisonPlayer2Id] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -90,6 +92,13 @@ function Dashboard() {
     }
     fetchData();
   }, []);
+
+  const playerStats = useMemo(() => {
+    return players.map(player => {
+      const allMatches = matchResults.filter(mr => mr.player_id === player.id).length;
+      return { ...player, totalMatches: allMatches };
+    });
+  }, [players, matchResults]);
 
   const availableMonths = useMemo(() => {
     const months = new Set<string>();
@@ -208,15 +217,22 @@ function Dashboard() {
   }, [matches, matchResults, players]);
 
   const h2hComparison = useMemo(() => {
+    if (players.length < 2) return null;
+
     const playerMatchCounts = players.map(p => ({
       ...p,
       count: matchResults.filter(mr => mr.player_id === p.id).length
     })).sort((a, b) => b.count - a.count);
 
-    if (players.length < 2 || !playerMatchCounts[0] || !playerMatchCounts[1]) return null;
+    const p1 = comparisonPlayer1Id 
+      ? players.find(p => p.id === comparisonPlayer1Id) 
+      : playerMatchCounts[0];
     
-    const p1 = playerMatchCounts[0];
-    const p2 = playerMatchCounts[1];
+    const p2 = comparisonPlayer2Id 
+      ? players.find(p => p.id === comparisonPlayer2Id) 
+      : playerMatchCounts[1];
+
+    if (!p1 || !p2 || p1.id === p2.id) return null;
 
     const commonMatches = matches.filter(m => {
       const participants = matchResults.filter(mr => mr.match_id === m.id);
@@ -233,7 +249,7 @@ function Dashboard() {
     const p2Wins = commonMatches.length - p1Wins;
 
     return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length };
-  }, [players, matches, matchResults]);
+  }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   if (loading) {
     return (
@@ -386,6 +402,7 @@ function Dashboard() {
                 label="Matches Played" 
                 value={periodStats.matchCount} 
                 icon={<LayoutDashboard className="h-4 w-4" />}
+                subValue="This Period"
               />
             </div>
             <StatCard 
@@ -429,7 +446,10 @@ function Dashboard() {
           >
             <div className="flex items-center gap-2 px-1">
               <Dice5 className="h-5 w-5 text-ludu-gold" />
-              <h2 className="text-xl font-black text-foreground">Match Details</h2>
+              <div className="flex flex-col">
+                <h2 className="text-xl font-black text-foreground">Match Details</h2>
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">{filteredData.matches.length} Total Matches Found</p>
+              </div>
             </div>
             
             {filteredData.matches.length === 0 ? (
@@ -508,7 +528,7 @@ function Dashboard() {
                       <PlayerAvatar name={player.name} size="md" />
                       <div className="flex-1">
                         <p className="font-black text-lg text-foreground">{player.name}</p>
-                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Player Rankings</p>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">{matchResults.filter(mr => mr.player_id === player.id).length} Matches Played</p>
                       </div>
                       <div className="flex items-center gap-1 bg-ludu-gold/10 px-2 py-0.5 rounded-full shrink-0">
                         <Star className="h-3 w-3 text-ludu-gold fill-ludu-gold" />
@@ -580,7 +600,7 @@ function Dashboard() {
                     <div>
                       <p className="font-black text-lg text-foreground">{player.name}</p>
                       <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
-                        {index === 0 ? "Biggest Contributor 💸" : (index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1) ? "Luckiest Player 🎉" : "Fine Contributor"}
+                        {index === 0 ? "Biggest Contributor 💸" : (index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1) ? "Luckiest Player 🎉" : `${matchResults.filter(mr => mr.player_id === player.id).length} Matches Played`}
                       </p>
                     </div>
                   </div>
@@ -687,18 +707,70 @@ function Dashboard() {
                 {h2hComparison && (
                     <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
                       <div className="flex items-center justify-between mb-8">
-                        <div className="text-center space-y-2">
-                          <PlayerAvatar name={h2hComparison.p1.name} size="md" />
-                          <p className="font-black text-sm">{h2hComparison.p1.name}</p>
-                        </div>
+                        <BottomDrawer
+                          title="Select Player 1"
+                          description="Choose a player for comparison"
+                          trigger={
+                            <button className="text-center space-y-2 active-scale group">
+                              <PlayerAvatar name={h2hComparison.p1.name} size="md" className="ring-2 ring-ludu-gold ring-offset-2 transition-all group-hover:ring-4" />
+                              <div className="flex flex-col">
+                                <p className="font-black text-xs">{h2hComparison.p1.name}</p>
+                                <span className="text-[8px] font-black text-muted-foreground uppercase">{matchResults.filter(mr => mr.player_id === h2hComparison.p1.id).length} Matches</span>
+                              </div>
+                            </button>
+                          }
+                        >
+                          <div className="grid grid-cols-2 gap-3 pb-6">
+                            {players.map(p => (
+                              <button
+                                key={p.id}
+                                onClick={() => setComparisonPlayer1Id(p.id)}
+                                className={cn(
+                                  "flex flex-col items-center gap-2 p-4 rounded-3xl border-2 transition-all active-scale",
+                                  h2hComparison.p1.id === p.id ? "bg-ludu-gold/10 border-ludu-gold" : "bg-muted/30 border-transparent"
+                                )}
+                              >
+                                <PlayerAvatar name={p.name} size="sm" />
+                                <span className="font-black text-xs">{p.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </BottomDrawer>
+
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter mb-1">VS</span>
                           <div className="h-0.5 w-12 bg-muted rounded-full" />
                         </div>
-                        <div className="text-center space-y-2">
-                          <PlayerAvatar name={h2hComparison.p2.name} size="md" />
-                          <p className="font-black text-sm">{h2hComparison.p2.name}</p>
-                        </div>
+
+                        <BottomDrawer
+                          title="Select Player 2"
+                          description="Choose a player for comparison"
+                          trigger={
+                            <button className="text-center space-y-2 active-scale group">
+                              <PlayerAvatar name={h2hComparison.p2.name} size="md" className="ring-2 ring-ludu-blue ring-offset-2 transition-all group-hover:ring-4" />
+                              <div className="flex flex-col">
+                                <p className="font-black text-xs">{h2hComparison.p2.name}</p>
+                                <span className="text-[8px] font-black text-muted-foreground uppercase">{matchResults.filter(mr => mr.player_id === h2hComparison.p2.id).length} Matches</span>
+                              </div>
+                            </button>
+                          }
+                        >
+                          <div className="grid grid-cols-2 gap-3 pb-6">
+                            {players.map(p => (
+                              <button
+                                key={p.id}
+                                onClick={() => setComparisonPlayer2Id(p.id)}
+                                className={cn(
+                                  "flex flex-col items-center gap-2 p-4 rounded-3xl border-2 transition-all active-scale",
+                                  h2hComparison.p2.id === p.id ? "bg-ludu-blue/10 border-ludu-blue" : "bg-muted/30 border-transparent"
+                                )}
+                              >
+                                <PlayerAvatar name={p.name} size="sm" />
+                                <span className="font-black text-xs">{p.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </BottomDrawer>
                       </div>
 
                       <div className="space-y-6">

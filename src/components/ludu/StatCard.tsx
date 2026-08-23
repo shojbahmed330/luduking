@@ -8,6 +8,7 @@ interface StatCardProps {
   value: string | number;
   icon?: ReactNode;
   className?: string;
+  subValue?: string | number;
   trend?: {
     value: string;
     isPositive: boolean;
@@ -15,7 +16,7 @@ interface StatCardProps {
   variant?: "default" | "gold" | "blue" | "green" | "red";
 }
 
-export function StatCard({ label, value, icon, className, trend, variant = "default" }: StatCardProps) {
+export function StatCard({ label, value, icon, className, subValue, trend, variant = "default" }: StatCardProps) {
   const variantStyles = {
     default: "bg-white border-muted/50",
     gold: "bg-gradient-to-br from-ludu-gold/20 to-ludu-gold/5 border-ludu-gold/20",
@@ -51,7 +52,14 @@ export function StatCard({ label, value, icon, className, trend, variant = "defa
               {icon}
             </div>
           )}
-          <div className="text-2xl font-black text-foreground tracking-tight">{value}</div>
+          <div className="flex flex-col items-center">
+            <div className="text-2xl font-black text-foreground tracking-tight">{value}</div>
+            {subValue && (
+              <div className="text-[10px] font-black text-muted-foreground -mt-1 mb-1">
+                {subValue}
+              </div>
+            )}
+          </div>
           <div className="mt-0.5 text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em] opacity-80">
             {label}
           </div>

@@ -37,10 +37,10 @@ export const Route = createFileRoute("/history")({
       { title: "Ludu Hisab — History" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Comparism a just dui joner nam kano? jar sathe jar icche comparism kora jabe, name select korle tader majhe comparism hobe. And Finally koita match khelche eitao thabe kintu sob jaigai. Total match",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan",
       },
       { property: "og:title", content: "Ludu Hisab — History" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Comparism a just dui joner nam kano? jar sathe jar icche comparism kora jabe, name select korle tader majhe comparism hobe. And Finally koita match khelche eitao thabe kintu sob jaigai. Total match" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan" },
     ],
   }),
   component: HistoryPage,
