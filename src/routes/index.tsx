@@ -47,13 +47,13 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Background color white chara onno kono color diya jai na?",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Koi ami to background gula ekhono sada e dekte pai, protita page er e.",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Background color white chara onno kono color diya jai na?" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Koi ami to background gula ekhono sada e dekte pai, protita page er e." },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Ludu Hisab — Dashboard" },
-      { name: "twitter:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Background color white chara onno kono color diya jai na?" },
+      { name: "twitter:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Koi ami to background gula ekhono sada e dekte pai, protita page er e." },
 
 
       { property: "og:type", content: "website" },
