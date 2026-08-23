@@ -524,7 +524,7 @@ function Dashboard() {
                       <PlayerAvatar name={player.name} size="md" />
                       <div className="flex-1">
                         <p className="font-black text-lg text-foreground">{player.name}</p>
-                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Player Rankings</p>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">{matchResults.filter(mr => mr.player_id === player.id).length} Matches Played</p>
                       </div>
                       <div className="flex items-center gap-1 bg-ludu-gold/10 px-2 py-0.5 rounded-full shrink-0">
                         <Star className="h-3 w-3 text-ludu-gold fill-ludu-gold" />
