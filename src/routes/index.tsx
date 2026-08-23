@@ -596,7 +596,7 @@ function Dashboard() {
                     <div>
                       <p className="font-black text-lg text-foreground">{player.name}</p>
                       <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
-                        {index === 0 ? "Biggest Contributor 💸" : (index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1) ? "Luckiest Player 🎉" : "Fine Contributor"}
+                        {index === 0 ? "Biggest Contributor 💸" : (index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1) ? "Luckiest Player 🎉" : `${matchResults.filter(mr => mr.player_id === player.id).length} Matches Played`}
                       </p>
                     </div>
                   </div>
