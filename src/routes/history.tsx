@@ -326,22 +326,20 @@ function HistoryPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-row gap-3 mt-4">
-            <Button 
-              variant="outline" 
-              className="flex-1 rounded-xl py-6 font-bold"
+            <button 
+              className="flex-1 rounded-2xl py-4 font-black bg-muted/40 text-muted-foreground active-scale transition-colors"
               onClick={() => setDeleteConfirm(null)}
               disabled={isDeleting}
             >
               Cancel
-            </Button>
-            <Button 
-              variant="destructive" 
-              className="flex-1 rounded-xl py-6 font-bold"
+            </button>
+            <button 
+              className="flex-1 rounded-2xl py-4 font-black bg-ludu-red text-white shadow-lg shadow-ludu-red/20 active-scale transition-colors"
               onClick={handleDelete}
               disabled={isDeleting}
             >
               {isDeleting ? "Deleting..." : "Yes, Delete"}
-            </Button>
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
