@@ -174,6 +174,67 @@ function Dashboard() {
     };
   }, [filteredData, periodStats]);
 
+  const winRateTrendData = useMemo(() => {
+    const last6Months = eachMonthOfInterval({
+      start: subMonths(new Date(), 5),
+      end: new Date()
+    });
+
+    return last6Months.map(month => {
+      const monthStr = format(month, "MMM");
+      const interval = { start: startOfMonth(month), end: endOfMonth(month) };
+      
+      const monthMatches = matches.filter(m => 
+        isWithinInterval(parseISO(m.match_date), interval)
+      );
+      
+      const data: any = { name: monthStr };
+      
+      players.forEach(player => {
+        const playerMatches = matchResults.filter(mr => 
+          mr.player_id === player.id && 
+          monthMatches.some(m => m.id === mr.match_id)
+        );
+        
+        if (playerMatches.length === 0) {
+          data[player.name] = 0;
+        } else {
+          const wins = playerMatches.filter(mr => mr.position === 1).length;
+          data[player.name] = Math.round((wins / playerMatches.length) * 100);
+        }
+      });
+      return data;
+    });
+  }, [matches, matchResults, players]);
+
+  const h2hComparison = useMemo(() => {
+    const playerMatchCounts = players.map(p => ({
+      ...p,
+      count: matchResults.filter(mr => mr.player_id === p.id).length
+    })).sort((a, b) => b.count - a.count);
+
+    if (players.length < 2 || !playerMatchCounts[0] || !playerMatchCounts[1]) return null;
+    
+    const p1 = playerMatchCounts[0];
+    const p2 = playerMatchCounts[1];
+
+    const commonMatches = matches.filter(m => {
+      const participants = matchResults.filter(mr => mr.match_id === m.id);
+      return participants.some(mr => mr.player_id === p1.id) && 
+             participants.some(mr => mr.player_id === p2.id);
+    });
+
+    const p1Wins = commonMatches.filter(m => {
+      const r1 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p1.id);
+      const r2 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p2.id);
+      return r1 && r2 && r1.position < r2.position;
+    }).length;
+
+    const p2Wins = commonMatches.length - p1Wins;
+
+    return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length };
+  }, [players, matches, matchResults]);
+
   if (loading) {
     return (
       <div className="flex flex-col gap-6 animate-pulse pt-2">
