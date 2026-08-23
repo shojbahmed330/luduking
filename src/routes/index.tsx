@@ -261,6 +261,7 @@ function Dashboard() {
       <div className="flex overflow-x-auto no-scrollbar gap-2 p-1 bg-muted/30 rounded-2xl shrink-0">
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+          { id: 'matches', label: 'Matches', icon: Dice5 },
           { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
           { id: 'money', label: 'Money', icon: Users },
           { id: 'chanasta', label: 'Cha-Nasta', icon: Coffee },
@@ -269,7 +270,7 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
+              "flex-1 min-w-[80px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
               activeTab === tab.id 
                 ? "bg-white text-ludu-gold shadow-sm ring-1 ring-black/5" 
                 : "text-muted-foreground hover:bg-white/50"
