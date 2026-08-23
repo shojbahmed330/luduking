@@ -320,21 +320,25 @@ function Dashboard() {
               variant="red"
             />
             
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <Link 
                 to="/add-match" 
-                className="flex flex-col items-center justify-center py-6 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-gold hover:bg-ludu-gold/5 transition-all group active-scale"
+                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-gold/50 transition-all group active-scale"
               >
-                <PlusCircle className="h-6 w-6 text-muted-foreground group-hover:text-ludu-gold transition-colors mb-1" />
-                <span className="text-sm font-black text-muted-foreground group-hover:text-ludu-gold">Add New Match</span>
+                <div className="h-10 w-10 rounded-2xl bg-ludu-gold/10 flex items-center justify-center text-ludu-gold mb-2 group-hover:scale-110 transition-transform">
+                  <Dice5 className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Match</span>
               </Link>
               
               <Link 
                 to="/add-expense" 
-                className="flex flex-col items-center justify-center py-6 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-red hover:bg-ludu-red/5 transition-all group active-scale"
+                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-red/50 transition-all group active-scale"
               >
-                <Coffee className="h-6 w-6 text-muted-foreground group-hover:text-ludu-red transition-colors mb-1" />
-                <span className="text-sm font-black text-muted-foreground group-hover:text-ludu-red">Add Expense</span>
+                <div className="h-10 w-10 rounded-2xl bg-ludu-red/10 flex items-center justify-center text-ludu-red mb-2 group-hover:scale-110 transition-transform">
+                  <Coffee className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Expense</span>
               </Link>
             </div>
           </motion.div>
