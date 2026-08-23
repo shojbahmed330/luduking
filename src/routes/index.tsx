@@ -639,7 +639,7 @@ function Dashboard() {
                         key={player.id}
                         type="monotone" 
                         dataKey={player.name} 
-                        stroke={['#F5B301', '#2E9E4D', '#2D6CDF', '#E14545', '#8B5CF6', '#EC4899'][idx % 6]} 
+                        stroke={['#F5B301', '#2E9E4D', '#2D6CDF', '#E14545', '#8B5CF6', '#EC4899'][idx % 6] || '#000'} 
                         strokeWidth={3}
                         dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
                         activeDot={{ r: 6, strokeWidth: 0 }}
@@ -662,6 +662,8 @@ function Dashboard() {
                   })).sort((a, b) => b.count - a.count);
 
                   if (players.length < 2) return null;
+                  
+                  if (!playerMatchCounts[0] || !playerMatchCounts[1]) return null;
                   
                   const p1 = playerMatchCounts[0];
                   const p2 = playerMatchCounts[1];
