@@ -202,16 +202,19 @@ function AddMatch() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="space-y-6 pb-10"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-extrabold tracking-tight">Add Match</h2>
-        <Button variant="ghost" size="sm" onClick={() => navigate({ to: "/" })} className="text-muted-foreground">
-          Cancel
+        <h2 className="text-2xl font-black tracking-tight flex items-center gap-2">
+          <Trophy className="h-6 w-6 text-ludu-gold" />
+          {editId ? "Edit Match" : "Add Match"}
+        </h2>
+        <Button variant="ghost" size="icon" onClick={() => navigate({ to: editId ? "/history" : "/" })} className="text-muted-foreground active-scale">
+          <Trash2 className="h-5 w-5" />
         </Button>
       </div>
 
