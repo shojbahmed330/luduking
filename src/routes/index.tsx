@@ -259,7 +259,14 @@ function Dashboard() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto no-scrollbar gap-2 p-1 bg-muted/30 rounded-2xl shrink-0">
+      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0">
+        <div 
+          className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
+          style={{
+            width: `calc(20% - 2.4px)`,
+            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta'].indexOf(activeTab) * 20}% + 4px)`
+          }}
+        />
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
           { id: 'matches', label: 'Matches', icon: Dice5 },
@@ -271,10 +278,10 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "flex-1 min-w-[80px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
+              "relative z-10 flex-1 min-w-[60px] flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl text-[10px] font-black transition-all active-scale",
               activeTab === tab.id 
-                ? "bg-white text-ludu-gold shadow-sm ring-1 ring-black/5" 
-                : "text-muted-foreground hover:bg-white/50"
+                ? "text-ludu-gold" 
+                : "text-muted-foreground hover:bg-white/30"
             )}
           >
             <tab.icon className={cn("h-4 w-4", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground")} />
@@ -313,21 +320,25 @@ function Dashboard() {
               variant="red"
             />
             
-            <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <Link 
                 to="/add-match" 
-                className="flex flex-col items-center justify-center py-6 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-gold hover:bg-ludu-gold/5 transition-all group active-scale"
+                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-gold/50 transition-all group active-scale"
               >
-                <PlusCircle className="h-6 w-6 text-muted-foreground group-hover:text-ludu-gold transition-colors mb-1" />
-                <span className="text-sm font-black text-muted-foreground group-hover:text-ludu-gold">Add New Match</span>
+                <div className="h-10 w-10 rounded-2xl bg-ludu-gold/10 flex items-center justify-center text-ludu-gold mb-2 group-hover:scale-110 transition-transform">
+                  <Dice5 className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Match</span>
               </Link>
               
               <Link 
                 to="/add-expense" 
-                className="flex flex-col items-center justify-center py-6 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-red hover:bg-ludu-red/5 transition-all group active-scale"
+                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-red/50 transition-all group active-scale"
               >
-                <Coffee className="h-6 w-6 text-muted-foreground group-hover:text-ludu-red transition-colors mb-1" />
-                <span className="text-sm font-black text-muted-foreground group-hover:text-ludu-red">Add Expense</span>
+                <div className="h-10 w-10 rounded-2xl bg-ludu-red/10 flex items-center justify-center text-ludu-red mb-2 group-hover:scale-110 transition-transform">
+                  <Coffee className="h-5 w-5" />
+                </div>
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Expense</span>
               </Link>
             </div>
           </motion.div>
@@ -373,14 +384,14 @@ function Dashboard() {
                           .map((result) => {
                             const player = players.find(p => p.id === result.player_id);
                             return (
-                              <div key={result.player_id} className="flex items-center gap-3">
-                                <div className="w-24 shrink-0">
+                              <div key={result.player_id} className="flex items-center gap-3 p-2 rounded-2xl transition-colors hover:bg-muted/10">
+                                <div className="w-20 shrink-0">
                                   <PositionBadge position={result.position as any} />
                                 </div>
-                                <PlayerAvatar name={player?.name || "???"} size="sm" />
-                                <span className="font-bold text-sm flex-1">{player?.name}</span>
+                                <PlayerAvatar name={player?.name || "???"} size="xs" />
+                                <span className="font-bold text-xs flex-1 truncate">{player?.name}</span>
                                 {result.fine_amount > 0 && (
-                                  <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                  <span className="text-[9px] font-black bg-ludu-red text-white px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm shadow-ludu-red/20">
                                     {result.fine_amount} ৳
                                   </span>
                                 )}
@@ -468,54 +479,43 @@ function Dashboard() {
               <h2 className="text-xl font-black text-foreground">Fine Contributions</h2>
             </div>
             <div className="grid grid-cols-1 gap-4">
-              {contributionLeaderboard.map((player) => (
+              {contributionLeaderboard.map((player, index) => (
                 <div 
                   key={player.id} 
-                  className="bg-white rounded-3xl p-5 border-2 border-muted shadow-sm flex items-center justify-between active-scale"
+                  className={cn(
+                    "bg-white rounded-3xl p-5 border-2 border-muted card-shadow flex items-center justify-between active-scale transition-all",
+                    index === 0 && "border-ludu-red/20 bg-gradient-to-br from-ludu-red/5 to-white",
+                    index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && "border-ludu-green/20 bg-gradient-to-br from-ludu-green/5 to-white"
+                  )}
                 >
                   <div className="flex items-center gap-3">
-                    <PlayerAvatar name={player.name} size="md" />
+                    <div className="relative">
+                      <PlayerAvatar name={player.name} size="md" />
+                      {index === 0 && (
+                        <div className="absolute -top-1 -right-1 bg-ludu-red text-white p-1 rounded-full shadow-sm ring-2 ring-white">
+                          <TrendingUp className="h-3 w-3" />
+                        </div>
+                      )}
+                      {index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && (
+                        <div className="absolute -top-1 -right-1 bg-ludu-green text-white p-1 rounded-full shadow-sm ring-2 ring-white">
+                          <Star className="h-3 w-3" />
+                        </div>
+                      )}
+                    </div>
                     <div>
                       <p className="font-black text-lg text-foreground">{player.name}</p>
-                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Total Fine Paid</p>
+                      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+                        {index === 0 ? "Biggest Contributor 💸" : (index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1) ? "Luckiest Player 🎉" : "Fine Contributor"}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-black text-foreground">{player.totalFine} ৳</p>
+                    <p className="text-2xl font-black text-foreground">{player.totalFine} <span className="text-sm">৳</span></p>
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.1em]">Total Paid</p>
                   </div>
                 </div>
               ))}
             </div>
-
-            {contributionLeaderboard.length > 0 && (
-              <div className="grid grid-cols-1 gap-3">
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-ludu-red/5 border-2 border-ludu-red/20">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-full bg-ludu-red p-2 text-white">
-                      <TrendingUp className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase text-ludu-red/60 tracking-wider">💸 Biggest Contributor</p>
-                      <p className="font-bold text-foreground">{contributionLeaderboard[0]?.name || 'N/A'}</p>
-                    </div>
-                  </div>
-                  <p className="text-lg font-black text-ludu-red">{contributionLeaderboard[0]?.totalFine || 0} ৳</p>
-                </div>
-                
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-ludu-green/5 border-2 border-ludu-green/20">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-full bg-ludu-green p-2 text-white">
-                      <Star className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase text-ludu-green/60 tracking-wider">🎉 Luckiest Player</p>
-                      <p className="font-bold text-foreground">{contributionLeaderboard[contributionLeaderboard.length - 1]?.name || 'N/A'}</p>
-                    </div>
-                  </div>
-                  <p className="text-lg font-black text-ludu-green">{contributionLeaderboard[contributionLeaderboard.length - 1]?.totalFine || 0} ৳</p>
-                </div>
-              </div>
-            )}
           </motion.div>
         )}
 

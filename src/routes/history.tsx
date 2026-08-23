@@ -309,14 +309,14 @@ function HistoryPage() {
                     
                     <div className="grid grid-cols-1 gap-2">
                       {match.match_results.sort((a: any, b: any) => a.position - b.position).map((result: any) => (
-                        <div key={result.id} className="flex items-center gap-3">
-                          <div className="w-24 shrink-0">
+                        <div key={result.id} className="flex items-center gap-3 p-2 rounded-2xl transition-colors hover:bg-muted/10">
+                          <div className="w-20 shrink-0">
                             <PositionBadge position={result.position as Position} />
                           </div>
-                          <PlayerAvatar name={result.players?.name || "Unknown"} size="sm" />
-                          <span className="font-bold text-sm flex-1">{result.players?.name}</span>
+                          <PlayerAvatar name={result.players?.name || "Unknown"} size="xs" />
+                          <span className="font-bold text-xs flex-1 truncate">{result.players?.name}</span>
                           {result.fine_amount > 0 && (
-                            <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            <span className="text-[9px] font-black bg-ludu-red text-white px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm shadow-ludu-red/20">
                               {result.fine_amount} ৳
                             </span>
                           )}
