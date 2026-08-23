@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Coffee } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
