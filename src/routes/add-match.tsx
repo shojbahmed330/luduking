@@ -121,12 +121,16 @@ function AddMatch() {
   const handleSave = async () => {
     setIsSubmitting(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userName = user?.user_metadata?.full_name || user?.email || "Unknown User";
+
       if (editId) {
         // UPDATE Existing Match
         const { error: matchError } = await supabase
           .from("matches")
           .update({
             match_date: format(date, "yyyy-MM-dd"),
+            updated_by_name: userName,
           })
           .eq("id", editId);
 
@@ -160,6 +164,8 @@ function AddMatch() {
           .from("matches")
           .insert({
             match_date: format(date, "yyyy-MM-dd"),
+            created_by_name: userName,
+            user_id: user?.id,
           })
           .select()
           .single();
