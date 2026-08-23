@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LogIn, Dice5, Trophy, Wallet, Coffee, Star } from "lucide-react";
+import { LogIn, Dice5, Trophy, Wallet, Coffee, Star, Mail, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PrimaryButton } from "./ludu/PrimaryButton";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -27,6 +30,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   const handleGoogleLogin = async () => {
     try {
+      setAuthLoading(true);
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -35,7 +39,35 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       });
       if (error) throw error;
     } catch (error: any) {
-      toast.error(error.message || "Failed to sign in with Google");
+      console.error("Auth error:", error);
+      toast.error(error.message || "Failed to sign in with Google. Check backend settings.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    try {
+      setAuthLoading(true);
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin,
+        },
+      });
+      if (error) throw error;
+      setIsEmailSent(true);
+      toast.success("Magic link sent to your email!");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to send magic link");
+    } finally {
+      setAuthLoading(false);
     }
   };
 
@@ -95,16 +127,71 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
             </p>
           </div>
 
-          <div className="w-full space-y-4 pt-4">
-            <PrimaryButton 
-              onClick={handleGoogleLogin} 
-              className="w-full h-16 bg-white border-2 border-muted text-foreground flex items-center justify-center gap-4 hover:bg-muted/5 transition-all shadow-xl shadow-black/[0.03] rounded-2xl group"
-            >
-              <div className="h-8 w-8 bg-white rounded-lg flex items-center justify-center shadow-sm border border-muted group-active:scale-95 transition-transform">
-                <img src="https://www.google.com/favicon.ico" alt="Google" className="h-5 w-5" />
-              </div>
-              <span className="font-black text-lg">Continue with Google</span>
-            </PrimaryButton>
+          <div className="w-full space-y-6 pt-4">
+            {isEmailSent ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 border-2 border-ludu-gold/20 card-shadow"
+              >
+                <div className="h-12 w-12 bg-ludu-gold/10 rounded-2xl flex items-center justify-center text-ludu-gold mx-auto mb-4">
+                  <Mail className="h-6 w-6" />
+                </div>
+                <h3 className="text-lg font-black mb-2 text-foreground">Check your email</h3>
+                <p className="text-sm font-bold text-muted-foreground mb-4">
+                  We've sent a login link to <span className="text-foreground">{email}</span>
+                </p>
+                <button 
+                  onClick={() => setIsEmailSent(false)}
+                  className="text-xs font-black text-ludu-gold uppercase tracking-widest hover:underline"
+                >
+                  Try a different email
+                </button>
+              </motion.div>
+            ) : (
+              <>
+                <div className="space-y-4">
+                  <form onSubmit={handleEmailLogin} className="space-y-3">
+                    <div className="relative group">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-ludu-gold transition-colors" />
+                      <input 
+                        type="email" 
+                        placeholder="Enter your email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full h-14 bg-white border-2 border-muted rounded-2xl pl-12 pr-4 text-sm font-bold focus:border-ludu-gold outline-none transition-all shadow-sm"
+                        required
+                      />
+                    </div>
+                    <PrimaryButton 
+                      type="submit"
+                      disabled={authLoading}
+                      className="w-full h-14 bg-ludu-gold text-white flex items-center justify-center gap-2 shadow-lg shadow-ludu-gold/20"
+                    >
+                      <span className="font-black">Login with Email</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </PrimaryButton>
+                  </form>
+
+                  <div className="flex items-center gap-4 px-2">
+                    <div className="h-px flex-1 bg-muted" />
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">or</span>
+                    <div className="h-px flex-1 bg-muted" />
+                  </div>
+
+                  <PrimaryButton 
+                    onClick={handleGoogleLogin} 
+                    disabled={authLoading}
+                    className="w-full h-14 bg-white border-2 border-muted text-foreground flex items-center justify-center gap-3 hover:bg-muted/5 transition-all shadow-sm rounded-2xl group"
+                  >
+                    <div className="h-7 w-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-muted group-active:scale-95 transition-transform shrink-0">
+                      <img src="https://www.google.com/favicon.ico" alt="Google" className="h-4 w-4" />
+                    </div>
+                    <span className="font-black text-sm">Continue with Google</span>
+                  </PrimaryButton>
+                </div>
+              </>
+            )}
             
             <div className="flex items-center justify-center gap-4 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] pt-4 opacity-50">
               <span className="flex items-center gap-1.5"><Wallet className="h-3 w-3" /> Fines</span>
