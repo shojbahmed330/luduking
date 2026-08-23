@@ -1,29 +1,32 @@
-# Plan - Step 4: Add Expense Feature
+# Mobile-First Professional UI Refinement Plan
 
-Implement the "Add Expense" feature for Ludu Hisab to log tea/snack expenses paid from the shared fund.
+Revising the "Ludu Hisab" app to enhance its professional feel and mobile usability through tactile feedback, refined spacing, and visual hierarchy.
 
-## User Interface
-- Create `src/routes/add-expense.tsx`.
-- Update `src/components/layout/BottomNavBar.tsx` to link to `/add-expense`.
-- Add "Add Expense" button to the Home screen (`src/routes/index.tsx`).
+## UI/UX Enhancements
+
+1. **Refined Typography & Spacing**
+   - Increase contrast between headings and body text.
+   - Standardize padding across all cards and sections for a consistent "breathable" feel.
+   - Use a more subtle background color (`#F8FAFC`) to make white cards pop.
+
+2. **Tactile Feedback & Micro-interactions**
+   - Add "active" states to all interactive elements (buttons, chips, tabs) using subtle scale-downs (98%) and background dimming.
+   - Implement Haptic-like visual feedback: brief glow or color shift when a form is successfully submitted.
+
+3. **Visual Hierarchy & Professional Polish**
+   - Replace standard HTML shadows with "soft layered shadows" for a modern floating effect on cards.
+   - Add subtle border-gradients or "glassmorphism" effects to the sticky header and bottom navigation bar.
+   - Use a more sophisticated color palette: slightly desaturated "Ludu" colors for a more premium look.
+
+4. **Mobile Navigation & Forms**
+   - Implement "Bottom Sheets" for selection menus (like the month selector) instead of standard dropdowns.
+   - Add multi-step progress indicators for the "Add Match" flow.
+   - Optimize input fields for mobile: larger touch targets, auto-focus where appropriate, and specific keyboard types (numeric for Taka).
 
 ## Technical Details
-- **Form Fields**:
-  - `date`: Date picker (default today).
-  - `amount`: Numeric input (positive whole number, required).
-  - `note`: Text area (optional).
-- **Live Fund Preview**:
-  - Implement a server function or client-side calculation to fetch the current fund balance.
-  - Show "Current Fund Balance" and "After this expense" live.
-  - Display a warning if the balance goes negative.
-- **Database Logic**:
-  - Use Supabase to insert a row into the `expenses` table.
-- **Validation**:
-  - Ensure amount is a positive integer.
-- **Success Flow**:
-  - Show success toast and redirect to Home (`/`).
 
-## Calculation Model
-- `Total Fund Collected` = SUM(`fine_amount` from `match_results`).
-- `Total Expenses` = SUM(`amount` from `expenses`).
-- `Current Balance` = `Total Fund Collected` - `Total Expenses`.
+- **Tailwind CSS**: Use custom shadow utilities and transition durations.
+- **Framer Motion**: Add `whileTap={{ scale: 0.98 }}` to all interactive components.
+- **Radix UI / Shadcn**: Integrate `Drawer` component for bottom sheets.
+- **CSS Variables**: Refine `--background` and `--card` tokens in `src/styles.css`.
+
