@@ -274,7 +274,7 @@ function Dashboard() {
       className="flex flex-col gap-6 pb-24"
     >
       {/* Fixed Top Section */}
-      <div className="flex flex-col gap-4 sticky top-0 glass-header -mx-4 px-4 pt-2 pb-6 z-40 rounded-b-[2rem]">
+      <div className="flex flex-col gap-4 sticky top-0 glass-header -mx-4 px-4 pt-4 pb-8 z-40 rounded-b-[2.5rem] shadow-ludu-gold/5">
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.25em] flex items-center gap-2 px-1">
             <Calendar className="h-3.5 w-3.5" /> Time Explorer
