@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
@@ -201,8 +202,9 @@ function AddMatch() {
 
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
+    <AuthGuard>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
@@ -449,6 +451,7 @@ function AddMatch() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+      </motion.div>
+    </AuthGuard>
   );
 }
