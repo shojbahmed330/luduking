@@ -138,12 +138,12 @@ function HistoryPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex p-1 bg-muted rounded-2xl">
+      <div className="flex p-1 bg-muted/40 rounded-2xl">
         <button
           onClick={() => setActiveTab("matches")}
           className={cn(
-            "flex-1 py-3 rounded-xl font-bold text-sm transition-all",
-            activeTab === "matches" ? "bg-white shadow-sm text-primary" : "text-muted-foreground"
+            "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
+            activeTab === "matches" ? "bg-white shadow-sm text-ludu-gold ring-1 ring-black/5" : "text-muted-foreground/60"
           )}
         >
           Matches
@@ -151,8 +151,8 @@ function HistoryPage() {
         <button
           onClick={() => setActiveTab("expenses")}
           className={cn(
-            "flex-1 py-3 rounded-xl font-bold text-sm transition-all",
-            activeTab === "expenses" ? "bg-white shadow-sm text-primary" : "text-muted-foreground"
+            "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
+            activeTab === "expenses" ? "bg-white shadow-sm text-ludu-red ring-1 ring-black/5" : "text-muted-foreground/60"
           )}
         >
           Expenses
@@ -161,16 +161,45 @@ function HistoryPage() {
 
       {/* Month Selector */}
       <div className="flex flex-col gap-2">
-        <select
-          value={selectedMonth}
-          onChange={(e) => setSelectedMonth(e.target.value)}
-          className="w-full rounded-2xl border-2 border-muted bg-white p-3 text-sm font-bold outline-none focus:border-ludu-gold transition-colors appearance-none"
+        <BottomDrawer
+          title="Filter History"
+          description="View entries for a specific month or all history."
+          trigger={
+            <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-4 py-3 text-sm font-black active-scale shadow-sm">
+              <span className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                {selectedMonth === "All-Time" ? "All-Time History" : selectedMonth}
+              </span>
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </button>
+          }
         >
-          <option value="All-Time">All-Time History</option>
-          {availableMonths.map(m => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => setSelectedMonth("All-Time")}
+              className={cn(
+                "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
+                selectedMonth === "All-Time" ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+              )}
+            >
+              All-Time History
+              {selectedMonth === "All-Time" && <Check className="h-5 w-5" />}
+            </button>
+            {availableMonths.map(m => (
+              <button
+                key={m}
+                onClick={() => setSelectedMonth(m)}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
+                  selectedMonth === m ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                )}
+              >
+                {m}
+                {selectedMonth === m && <Check className="h-5 w-5" />}
+              </button>
+            ))}
+          </div>
+        </BottomDrawer>
       </div>
 
       {/* List Content */}
