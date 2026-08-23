@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { LuduBoard } from "@/components/games/LuduBoard";
-import { rollDice, type Piece } from "@/lib/ludu-engine";
+import { rollDice, type Piece, type LuduColor } from "@/lib/ludu-engine";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/games/$roomId")({
