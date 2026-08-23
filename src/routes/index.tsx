@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Games er jonno ki aro kichu baki ache? thakle koro full usable games koro",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            https://www.youtube.com/shorts/UYCaN8Iw_js\n\nEita abar ki dhoroner ludu? tumi ei video ta dekho, ei ludu ei vabei khele, ei rokom create kore dao, eitai ludu king",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Games er jonno ki aro kichu baki ache? thakle koro full usable games koro" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            https://www.youtube.com/shorts/UYCaN8Iw_js\n\nEita abar ki dhoroner ludu? tumi ei video ta dekho, ei ludu ei vabei khele, ei rokom create kore dao, eitai ludu king" },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
