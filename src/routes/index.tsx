@@ -61,7 +61,7 @@ export const Route = createFileRoute("/")({
 type Player = { id: string; name: string };
 type Match = { id: string; match_date: string };
 type MatchResult = { match_id: string; player_id: string; position: number; fine_amount: number };
-type Expense = { amount: number; expense_date: string; note: string | null; created_by_name?: string };
+type Expense = { amount: number; expense_date: string; note: string | null; created_by_name: string | null };
 
 function Dashboard() {
   const [players, setPlayers] = useState<Player[]>([]);
