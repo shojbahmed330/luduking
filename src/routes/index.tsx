@@ -56,7 +56,7 @@ function Dashboard() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "money" | "chanasta">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta">("overview");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
