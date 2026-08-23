@@ -446,7 +446,10 @@ function Dashboard() {
           >
             <div className="flex items-center gap-2 px-1">
               <Dice5 className="h-5 w-5 text-ludu-gold" />
-              <h2 className="text-xl font-black text-foreground">Match Details</h2>
+              <div className="flex flex-col">
+                <h2 className="text-xl font-black text-foreground">Match Details</h2>
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">{filteredData.matches.length} Total Matches Found</p>
+              </div>
             </div>
             
             {filteredData.matches.length === 0 ? (
