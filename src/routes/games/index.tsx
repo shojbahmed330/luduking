@@ -10,10 +10,10 @@ export const Route = createFileRoute("/games/")({
       { title: "Ludu Hisab — Ludu King Virtual Arena" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Haire, ami jei html file diachi oita ludu games er code oi code diye games er majhe ludu ta run koro",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            koi backgrond color to ekhono white e ache, somossa ki? color change hoi na kano? age somossa khuje ber koro, then solve koro",
       },
       { property: "og:title", content: "Ludu Hisab — Ludu King Virtual Arena" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Haire, ami jei html file diachi oita ludu games er code oi code diye games er majhe ludu ta run koro" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            koi backgrond color to ekhono white e ache, somossa ki? color change hoi na kano? age somossa khuje ber koro, then solve koro" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
