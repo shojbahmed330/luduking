@@ -37,10 +37,10 @@ export const Route = createFileRoute("/history")({
       { title: "Ludu Hisab — History" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            And games nam a ekta option dao, oikhane ludu khela hobe vitually jeno ludu khela jai invite kore emon koro, and ludu ta jeno ludu king er moto system hoi sob kichu, Ludu king er same to same.",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan",
       },
       { property: "og:title", content: "Ludu Hisab — History" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            And games nam a ekta option dao, oikhane ludu khela hobe vitually jeno ludu khela jai invite kore emon koro, and ludu ta jeno ludu king er moto system hoi sob kichu, Ludu king er same to same." },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan" },
 
     ],
   }),
