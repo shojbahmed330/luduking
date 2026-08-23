@@ -93,6 +93,13 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  const playerStats = useMemo(() => {
+    return players.map(player => {
+      const allMatches = matchResults.filter(mr => mr.player_id === player.id).length;
+      return { ...player, totalMatches: allMatches };
+    });
+  }, [players, matchResults]);
+
   const availableMonths = useMemo(() => {
     const months = new Set<string>();
     matches.forEach(m => months.add(format(parseISO(m.match_date), "MMMM yyyy")));
