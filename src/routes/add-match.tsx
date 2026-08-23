@@ -122,7 +122,7 @@ function AddMatch() {
     setIsSubmitting(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      const userName = user?.user_metadata?.full_name || user?.email || "Unknown User";
+      const userName = (user?.user_metadata?.["full_name"] as string) || user?.email || "Unknown User";
 
       if (editId) {
         // UPDATE Existing Match
@@ -165,7 +165,7 @@ function AddMatch() {
           .insert({
             match_date: format(date, "yyyy-MM-dd"),
             created_by_name: userName,
-            user_id: user?.id,
+            user_id: user?.id ?? null,
           })
           .select()
           .single();
