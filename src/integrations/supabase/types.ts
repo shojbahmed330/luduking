@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      expenses: {
+        Row: {
+          amount: number
+          created_at: string
+          expense_date: string
+          id: string
+          note: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          expense_date: string
+          id?: string
+          note?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          expense_date?: string
+          id?: string
+          note?: string | null
+        }
+        Relationships: []
+      }
+      match_results: {
+        Row: {
+          created_at: string
+          fine_amount: number
+          id: string
+          match_id: string
+          player_id: string
+          position: number
+        }
+        Insert: {
+          created_at?: string
+          fine_amount?: number
+          id?: string
+          match_id: string
+          player_id: string
+          position: number
+        }
+        Update: {
+          created_at?: string
+          fine_amount?: number
+          id?: string
+          match_id?: string
+          player_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_results_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "match_results_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      matches: {
+        Row: {
+          created_at: string
+          id: string
+          match_date: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_date: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_date?: string
+        }
+        Relationships: []
+      }
+      players: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
