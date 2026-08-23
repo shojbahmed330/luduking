@@ -169,7 +169,7 @@ function HistoryPage() {
     >
       <div className="flex items-center gap-2 px-1">
         <HistoryIcon className="h-6 w-6 text-ludu-blue" />
-        <h1 className="text-2xl font-black text-foreground tracking-tight">Match History</h1>
+        <h1 className="text-2xl font-black text-foreground tracking-tight">Daily Breakdown</h1>
       </div>
 
       {/* Tabs */}

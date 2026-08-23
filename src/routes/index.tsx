@@ -16,7 +16,8 @@ import {
   LayoutDashboard,
   ChevronDown,
   ChevronRight,
-  Check
+  Check,
+  Dice5
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/ludu/StatCard";
@@ -56,7 +57,7 @@ function Dashboard() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "money" | "chanasta">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta">("overview");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -261,6 +262,7 @@ function Dashboard() {
       <div className="flex overflow-x-auto no-scrollbar gap-2 p-1 bg-muted/30 rounded-2xl shrink-0">
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+          { id: 'matches', label: 'Matches', icon: Dice5 },
           { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
           { id: 'money', label: 'Money', icon: Users },
           { id: 'chanasta', label: 'Cha-Nasta', icon: Coffee },
@@ -269,7 +271,7 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
+              "flex-1 min-w-[80px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
               activeTab === tab.id 
                 ? "bg-white text-ludu-gold shadow-sm ring-1 ring-black/5" 
                 : "text-muted-foreground hover:bg-white/50"
@@ -311,29 +313,85 @@ function Dashboard() {
               variant="red"
             />
             
-            <Link 
-              to="/history" 
-              className="flex items-center justify-between p-4 rounded-2xl bg-white border-2 border-muted hover:border-ludu-gold active-scale group shadow-sm"
-            >
-              <div className="flex items-center gap-3">
-                <div className="rounded-xl bg-ludu-gold/10 p-2 text-ludu-gold group-hover:bg-ludu-gold group-hover:text-white transition-colors">
-                  <Calendar className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-black text-foreground">Daily Breakdown</p>
-                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">View detailed history</p>
-                </div>
-              </div>
-              <ChevronRight className="h-5 w-5 text-muted-foreground" />
-            </Link>
+            <div className="flex flex-col gap-4">
+              <Link 
+                to="/add-match" 
+                className="flex flex-col items-center justify-center py-6 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-gold hover:bg-ludu-gold/5 transition-all group active-scale"
+              >
+                <PlusCircle className="h-6 w-6 text-muted-foreground group-hover:text-ludu-gold transition-colors mb-1" />
+                <span className="text-sm font-black text-muted-foreground group-hover:text-ludu-gold">Add New Match</span>
+              </Link>
+              
+              <Link 
+                to="/add-expense" 
+                className="flex flex-col items-center justify-center py-6 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-red hover:bg-ludu-red/5 transition-all group active-scale"
+              >
+                <Coffee className="h-6 w-6 text-muted-foreground group-hover:text-ludu-red transition-colors mb-1" />
+                <span className="text-sm font-black text-muted-foreground group-hover:text-ludu-red">Add Expense</span>
+              </Link>
+            </div>
+          </motion.div>
+        )}
 
-            <Link 
-              to="/add-match" 
-              className="mt-2 flex flex-col items-center justify-center py-8 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-gold hover:bg-ludu-gold/5 transition-all group active-scale"
-            >
-              <PlusCircle className="h-8 w-8 text-muted-foreground group-hover:text-ludu-gold transition-colors mb-2" />
-              <span className="font-black text-muted-foreground group-hover:text-ludu-gold">Add New Match</span>
-            </Link>
+        {activeTab === 'matches' && (
+          <motion.div 
+            key="matches"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-2 px-1">
+              <Dice5 className="h-5 w-5 text-ludu-gold" />
+              <h2 className="text-xl font-black text-foreground">Match Details</h2>
+            </div>
+            
+            {filteredData.matches.length === 0 ? (
+              <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
+                No matches played this period 🎲
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredData.matches
+                  .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())
+                  .map(match => (
+                    <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
+                          <Dice5 className="h-3 w-3 text-ludu-gold" />
+                          Match #{match.id.slice(0, 4)}
+                        </div>
+                        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-2 py-0.5 rounded-full">
+                          {format(parseISO(match.match_date), "MMM d, yyyy")}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-2">
+                        {matchResults
+                          .filter(mr => mr.match_id === match.id)
+                          .sort((a, b) => a.position - b.position)
+                          .map((result) => {
+                            const player = players.find(p => p.id === result.player_id);
+                            return (
+                              <div key={result.player_id} className="flex items-center gap-3">
+                                <div className="w-24 shrink-0">
+                                  <PositionBadge position={result.position as any} />
+                                </div>
+                                <PlayerAvatar name={player?.name || "???"} size="sm" />
+                                <span className="font-bold text-sm flex-1">{player?.name}</span>
+                                {result.fine_amount > 0 && (
+                                  <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                    {result.fine_amount} ৳
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
           </motion.div>
         )}
 
@@ -366,9 +424,9 @@ function Dashboard() {
                         <p className="font-black text-lg text-foreground">{player.name}</p>
                         <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Player Rankings</p>
                       </div>
-                      <div className="flex items-center gap-1 bg-ludu-gold/10 px-3 py-1 rounded-full">
+                      <div className="flex items-center gap-1 bg-ludu-gold/10 px-2 py-0.5 rounded-full shrink-0">
                         <Star className="h-3 w-3 text-ludu-gold fill-ludu-gold" />
-                        <span className="text-xs font-black text-ludu-gold">{player.counts[1] || 0} Wins</span>
+                        <span className="text-[10px] font-black text-ludu-gold">{player.counts[1] || 0} Wins</span>
                       </div>
                     </div>
                     
@@ -409,28 +467,24 @@ function Dashboard() {
               <Users className="h-5 w-5 text-ludu-blue" />
               <h2 className="text-xl font-black text-foreground">Fine Contributions</h2>
             </div>
-            <div className="rounded-3xl bg-white shadow-sm border-2 border-muted overflow-hidden">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-muted/30">
-                    <th className="p-4 text-xs font-black uppercase text-muted-foreground">Player</th>
-                    <th className="p-4 text-right text-xs font-black uppercase text-muted-foreground">Total Paid</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-muted">
-                  {contributionLeaderboard.map((player) => (
-                    <tr key={player.id} className="group hover:bg-muted/10 transition-colors">
-                      <td className="p-4">
-                        <div className="flex items-center gap-3">
-                          <PlayerAvatar name={player.name} size="sm" />
-                          <span className="font-bold text-foreground">{player.name}</span>
-                        </div>
-                      </td>
-                      <td className="p-4 text-right font-black text-foreground">{player.totalFine} ৳</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-1 gap-4">
+              {contributionLeaderboard.map((player) => (
+                <div 
+                  key={player.id} 
+                  className="bg-white rounded-3xl p-5 border-2 border-muted shadow-sm flex items-center justify-between active-scale"
+                >
+                  <div className="flex items-center gap-3">
+                    <PlayerAvatar name={player.name} size="md" />
+                    <div>
+                      <p className="font-black text-lg text-foreground">{player.name}</p>
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Total Fine Paid</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xl font-black text-foreground">{player.totalFine} ৳</p>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {contributionLeaderboard.length > 0 && (
