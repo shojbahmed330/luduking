@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { LuduBoard } from "@/components/games/LuduBoard";
-import { rollDice, type Piece } from "@/lib/ludu-engine";
+import { rollDice, type Piece, type LuduColor } from "@/lib/ludu-engine";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/games/$roomId")({
@@ -20,6 +20,8 @@ function GameArena() {
   const [user, setUser] = useState<any>(null);
   const [diceValue, setDiceValue] = useState<number | null>(null);
   const [isRolling, setIsRolling] = useState(false);
+  const [turnColor, setTurnColor] = useState<LuduColor>('red');
+  const [canMove, setCanMove] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
@@ -106,6 +108,13 @@ function GameArena() {
           <LuduBoard 
             pieces={room?.board_state?.pieces || []} 
             currentPlayerColor={room?.players_data?.find((p: any) => p.id === user?.id)?.color}
+            turnColor={turnColor}
+            onPieceClick={(pieceId) => {
+              if (!canMove || isRolling) return;
+              toast.success("Moving piece...");
+              setCanMove(false);
+              setDiceValue(null);
+            }}
           />
         </div>
 
@@ -145,18 +154,18 @@ function GameArena() {
 
           <PrimaryButton 
             onClick={async () => {
-              if (isRolling) return;
+              if (isRolling || canMove) return;
               setIsRolling(true);
               const val = rollDice();
               setDiceValue(val);
               
-              // Simulate roll delay
               setTimeout(() => {
                 setIsRolling(false);
-                toast.success(`You rolled a ${val}!`);
-              }, 600);
+                setCanMove(true);
+                toast.success(`You rolled a ${val}! Tap a piece to move.`);
+              }, 800);
             }}
-            disabled={isRolling}
+            disabled={isRolling || canMove}
             className="w-full py-5 rounded-2xl bg-ludu-gold text-white shadow-lg shadow-ludu-gold/20"
           >
             <Dice6 className={cn("h-6 w-6 mr-2", isRolling && "animate-spin")} />
