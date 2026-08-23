@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay } from "date-fns";
