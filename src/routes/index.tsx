@@ -463,19 +463,16 @@ function Dashboard() {
                   .map(match => (
                     <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted">
                       <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
-                          <Dice5 className="h-3 w-3 text-ludu-gold" />
-                          <div className="flex flex-col">
-                            <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
-                              <Dice5 className="h-3 w-3 text-ludu-gold" />
-                              Match #{match.id.slice(0, 4)}
-                            </div>
-                            {(match as any).created_by_name && (
-                              <span className="text-[7px] font-black text-muted-foreground/60 uppercase tracking-tighter">
-                                By: {(match as any).created_by_name}
-                              </span>
-                            )}
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
+                            <Dice5 className="h-3 w-3 text-ludu-gold" />
+                            Match #{match.id.slice(0, 4)}
                           </div>
+                          {(match as any).created_by_name && (
+                            <span className="text-[7px] font-black text-muted-foreground/60 uppercase tracking-tighter">
+                              By: {(match as any).created_by_name}
+                            </span>
+                          )}
                         </div>
                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-2 py-0.5 rounded-full">
                           {format(parseISO(match.match_date), "MMM d, yyyy")}
@@ -653,7 +650,6 @@ function Dashboard() {
                 <div className="flex justify-between items-center pt-2 border-t border-dashed">
                   <span className="text-sm font-bold text-muted-foreground">Avg. Daily Spend</span>
                   <span className="font-black text-ludu-blue">{Math.round(expenseSummary.avgSpend)} ৳</span>
-                </div>
                 </div>
                 <div className="pt-4 space-y-3">
                   <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">Recent Expenses</h3>
