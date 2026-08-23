@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
@@ -8,13 +8,19 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2, ArrowRight } from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { z } from "zod";
+
+const matchSearchSchema = z.object({
+  editId: z.string().optional(),
+});
 
 export const Route = createFileRoute("/add-match")({
+  validateSearch: (search) => matchSearchSchema.parse(search),
   component: AddMatch,
 });
 
@@ -27,12 +33,14 @@ type Step = "date" | "players" | "positions" | "review";
 
 function AddMatch() {
   const navigate = useNavigate();
+  const { editId } = useSearch({ from: "/add-match" });
   const [step, setStep] = useState<Step>("date");
   const [date, setDate] = useState<Date>(new Date());
   const [allPlayers, setAllPlayers] = useState<Player[]>([]);
   const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([]);
   const [ranking, setRanking] = useState<Player[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingEdit, setIsLoadingEdit] = useState(!!editId);
 
   useEffect(() => {
     async function fetchPlayers() {
@@ -45,6 +53,41 @@ function AddMatch() {
     }
     fetchPlayers();
   }, []);
+
+  useEffect(() => {
+    async function fetchMatchToEdit() {
+      if (!editId || allPlayers.length === 0) return;
+
+      const { data: match, error: matchError } = await supabase
+        .from("matches")
+        .select("*, match_results(*)")
+        .eq("id", editId)
+        .single();
+
+      if (matchError || !match) {
+        toast.error("Failed to load match for editing");
+        setIsLoadingEdit(false);
+        return;
+      }
+
+      setDate(parseISO(match.match_date));
+      
+      const sortedResults = [...match.match_results].sort((a, b) => a.position - b.position);
+      const rankedPlayers = sortedResults.map(r => {
+        const player = allPlayers.find(p => p.id === r.player_id);
+        return player || { id: r.player_id, name: "Unknown" };
+      });
+
+      setSelectedPlayers(rankedPlayers);
+      setRanking(rankedPlayers);
+      setIsLoadingEdit(false);
+      setStep("review"); // Go straight to review when editing
+    }
+
+    if (editId && allPlayers.length > 0) {
+      fetchMatchToEdit();
+    }
+  }, [editId, allPlayers]);
 
   const togglePlayer = (player: Player) => {
     if (selectedPlayers.find((p) => p.id === player.id)) {
@@ -77,35 +120,67 @@ function AddMatch() {
   const handleSave = async () => {
     setIsSubmitting(true);
     try {
-      // 1. Create match
-      const { data: match, error: matchError } = await supabase
-        .from("matches")
-        .insert({
-          match_date: format(date, "yyyy-MM-dd"),
-        })
-        .select()
-        .single();
+      if (editId) {
+        // UPDATE Existing Match
+        const { error: matchError } = await supabase
+          .from("matches")
+          .update({
+            match_date: format(date, "yyyy-MM-dd"),
+          })
+          .eq("id", editId);
 
-      if (matchError) throw matchError;
+        if (matchError) throw matchError;
 
-      // 2. Create results
-      const results = ranking.map((player, index) => ({
-        match_id: match.id,
-        player_id: player.id,
-        position: index + 1,
-        fine_amount: getFine(index),
-      }));
+        // Delete old results and insert new ones
+        const { error: deleteError } = await supabase
+          .from("match_results")
+          .delete()
+          .eq("match_id", editId);
+          
+        if (deleteError) throw deleteError;
 
-      const { error: resultsError } = await supabase
-        .from("match_results")
-        .insert(results);
+        const results = ranking.map((player, index) => ({
+          match_id: editId,
+          player_id: player.id,
+          position: index + 1,
+          fine_amount: getFine(index),
+        }));
 
-      if (resultsError) throw resultsError;
+        const { error: resultsError } = await supabase
+          .from("match_results")
+          .insert(results);
 
-      toast.success("Match saved! 🎲", {
-        description: "Results have been recorded successfully.",
-      });
-      navigate({ to: "/" });
+        if (resultsError) throw resultsError;
+
+        toast.success("Match updated! 🎲");
+      } else {
+        // CREATE New Match
+        const { data: match, error: matchError } = await supabase
+          .from("matches")
+          .insert({
+            match_date: format(date, "yyyy-MM-dd"),
+          })
+          .select()
+          .single();
+
+        if (matchError) throw matchError;
+
+        const results = ranking.map((player, index) => ({
+          match_id: match.id,
+          player_id: player.id,
+          position: index + 1,
+          fine_amount: getFine(index),
+        }));
+
+        const { error: resultsError } = await supabase
+          .from("match_results")
+          .insert(results);
+
+        if (resultsError) throw resultsError;
+
+        toast.success("Match saved! 🎲");
+      }
+      navigate({ to: editId ? "/history" : "/" });
     } catch (error: any) {
       console.error(error);
       toast.error("Failed to save match: " + error.message);
@@ -113,6 +188,11 @@ function AddMatch() {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoadingEdit) {
+    return <div className="flex items-center justify-center min-h-[50vh]">Loading Match...</div>;
+  }
+
 
   return (
     <div className="space-y-6 pb-10">
