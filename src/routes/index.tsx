@@ -217,15 +217,22 @@ function Dashboard() {
   }, [matches, matchResults, players]);
 
   const h2hComparison = useMemo(() => {
+    if (players.length < 2) return null;
+
     const playerMatchCounts = players.map(p => ({
       ...p,
       count: matchResults.filter(mr => mr.player_id === p.id).length
     })).sort((a, b) => b.count - a.count);
 
-    if (players.length < 2 || !playerMatchCounts[0] || !playerMatchCounts[1]) return null;
+    const p1 = comparisonPlayer1Id 
+      ? players.find(p => p.id === comparisonPlayer1Id) 
+      : playerMatchCounts[0];
     
-    const p1 = playerMatchCounts[0];
-    const p2 = playerMatchCounts[1];
+    const p2 = comparisonPlayer2Id 
+      ? players.find(p => p.id === comparisonPlayer2Id) 
+      : playerMatchCounts[1];
+
+    if (!p1 || !p2 || p1.id === p2.id) return null;
 
     const commonMatches = matches.filter(m => {
       const participants = matchResults.filter(mr => mr.match_id === m.id);
@@ -242,7 +249,7 @@ function Dashboard() {
     const p2Wins = commonMatches.length - p1Wins;
 
     return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length };
-  }, [players, matches, matchResults]);
+  }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   if (loading) {
     return (
