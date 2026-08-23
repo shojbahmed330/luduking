@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay } from "date-fns";
@@ -171,13 +172,14 @@ function HistoryPage() {
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-      className="flex flex-col gap-6 pb-24"
-    >
+    <AuthGuard>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
+        className="flex flex-col gap-6 pb-24"
+      >
       <div className="flex items-center gap-2 px-1">
         <HistoryIcon className="h-6 w-6 text-ludu-blue" />
         <h1 className="text-2xl font-black text-foreground tracking-tight">Daily Breakdown</h1>
@@ -430,6 +432,7 @@ function HistoryPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </motion.div>
+      </motion.div>
+    </AuthGuard>
   );
 }
