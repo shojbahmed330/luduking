@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Home, PlusCircle, Coffee, LayoutDashboard, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 
