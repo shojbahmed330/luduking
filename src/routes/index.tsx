@@ -467,28 +467,24 @@ function Dashboard() {
               <Users className="h-5 w-5 text-ludu-blue" />
               <h2 className="text-xl font-black text-foreground">Fine Contributions</h2>
             </div>
-            <div className="rounded-3xl bg-white shadow-sm border-2 border-muted overflow-hidden">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-muted/30">
-                    <th className="p-4 text-xs font-black uppercase text-muted-foreground">Player</th>
-                    <th className="p-4 text-right text-xs font-black uppercase text-muted-foreground">Total Paid</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-muted">
-                  {contributionLeaderboard.map((player) => (
-                    <tr key={player.id} className="group hover:bg-muted/10 transition-colors">
-                      <td className="p-4">
-                        <div className="flex items-center gap-3">
-                          <PlayerAvatar name={player.name} size="sm" />
-                          <span className="font-bold text-foreground">{player.name}</span>
-                        </div>
-                      </td>
-                      <td className="p-4 text-right font-black text-foreground">{player.totalFine} ৳</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-1 gap-4">
+              {contributionLeaderboard.map((player) => (
+                <div 
+                  key={player.id} 
+                  className="bg-white rounded-3xl p-5 border-2 border-muted shadow-sm flex items-center justify-between active-scale"
+                >
+                  <div className="flex items-center gap-3">
+                    <PlayerAvatar name={player.name} size="md" />
+                    <div>
+                      <p className="font-black text-lg text-foreground">{player.name}</p>
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Total Fine Paid</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xl font-black text-foreground">{player.totalFine} ৳</p>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {contributionLeaderboard.length > 0 && (
