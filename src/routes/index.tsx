@@ -462,14 +462,9 @@ function Dashboard() {
                   <Coffee className="mr-2 h-6 w-6" /> Add Expense
                 </PrimaryButton>
               </Link>
-              >
-                <div className="h-10 w-10 rounded-2xl bg-ludu-red/10 flex items-center justify-center text-ludu-red mb-2 group-hover:scale-110 transition-transform">
-                  <Coffee className="h-5 w-5" />
-                </div>
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Expense</span>
-              </Link>
             </div>
           </motion.div>
+        )}
         )}
 
         {activeTab === 'matches' && (
