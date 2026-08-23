@@ -47,6 +47,36 @@ export type Database = {
         }
         Relationships: []
       }
+      game_rooms: {
+        Row: {
+          board_state: Json
+          created_at: string | null
+          created_by: string | null
+          current_turn_index: number
+          id: string
+          players_data: Json
+          status: string
+        }
+        Insert: {
+          board_state?: Json
+          created_at?: string | null
+          created_by?: string | null
+          current_turn_index?: number
+          id?: string
+          players_data?: Json
+          status?: string
+        }
+        Update: {
+          board_state?: Json
+          created_at?: string | null
+          created_by?: string | null
+          current_turn_index?: number
+          id?: string
+          players_data?: Json
+          status?: string
+        }
+        Relationships: []
+      }
       match_results: {
         Row: {
           created_at: string
