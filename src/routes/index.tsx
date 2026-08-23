@@ -663,7 +663,7 @@ function Dashboard() {
                             <span className="text-xs font-black">{exp.amount} ৳</span>
                             <span className="text-[8px] font-bold text-muted-foreground">
                               {format(parseISO(exp.expense_date), "MMM d")} 
-                              {(exp as any).created_by_name ? ` • By ${(exp as any).created_by_name}` : ''}
+                              {exp.created_by_name ? ` • By ${exp.created_by_name}` : ''}
                             </span>
                           </div>
                           {exp.note && <span className="text-[9px] font-medium text-muted-foreground italic truncate max-w-[100px]">{exp.note}</span>}
