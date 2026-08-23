@@ -646,38 +646,7 @@ function Dashboard() {
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">Win Rate Trend (1st Place %)</h3>
               <div className="h-[200px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={useMemo(() => {
-                    const last6Months = eachMonthOfInterval({
-                      start: subMonths(new Date(), 5),
-                      end: new Date()
-                    });
-
-                    return last6Months.map(month => {
-                      const monthStr = format(month, "MMM");
-                      const interval = { start: startOfMonth(month), end: endOfMonth(month) };
-                      
-                      const monthMatches = matches.filter(m => 
-                        isWithinInterval(parseISO(m.match_date), interval)
-                      );
-                      
-                      const data: any = { name: monthStr };
-                      
-                      players.forEach(player => {
-                        const playerMatches = matchResults.filter(mr => 
-                          mr.player_id === player.id && 
-                          monthMatches.some(m => m.id === mr.match_id)
-                        );
-                        
-                        if (playerMatches.length === 0) {
-                          data[player.name] = 0;
-                        } else {
-                          const wins = playerMatches.filter(mr => mr.position === 1).length;
-                          data[player.name] = Math.round((wins / playerMatches.length) * 100);
-                        }
-                      });
-                      return data;
-                    });
-                  }, [matches, matchResults, players])}>
+                  <LineChart data={winRateTrendData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                     <XAxis 
                       dataKey="name" 
