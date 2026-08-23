@@ -4,13 +4,14 @@ import { cn } from "@/lib/utils";
 interface PlayerAvatarProps {
   name: string;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
 }
 
 export function PlayerAvatar({ name, className, size = "md" }: PlayerAvatarProps) {
   const initial = name.charAt(0).toUpperCase();
   
   const sizeClasses = {
+    xs: "h-6 w-6 text-[10px]",
     sm: "h-8 w-8",
     md: "h-10 w-10",
     lg: "h-16 w-16 text-2xl",
