@@ -1,13 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Share2, Users, ArrowLeft, Dice6 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, Share2, Users, ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
-import { LuduBoard } from "@/components/games/LuduBoard";
-import { rollDice, type Piece, type LuduColor } from "@/lib/ludu-engine";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/games/$roomId")({
   component: GameArena,
@@ -18,10 +15,6 @@ function GameArena() {
   const [room, setRoom] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-  const [diceValue, setDiceValue] = useState<number | null>(null);
-  const [isRolling, setIsRolling] = useState(false);
-  const [turnColor, setTurnColor] = useState<LuduColor>('red');
-  const [canMove, setCanMove] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
@@ -103,39 +96,18 @@ function GameArena() {
         </motion.button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center gap-6">
-        <div className="w-full max-w-[360px] px-2">
-          <LuduBoard 
-            pieces={room?.board_state?.pieces || []} 
-            currentPlayerColor={room?.players_data?.find((p: any) => p.id === user?.id)?.color}
-            turnColor={turnColor}
-            onPieceClick={(pieceId) => {
-              if (!canMove || isRolling) return;
-              toast.success("Moving piece...");
-              setCanMove(false);
-              setDiceValue(null);
-            }}
-          />
-        </div>
-
-        <div className="flex flex-col items-center gap-4">
-          <AnimatePresence mode="wait">
-            {diceValue && (
-              <motion.div
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                exit={{ scale: 0, rotate: 180 }}
-                className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center border-4 border-ludu-gold text-ludu-gold shadow-xl"
-              >
-                <span className="text-3xl font-black">{diceValue}</span>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="text-center">
-            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-              {room.status === 'playing' ? "Your Turn" : "Waiting for Players"}
-            </p>
+      <div className="flex-1 flex flex-col items-center justify-center gap-8">
+        {/* Placeholder for the Ludu Board */}
+        <div className="w-full aspect-square max-w-[320px] bg-white rounded-3xl border-4 border-muted card-shadow p-2 relative overflow-hidden flex items-center justify-center group">
+          <div className="absolute inset-0 bg-gradient-to-br from-ludu-gold/5 via-transparent to-ludu-blue/5" />
+          <div className="text-center z-10 space-y-4">
+            <div className="h-20 w-20 bg-muted/20 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-500">
+              <Users className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-lg font-black tracking-tight">Game Board Loading</p>
+              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Waiting for Players...</p>
+            </div>
           </div>
         </div>
 
@@ -153,25 +125,10 @@ function GameArena() {
           </div>
 
           <PrimaryButton 
-            onClick={async () => {
-              if (isRolling || canMove) return;
-              setIsRolling(true);
-              const val = rollDice();
-              setDiceValue(val);
-              
-              setTimeout(() => {
-                setIsRolling(false);
-                setCanMove(true);
-                toast.success(`You rolled a ${val}! Tap a piece to move.`);
-              }, 800);
-            }}
-            disabled={isRolling || canMove}
-            className="w-full py-5 rounded-2xl bg-ludu-gold text-white shadow-lg shadow-ludu-gold/20"
+            onClick={() => toast.info("Game engine coming in next phase!")}
+            className="w-full py-5 rounded-2xl bg-ludu-green text-white shadow-lg shadow-ludu-green/20"
           >
-            <Dice6 className={cn("h-6 w-6 mr-2", isRolling && "animate-spin")} />
-            <span className="text-lg font-black uppercase tracking-wider">
-              {isRolling ? "Rolling..." : "Roll Dice"}
-            </span>
+            <span className="text-lg font-black uppercase tracking-wider">Start Match</span>
           </PrimaryButton>
         </div>
       </div>

@@ -39,12 +39,8 @@ export function StatCard({ label, value, icon, className, subValue, trend, varia
       className="w-full"
     >
       <Card className={cn(
-        "overflow-hidden border-2 transition-all group active-scale ludu-card-3d",
-        variant === "gold" && "bg-ludu-gradient-gold/10 border-ludu-gold/30 border-b-ludu-gold/50",
-        variant === "blue" && "bg-ludu-gradient-blue/10 border-ludu-blue/30 border-b-ludu-blue/50",
-        variant === "green" && "bg-ludu-gradient-green/10 border-ludu-green/30 border-b-ludu-green/50",
-        variant === "red" && "bg-ludu-gradient-red/10 border-ludu-red/30 border-b-ludu-red/50",
-        variant === "default" && "bg-white border-muted/50 border-b-muted",
+        "overflow-hidden border-2 card-shadow transition-all group active-scale inner-glow",
+        variantStyles[variant],
         className
       )}>
         <CardContent className="flex flex-col items-center justify-center p-5 text-center relative">

@@ -1,23 +1,39 @@
-# Visual Overhaul & Professional Polish Plan
+# Plan: Virtual Ludu Game Integration
 
-Refine "Ludu Hisab" into a high-fidelity, colorful, and animated professional mobile experience.
+Integrating a fully functional, multiplayer virtual Ludu game (similar to Ludu King) into the application.
 
-## Design Refinement
-- **Color Palette Expansion**: Introduce high-contrast semantic variants for the Ludu colors (e.g., deeper shadows, vibrant gradients).
-- **Glassmorphism 2.0**: Enhance the dashboard and navigation with richer blur effects and subtle border glows.
-- **3D Interactive Elements**: Upgrade cards and buttons with deeper tactile feedback and shadows.
+## User Review Required
 
-## Navigation & UI Structure
-- **Professional Bottom Nav**: Replace the current navigation with a larger, floating-effect bar using animated SVG icons and pill indicators.
-- **Dynamic Tab Switching**: Implement layout-aware transitions between dashboard sections.
-- **Enhanced Overview**: Rebuild the overview tab with large, bento-grid style cards and real-time counter animations for numbers.
+> [!IMPORTANT]
+> A full "Ludu King" clone with physics, 3D animations, and complex multiplayer logic is a massive undertaking. I will implement a high-quality, 2D multiplayer-ready Ludu board engine using React and Tailwind, featuring dice rolls, piece movement, and game state sync via Lovable Cloud (Realtime).
 
-## Animations & Feedback
-- **Micro-interactions**: Add spring-based animations to all toggles, drawers, and form steps.
-- **Page Transitions**: Use staggered entrance animations for list items in History and Stats.
-- **Haptic-like Visuals**: Strengthen the "active-scale" effect with multi-layered shadows.
+- **Game Name**: Virtual Ludu
+- **Style**: Classic Ludu King aesthetic (Colorful board, animated pieces).
+- **Multiplayer**: Invite-based system using shareable links/room codes.
+
+## Proposed Changes
+
+### 1. Database & Realtime Setup
+- Create `game_rooms` table: `id`, `created_by`, `status` (waiting/playing/finished), `current_turn_index`, `players_data` (JSONB for positions).
+- Enable Supabase Realtime for `game_rooms` to ensure instant updates across all connected players.
+
+### 2. Game Engine Development (`src/lib/ludu-engine.ts`)
+- Logic for board mapping (safe zones, home path, finishing line).
+- Piece movement rules (dice 6 for entry, kicking opponents, blockades).
+- Turn management and win conditions.
+
+### 3. Game Components (`src/components/game/`)
+- `LuduBoard.tsx`: The visual rendering of the board and pieces.
+- `Dice.tsx`: Animated dice rolling component.
+- `GameUI.tsx`: Player indicators, chat, and status messages.
+
+### 4. Integration
+- Add a "Games" tab to the `BottomNavBar` with a game controller icon.
+- Create `src/routes/games/index.tsx`: Lobby to join or create rooms.
+- Create `src/routes/games/$roomId.tsx`: The actual game arena.
 
 ## Technical Details
-- Use `framer-motion` for complex layout transitions.
-- Update `StatCard` and `PrimaryButton` components for higher visual density.
-- Refine `src/styles.css` with advanced utility classes for professional shading and gradients.
+
+- **Rendering**: SVG/CSS for the board to ensure responsiveness on all mobile screens.
+- **State Management**: React state synced with Supabase Realtime `broadcast` channel for low-latency piece movement.
+- **Animations**: `framer-motion` for smooth piece gliding and dice shakes.

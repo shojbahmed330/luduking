@@ -15,8 +15,8 @@ export function BottomNavBar() {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md glass-morphism rounded-[2.5rem] p-2 mb-[var(--sab)]">
-      <div className="flex h-16 items-center justify-around px-2 relative">
+    <nav className="fixed bottom-0 left-0 z-50 w-full glass-nav pb-[var(--sab)]">
+      <div className="mx-auto flex h-16 max-w-md items-center justify-around px-2">
         {navItems.map((item) => {
           const isActive = location.pathname === item.to;
           return (
@@ -24,27 +24,22 @@ export function BottomNavBar() {
               key={item.label}
               to={item.to}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 transition-all active-scale min-w-[64px] relative z-10",
-                isActive ? "text-ludu-gold" : "text-muted-foreground/60"
+                "flex flex-col items-center justify-center gap-1 text-muted-foreground/60 transition-all hover:text-ludu-gold active-scale min-w-[72px] relative",
+                isActive ? "text-ludu-gold" : ""
               )}
             >
-              <motion.div
-                animate={isActive ? { y: -4, scale: 1.1 } : { y: 0, scale: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                <item.icon className="h-6 w-6" />
-              </motion.div>
+              <item.icon className={cn("h-6 w-6 transition-transform", isActive ? "scale-110" : "")} />
               <span className={cn(
-                "text-[9px] font-black uppercase tracking-widest transition-opacity duration-300",
-                isActive ? "opacity-100" : "opacity-0 h-0"
+                "text-[10px] font-black uppercase tracking-tighter transition-opacity",
+                isActive ? "opacity-100" : "opacity-60"
               )}>
                 {item.label}
               </span>
               {isActive && (
                 <motion.div 
-                  layoutId="nav-pill-bg"
-                  className="absolute inset-0 bg-ludu-gold/10 rounded-2xl -z-10"
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  layoutId="nav-pill"
+                  className="absolute -top-1 w-8 h-1 bg-ludu-gold rounded-full"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
             </Link>
