@@ -475,54 +475,43 @@ function Dashboard() {
               <h2 className="text-xl font-black text-foreground">Fine Contributions</h2>
             </div>
             <div className="grid grid-cols-1 gap-4">
-              {contributionLeaderboard.map((player) => (
+              {contributionLeaderboard.map((player, index) => (
                 <div 
                   key={player.id} 
-                  className="bg-white rounded-3xl p-5 border-2 border-muted shadow-sm flex items-center justify-between active-scale"
+                  className={cn(
+                    "bg-white rounded-3xl p-5 border-2 border-muted card-shadow flex items-center justify-between active-scale transition-all",
+                    index === 0 && "border-ludu-red/20 bg-gradient-to-br from-ludu-red/5 to-white",
+                    index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && "border-ludu-green/20 bg-gradient-to-br from-ludu-green/5 to-white"
+                  )}
                 >
                   <div className="flex items-center gap-3">
-                    <PlayerAvatar name={player.name} size="md" />
+                    <div className="relative">
+                      <PlayerAvatar name={player.name} size="md" />
+                      {index === 0 && (
+                        <div className="absolute -top-1 -right-1 bg-ludu-red text-white p-1 rounded-full shadow-sm ring-2 ring-white">
+                          <TrendingUp className="h-3 w-3" />
+                        </div>
+                      )}
+                      {index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && (
+                        <div className="absolute -top-1 -right-1 bg-ludu-green text-white p-1 rounded-full shadow-sm ring-2 ring-white">
+                          <Star className="h-3 w-3" />
+                        </div>
+                      )}
+                    </div>
                     <div>
                       <p className="font-black text-lg text-foreground">{player.name}</p>
-                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Total Fine Paid</p>
+                      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+                        {index === 0 ? "Biggest Contributor 💸" : (index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1) ? "Luckiest Player 🎉" : "Fine Contributor"}
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl font-black text-foreground">{player.totalFine} ৳</p>
+                    <p className="text-2xl font-black text-foreground">{player.totalFine} <span className="text-sm">৳</span></p>
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.1em]">Total Paid</p>
                   </div>
                 </div>
               ))}
             </div>
-
-            {contributionLeaderboard.length > 0 && (
-              <div className="grid grid-cols-1 gap-3">
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-ludu-red/5 border-2 border-ludu-red/20">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-full bg-ludu-red p-2 text-white">
-                      <TrendingUp className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase text-ludu-red/60 tracking-wider">💸 Biggest Contributor</p>
-                      <p className="font-bold text-foreground">{contributionLeaderboard[0]?.name || 'N/A'}</p>
-                    </div>
-                  </div>
-                  <p className="text-lg font-black text-ludu-red">{contributionLeaderboard[0]?.totalFine || 0} ৳</p>
-                </div>
-                
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-ludu-green/5 border-2 border-ludu-green/20">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-full bg-ludu-green p-2 text-white">
-                      <Star className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-black uppercase text-ludu-green/60 tracking-wider">🎉 Luckiest Player</p>
-                      <p className="font-bold text-foreground">{contributionLeaderboard[contributionLeaderboard.length - 1]?.name || 'N/A'}</p>
-                    </div>
-                  </div>
-                  <p className="text-lg font-black text-ludu-green">{contributionLeaderboard[contributionLeaderboard.length - 1]?.totalFine || 0} ৳</p>
-                </div>
-              </div>
-            )}
           </motion.div>
         )}
 
