@@ -79,12 +79,9 @@ export function getCoordinates(color: LuduColor, position: number, pieceIdx: num
       blue: { x: 1.5, y: 10.5 }
     };
     const base = bases[color];
-    const pieceOffsets = [
-      { dx: 0, dy: 0 }, { dx: 2, dy: 0 },
-      { dx: 0, dy: 2 }, { dx: 2, dy: 2 }
-    ];
-    const offset = pieceOffsets[pieceIdx % 4];
-    return { x: base.x + offset.dx, y: base.y + offset.dy };
+    const dx = pieceIdx % 2 === 0 ? 0 : 2;
+    const dy = pieceIdx < 2 ? 0 : 2;
+    return { x: base.x + dx, y: base.y + dy };
   }
 
   // Finish Area
