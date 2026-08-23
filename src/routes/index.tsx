@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Visual Overhaul & Professional Polish Plan\n\nRefine \"Ludu Hisab\" into a high-fidelity, colorful, and animated professional mobile experience.\n\nDesign Refinement\n\nColor Palette Expansion: Introduce high-contrast semantic variants for the Ludu colors (e.g., deeper shadows, vibrant gradients).\n\nGlassmorphism 2.0: Enhance the dashboard and navigation with richer blur effects and subtle border glows.\n\n3D Interactive Elements: Upgrade cards and buttons with deeper tactile feedback and shadows.\n\nNavigation & UI Structure\n\nProfessional Bottom Nav: Replace the current navigation with a larger, floating-effect bar using animated SVG icons and pill indicators.\n\nDynamic Tab Switching: Implement layout-aware transitions between dashboard sections.\n\nEnhanced Overview: Rebuild the overview tab with large, bento-grid style cards and real-time counter animations for numbers.\n\nAnimations & Feedback\n\nMicro-interactions: Add spring-based animations to all toggles, drawers, and form steps.\n\nPage Transitions: Use staggered entrance animations for list items in History and Stats.\n\nHaptic-like Visuals: Strengthen the \"active-scale\" effect with multi-layered shadows.\n\nTechnical Details\n\nUse framer-motion for complex layout transitions.\n\nUpdate StatCard and PrimaryButton components for higher visual density.\n\nRefine src/styles.css with advanced utility classes for professional shading and gradients.\n\nEIta full implement koro, new plan korbe na, ei sob implement koro",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Visual Overhaul & Professional Polish Plan\n\nRefine \"Ludu Hisab\" into a high-fidelity, colorful, and animated professional mobile experience.\n\nDesign Refinement\n\nColor Palette Expansion: Introduce high-contrast semantic variants for the Ludu colors (e.g., deeper shadows, vibrant gradients).\n\nGlassmorphism 2.0: Enhance the dashboard and navigation with richer blur effects and subtle border glows.\n\n3D Interactive Elements: Upgrade cards and buttons with deeper tactile feedback and shadows.\n\nNavigation & UI Structure\n\nProfessional Bottom Nav: Replace the current navigation with a larger, floating-effect bar using animated SVG icons and pill indicators.\n\nDynamic Tab Switching: Implement layout-aware transitions between dashboard sections.\n\nEnhanced Overview: Rebuild the overview tab with large, bento-grid style cards and real-time counter animations for numbers.\n\nAnimations & Feedback\n\nMicro-interactions: Add spring-based animations to all toggles, drawers, and form steps.\n\nPage Transitions: Use staggered entrance animations for list items in History and Stats.\n\nHaptic-like Visuals: Strengthen the \"active-scale\" effect with multi-layered shadows.\n\nTechnical Details\n\nUse framer-motion for complex layout transitions.\n\nUpdate StatCard and PrimaryButton components for higher visual density.\n\nRefine src/styles.css with advanced utility classes for professional shading and gradients.\n\nEIta full implement koro, new plan korbe na, ei sob implement koro" },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -393,25 +393,46 @@ function Dashboard() {
             className="grid grid-cols-1 gap-4"
           >
             <div className="grid grid-cols-2 gap-4">
-              <StatCard 
-                label="Fund Collected" 
-                value={`${periodStats.totalFines} ৳`} 
-                icon={<Wallet className="h-4 w-4" />}
-                trend={{ value: "Fines", isPositive: true }}
-              />
-              <StatCard 
-                label="Matches Played" 
-                value={periodStats.matchCount} 
-                icon={<LayoutDashboard className="h-4 w-4" />}
-                subValue="This Period"
-              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                <StatCard 
+                  label="Fund Collected" 
+                  value={`${periodStats.totalFines} ৳`} 
+                  icon={<Wallet className="h-6 w-6" />}
+                  trend={{ value: "Fines", isPositive: true }}
+                  variant="green"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <StatCard 
+                  label="Matches Played" 
+                  value={periodStats.matchCount} 
+                  icon={<LayoutDashboard className="h-6 w-6" />}
+                  subValue="This Period"
+                  variant="blue"
+                />
+              </motion.div>
             </div>
-            <StatCard 
-              label="Total Cha-Nasta Expense" 
-              value={`${periodStats.totalExpenses} ৳`} 
-              icon={<Coffee className="h-4 w-4" />}
-              variant="red"
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <StatCard 
+                label="Total Cha-Nasta Expense" 
+                value={`${periodStats.totalExpenses} ৳`} 
+                icon={<Coffee className="h-6 w-6" />}
+                variant="red"
+                className="py-8"
+              />
+            </motion.div>
             
             <div className="grid grid-cols-2 gap-4">
               <Link 
