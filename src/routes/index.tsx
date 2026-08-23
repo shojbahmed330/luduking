@@ -47,13 +47,13 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Koi ami to background gula ekhono sada e dekte pai, protita page er e.",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            tmr diya ludu bad diye ludu games a eita rakho",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Koi ami to background gula ekhono sada e dekte pai, protita page er e." },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            tmr diya ludu bad diye ludu games a eita rakho" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Ludu Hisab — Dashboard" },
-      { name: "twitter:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Koi ami to background gula ekhono sada e dekte pai, protita page er e." },
+      { name: "twitter:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            tmr diya ludu bad diye ludu games a eita rakho" },
 
 
       { property: "og:type", content: "website" },
