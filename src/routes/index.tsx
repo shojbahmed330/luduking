@@ -13,13 +13,16 @@ import {
   Star,
   Frown,
   PlusCircle,
-  LayoutDashboard
+  LayoutDashboard,
+  ChevronDown,
+  Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/ludu/StatCard";
 import { PositionBadge } from "@/components/ludu/PositionBadge";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
+import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
