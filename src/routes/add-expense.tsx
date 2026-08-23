@@ -1,25 +1,32 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Coffee, Calendar, AlertTriangle, ArrowLeft } from "lucide-react";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
-import { StatCard } from "@/components/ludu/StatCard";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
+
+const expenseSearchSchema = z.object({
+  editId: z.string().optional(),
+});
 
 export const Route = createFileRoute("/add-expense")({
+  validateSearch: (search) => expenseSearchSchema.parse(search),
   component: AddExpense,
 });
 
 function AddExpense() {
   const navigate = useNavigate();
+  const { editId } = useSearch({ from: "/add-expense" });
   const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [amount, setAmount] = useState<string>("");
   const [note, setNote] = useState("");
   const [currentBalance, setCurrentBalance] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingEdit, setIsLoadingEdit] = useState(!!editId);
 
   useEffect(() => {
     async function fetchBalance() {
@@ -42,6 +49,30 @@ function AddExpense() {
     fetchBalance();
   }, []);
 
+  useEffect(() => {
+    async function fetchExpenseToEdit() {
+      if (!editId) return;
+
+      const { data, error } = await supabase
+        .from("expenses")
+        .select("*")
+        .eq("id", editId)
+        .single();
+
+      if (error || !data) {
+        toast.error("Failed to load expense for editing");
+        setIsLoadingEdit(false);
+        return;
+      }
+
+      setDate(data.expense_date);
+      setAmount(data.amount.toString());
+      setNote(data.note || "");
+      setIsLoadingEdit(false);
+    }
+    fetchExpenseToEdit();
+  }, [editId]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!amount || isNaN(parseInt(amount)) || parseInt(amount) <= 0) {
@@ -51,24 +82,41 @@ function AddExpense() {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase
-        .from("expenses")
-        .insert({
-          expense_date: date,
-          amount: parseInt(amount),
-          note: note.trim() || null,
-        });
+      if (editId) {
+        const { error } = await supabase
+          .from("expenses")
+          .update({
+            expense_date: date,
+            amount: parseInt(amount),
+            note: note.trim() || null,
+          })
+          .eq("id", editId);
 
-      if (error) throw error;
+        if (error) throw error;
+        toast.success("Expense updated! ☕");
+      } else {
+        const { error } = await supabase
+          .from("expenses")
+          .insert({
+            expense_date: date,
+            amount: parseInt(amount),
+            note: note.trim() || null,
+          });
 
-      toast.success("Expense saved! ☕");
-      navigate({ to: "/" });
+        if (error) throw error;
+        toast.success("Expense saved! ☕");
+      }
+      navigate({ to: editId ? "/history" : "/" });
     } catch (error: any) {
       toast.error(error.message || "Failed to save expense");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoadingEdit) {
+    return <div className="flex items-center justify-center min-h-[50vh]">Loading Expense...</div>;
+  }
 
   const amountVal = parseInt(amount) || 0;
   const afterBalance = currentBalance !== null ? currentBalance - amountVal : null;
@@ -78,13 +126,14 @@ function AddExpense() {
     <div className="flex flex-col gap-6 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center gap-4">
         <button
-          onClick={() => navigate({ to: "/" })}
+          onClick={() => navigate({ to: editId ? "/history" : "/" })}
           className="rounded-full bg-white p-2 shadow-sm border text-muted-foreground"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-extrabold text-foreground">Add Expense</h1>
+        <h1 className="text-2xl font-extrabold text-foreground">{editId ? "Edit Expense" : "Add Expense"}</h1>
       </div>
+
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="space-y-2">
