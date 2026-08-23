@@ -9,11 +9,14 @@ import {
   Trash2, 
   Dice5, 
   Coffee,
-  ChevronRight
+  ChevronRight,
+  ChevronDown,
+  Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PositionBadge, type Position } from "@/components/ludu/PositionBadge";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
+import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { 
   Dialog, 
   DialogContent, 
