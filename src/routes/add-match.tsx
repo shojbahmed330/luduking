@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format, parseISO } from "date-fns";
-import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2 } from "lucide-react";
+import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
