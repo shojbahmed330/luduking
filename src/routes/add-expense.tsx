@@ -222,7 +222,7 @@ function AddExpense() {
               </motion.div>
             )}
           </AnimatePresence>
-    </motion.div>
+        </div>
 
         <PrimaryButton 
           type="submit" 

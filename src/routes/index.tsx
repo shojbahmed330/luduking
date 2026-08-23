@@ -340,7 +340,7 @@ function Dashboard() {
             <div className="flex justify-between items-center">
               <span className="text-sm font-bold text-muted-foreground">Total Spent</span>
               <span className="font-black text-foreground">{periodStats.totalExpenses} ৳</span>
-    </motion.div>
+            </div>
             <div className="flex justify-between items-center pt-2 border-t border-dashed">
               <span className="text-sm font-bold text-muted-foreground">Avg. Daily Spend</span>
               <span className="font-black text-ludu-blue">{Math.round(expenseSummary.avgSpend)} ৳</span>
