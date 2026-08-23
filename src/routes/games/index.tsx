@@ -39,7 +39,7 @@ function GamesLobby() {
     setCreating(true);
     try {
       // @ts-ignore - game_rooms table is dynamic
-      const { data, error } = await supabase
+      const { data, error } = await (supabase
         .from("game_rooms" as any)
         .insert({
           created_by: user.id,
@@ -52,7 +52,7 @@ function GamesLobby() {
           }]
         })
         .select()
-        .single();
+        .single() as any);
 
       if (error) throw error;
       // Navigate using typed route when generated, but cast for now to fix build
