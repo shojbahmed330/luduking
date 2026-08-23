@@ -132,13 +132,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background pb-[calc(5rem+var(--sab))] pt-[var(--sat)]">
-        <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md px-6 py-4 pt-[calc(1rem+var(--sat))]">
+      <div className="flex min-h-screen flex-col bg-background pb-[calc(4rem+var(--sab))] pt-[var(--sat)]">
+        <header className="sticky top-0 z-40 w-full glass-header px-6 py-4 pt-[calc(0.5rem+var(--sat))]">
           <div className="flex items-center gap-2">
-            <span className="text-2xl" role="img" aria-label="dice">
+            <span className="text-2xl active-scale" role="img" aria-label="dice">
               🎲
             </span>
-            <span className="text-xl font-extrabold tracking-tight">Ludu Hisab</span>
+            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Ludu Hisab</span>
           </div>
         </header>
         <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
