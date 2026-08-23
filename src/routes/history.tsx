@@ -74,18 +74,46 @@ function HistoryPage() {
   }, [matches, expenses]);
 
   const filteredMatches = useMemo(() => {
-    if (selectedMonth === "All-Time") return matches;
-    const start = startOfMonth(new Date(selectedMonth));
-    const end = endOfMonth(new Date(selectedMonth));
-    return matches.filter(m => isWithinInterval(parseISO(m.match_date), { start, end }));
+    let result = matches;
+    if (selectedMonth !== "All-Time") {
+      const start = startOfMonth(new Date(selectedMonth));
+      const end = endOfMonth(new Date(selectedMonth));
+      result = matches.filter(m => isWithinInterval(parseISO(m.match_date), { start, end }));
+    }
+    
+    // Further group by day to show daily sectioning
+    return result;
   }, [matches, selectedMonth]);
 
   const filteredExpenses = useMemo(() => {
-    if (selectedMonth === "All-Time") return expenses;
-    const start = startOfMonth(new Date(selectedMonth));
-    const end = endOfMonth(new Date(selectedMonth));
-    return expenses.filter(e => isWithinInterval(parseISO(e.expense_date), { start, end }));
+    let result = expenses;
+    if (selectedMonth !== "All-Time") {
+      const start = startOfMonth(new Date(selectedMonth));
+      const end = endOfMonth(new Date(selectedMonth));
+      result = expenses.filter(e => isWithinInterval(parseISO(e.expense_date), { start, end }));
+    }
+    return result;
   }, [expenses, selectedMonth]);
+
+  const matchesGroupedByDay = useMemo(() => {
+    const groups: Record<string, any[]> = {};
+    filteredMatches.forEach(match => {
+      const day = format(parseISO(match.match_date), "yyyy-MM-dd");
+      if (!groups[day]) groups[day] = [];
+      groups[day].push(match);
+    });
+    return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
+  }, [filteredMatches]);
+
+  const expensesGroupedByDay = useMemo(() => {
+    const groups: Record<string, any[]> = {};
+    filteredExpenses.forEach(expense => {
+      const day = format(parseISO(expense.expense_date), "yyyy-MM-dd");
+      if (!groups[day]) groups[day] = [];
+      groups[day].push(expense);
+    });
+    return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
+  }, [filteredExpenses]);
 
   const handleDelete = async () => {
     if (!deleteConfirm) return;
