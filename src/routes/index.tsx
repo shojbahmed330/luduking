@@ -182,7 +182,7 @@ function Dashboard() {
       className="flex flex-col gap-6 pb-24"
     >
       {/* Fixed Top Section */}
-      <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-30">
+      <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-40">
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
             <Calendar className="h-3 w-3" /> Select Period
@@ -258,7 +258,7 @@ function Dashboard() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto no-scrollbar gap-2 p-1 bg-muted/30 rounded-2xl">
+      <div className="flex overflow-x-auto no-scrollbar gap-2 p-1 bg-muted/30 rounded-2xl shrink-0">
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
           { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
@@ -269,7 +269,7 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-black whitespace-nowrap transition-all active-scale",
+              "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
               activeTab === tab.id 
                 ? "bg-white text-ludu-gold shadow-sm ring-1 ring-black/5" 
                 : "text-muted-foreground hover:bg-white/50"
