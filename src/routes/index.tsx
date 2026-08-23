@@ -468,9 +468,9 @@ function Dashboard() {
                             <Dice5 className="h-3 w-3 text-ludu-gold" />
                             Match #{match.id.slice(0, 4)}
                           </div>
-                          {(match as any).created_by_name && (
+                          {match.created_by_name && (
                             <span className="text-[7px] font-black text-muted-foreground/60 uppercase tracking-tighter">
-                              By: {(match as any).created_by_name}
+                              By: {match.created_by_name}
                             </span>
                           )}
                         </div>
