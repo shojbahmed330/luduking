@@ -153,44 +153,47 @@ function AddExpense() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="space-y-2">
-          <label className="text-sm font-bold text-muted-foreground flex items-center gap-2">
-            <Calendar className="h-4 w-4" /> Expense Date
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
+            <Calendar className="h-3.5 w-3.5" /> Expense Date
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-lg font-bold outline-none focus:border-ludu-blue transition-colors"
+            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-lg font-black outline-none focus:border-ludu-red transition-colors shadow-sm"
             required
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-muted-foreground">
-            Amount Spent (Taka)
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-1">
+            Amount Spent (৳)
           </label>
-          <input
-            type="number"
-            inputMode="numeric"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="e.g. 50"
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-2xl font-black text-ludu-red outline-none focus:border-ludu-red transition-colors"
-            required
-            min="1"
-            step="1"
-          />
+          <div className="relative">
+            <input
+              type="number"
+              inputMode="numeric"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0"
+              className="w-full rounded-2xl border-2 border-muted bg-white p-4 pl-12 text-3xl font-black text-ludu-red outline-none focus:border-ludu-red transition-colors shadow-sm"
+              required
+              min="1"
+              step="1"
+            />
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-black text-muted-foreground/30">৳</span>
+          </div>
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-muted-foreground">
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-1">
             Note (optional)
           </label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="biscuits and tea for evening session"
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-base font-medium outline-none focus:border-ludu-gold transition-colors resize-none h-24"
+            placeholder="e.g. Biscuits and tea for evening session"
+            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-base font-bold outline-none focus:border-ludu-gold transition-colors resize-none h-28 shadow-sm"
           />
         </div>
 
