@@ -15,6 +15,7 @@ import {
   PlusCircle,
   LayoutDashboard,
   ChevronDown,
+  ChevronRight,
   Check
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -280,8 +281,24 @@ function Dashboard() {
             />
             
             <Link 
+              to="/history" 
+              className="flex items-center justify-between p-4 rounded-2xl bg-white border-2 border-muted hover:border-ludu-gold active-scale group shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <div className="rounded-xl bg-ludu-gold/10 p-2 text-ludu-gold group-hover:bg-ludu-gold group-hover:text-white transition-colors">
+                  <Calendar className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-black text-foreground">Daily Breakdown</p>
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">View detailed history</p>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-muted-foreground" />
+            </Link>
+
+            <Link 
               to="/add-match" 
-              className="mt-4 flex flex-col items-center justify-center py-8 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-gold hover:bg-ludu-gold/5 transition-all group active-scale"
+              className="mt-2 flex flex-col items-center justify-center py-8 rounded-3xl border-2 border-dashed border-muted hover:border-ludu-gold hover:bg-ludu-gold/5 transition-all group active-scale"
             >
               <PlusCircle className="h-8 w-8 text-muted-foreground group-hover:text-ludu-gold transition-colors mb-2" />
               <span className="font-black text-muted-foreground group-hover:text-ludu-gold">Add New Match</span>
