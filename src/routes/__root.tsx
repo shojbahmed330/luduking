@@ -10,7 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BottomNavBar } from "@/components/layout/BottomNavBar";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "sonner";
+import { AuthGuard } from "@/components/AuthGuard";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -142,9 +143,11 @@ function RootComponent() {
           </div>
         </header>
         <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
-          <AnimatePresence mode="wait">
-            <Outlet />
-          </AnimatePresence>
+          <AuthGuard>
+            <AnimatePresence mode="wait">
+              <Outlet />
+            </AnimatePresence>
+          </AuthGuard>
         </main>
         <BottomNavBar />
       </div>

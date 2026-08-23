@@ -137,7 +137,7 @@ function AddExpense() {
   const isNegative = afterBalance !== null && afterBalance < 0;
 
   return (
-    <AuthGuard>
+    <>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -247,6 +247,6 @@ function AddExpense() {
         </PrimaryButton>
       </form>
       </motion.div>
-    </AuthGuard>
+    </>
   );
 }
