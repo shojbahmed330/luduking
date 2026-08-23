@@ -355,10 +355,6 @@ function Dashboard() {
         </motion.div>
       </div>
 
-      {/* Tabs Navigation */}
-      </div>
-
-      {/* Tabs Navigation */}
       <div className="relative flex p-1.5 bg-muted/40 rounded-[2rem] shrink-0 overflow-x-auto no-scrollbar glass-morphism">
         <div 
           className="absolute h-[calc(100%-12px)] bg-white rounded-2xl shadow-md ring-1 ring-black/5 transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) z-0"
