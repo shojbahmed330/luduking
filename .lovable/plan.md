@@ -1,32 +1,33 @@
-# Mobile-First Professional UI Refinement Plan
+# Plan: Professional UI/UX Refinement for Ludu Hisab
 
-Revising the "Ludu Hisab" app to enhance its professional feel and mobile usability through tactile feedback, refined spacing, and visual hierarchy.
+Enhance the mobile-first experience to feel like a high-end native application through visual consistency, improved interactions, and refined layouts.
 
-## UI/UX Enhancements
+## User Review Required
 
-1. **Refined Typography & Spacing**
-   - Increase contrast between headings and body text.
-   - Standardize padding across all cards and sections for a consistent "breathable" feel.
-   - Use a more subtle background color (`#F8FAFC`) to make white cards pop.
+> [!IMPORTANT]
+> The current "Overview" tab has a lot of secondary links. Should we move the "Add Match" and "Add Expense" buttons to a more prominent floating action button or keep them as large cards within the tab?
 
-2. **Tactile Feedback & Micro-interactions**
-   - Add "active" states to all interactive elements (buttons, chips, tabs) using subtle scale-downs (98%) and background dimming.
-   - Implement Haptic-like visual feedback: brief glow or color shift when a form is successfully submitted.
+- **Color Palette Consistency**: Standardize the use of semantic colors across all screens to ensure a cohesive brand identity.
+- **Micro-interactions**: Implement subtle animations and feedback loops for all user actions.
 
-3. **Visual Hierarchy & Professional Polish**
-   - Replace standard HTML shadows with "soft layered shadows" for a modern floating effect on cards.
-   - Add subtle border-gradients or "glassmorphism" effects to the sticky header and bottom navigation bar.
-   - Use a more sophisticated color palette: slightly desaturated "Ludu" colors for a more premium look.
+## Proposed Changes
 
-4. **Mobile Navigation & Forms**
-   - Implement "Bottom Sheets" for selection menus (like the month selector) instead of standard dropdowns.
-   - Add multi-step progress indicators for the "Add Match" flow.
-   - Optimize input fields for mobile: larger touch targets, auto-focus where appropriate, and specific keyboard types (numeric for Taka).
+### Styling & Visual Polish
+- **Refined Surfaces**: Update `src/styles.css` with a multi-layered shadow system and sophisticated background gradients for cards.
+- **Glassmorphism**: Enhance the `glass-header` and `glass-nav` with better blur radius and subtle borders to improve depth.
+- **Typography**: Standardize tracking and font weights for a more "designed" editorial feel.
+
+### Component Enhancements
+- **StatCard 2.0**: Update `StatCard.tsx` with internal padding refinements and a subtle inner glow effect for colored variants.
+- **PlayerAvatar**: Add a delicate ring or shadow to avatars to make them pop against various backgrounds.
+- **List Items**: Redesign match and expense list items in `src/routes/history.tsx` and `src/routes/index.tsx` (Matches tab) with better information hierarchy.
+
+### Layout Optimization
+- **Dashboard Tabs**: Refine the tab bar in `src/routes/index.tsx` with a sliding background indicator for the active state.
+- **Money Tab**: Convert the remaining tables in the Money tab into card-based layouts for better mobile viewing.
+- **Matches Tab**: Improve the match detail cards to show a "Match Breakdown" that is easier to scan.
 
 ## Technical Details
-
-- **Tailwind CSS**: Use custom shadow utilities and transition durations.
-- **Framer Motion**: Add `whileTap={{ scale: 0.98 }}` to all interactive components.
-- **Radix UI / Shadcn**: Integrate `Drawer` component for bottom sheets.
-- **CSS Variables**: Refine `--background` and `--card` tokens in `src/styles.css`.
-
+- Utilize `framer-motion` for layout transitions and shared element animations.
+- Leverage Tailwind's `group` and `peer` utilities for complex hover/active states.
+- Ensure all touch targets meet the 44px minimum with proper visual hit states.
