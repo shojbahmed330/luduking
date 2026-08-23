@@ -212,13 +212,12 @@ function HistoryPage() {
                 <Dice5 className="h-12 w-12 text-muted-foreground/30" />
               </div>
               <p className="text-muted-foreground font-bold">No matches logged yet — tap Add Match to get started! 🎲</p>
-              <Button 
-                variant="outline" 
-                className="mt-4 rounded-xl border-ludu-gold text-ludu-gold font-bold"
+              <button 
+                className="mt-6 w-full rounded-2xl bg-ludu-gold text-white font-black py-4 shadow-lg shadow-ludu-gold/20 active-scale"
                 onClick={() => navigate({ to: "/add-match" })}
               >
                 Add Match
-              </Button>
+              </button>
             </div>
           ) : (
             filteredMatches.map(match => (
