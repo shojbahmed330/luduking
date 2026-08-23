@@ -127,14 +127,15 @@ function HistoryPage() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="flex flex-col gap-6 pb-24"
     >
       <div className="flex items-center gap-2 px-1">
-        <HistoryIcon className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-black text-foreground">History</h1>
+        <HistoryIcon className="h-6 w-6 text-ludu-blue" />
+        <h1 className="text-2xl font-black text-foreground tracking-tight">Match History</h1>
       </div>
 
       {/* Tabs */}
