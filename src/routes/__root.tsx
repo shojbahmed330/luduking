@@ -130,6 +130,47 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function AuthStatus() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!user) return null;
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className="flex flex-col items-end mr-1">
+        <span className="text-[10px] font-black text-foreground truncate max-w-[80px]">
+          {(user.user_metadata?.["full_name"] as string) || user.email?.split('@')[0]}
+        </span>
+        <button 
+          onClick={() => supabase.auth.signOut()}
+          className="text-[8px] font-black text-ludu-red uppercase tracking-widest hover:opacity-80 transition-opacity"
+        >
+          Logout
+        </button>
+      </div>
+      {user.user_metadata?.["avatar_url"] ? (
+        <img 
+          src={user.user_metadata["avatar_url"]} 
+          alt="Avatar" 
+          className="h-8 w-8 rounded-full border-2 border-white shadow-sm"
+        />
+      ) : (
+        <div className="h-8 w-8 rounded-full bg-ludu-gold/10 flex items-center justify-center text-ludu-gold text-xs font-black border-2 border-white shadow-sm">
+          {user.email?.[0].toUpperCase()}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
