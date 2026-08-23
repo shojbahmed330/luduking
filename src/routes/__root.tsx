@@ -87,7 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { property: "og:title", content: "Ludu Hisab" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Match Insights & Analytics: Add a \"Player vs Player\" comparison tool to see head-to-head records and a \"Win Rate\" trend chart to visualize performance over time.\n\nShared Authentication (Lightweight): Implement a group password or per-user PIN to prevent accidental data entry from outside the group while keeping the \"no signup\" feel.\n\nEi duita full implement koro" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
 
