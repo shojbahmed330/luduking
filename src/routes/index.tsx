@@ -703,18 +703,70 @@ function Dashboard() {
                 {h2hComparison && (
                     <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
                       <div className="flex items-center justify-between mb-8">
-                        <div className="text-center space-y-2">
-                          <PlayerAvatar name={h2hComparison.p1.name} size="md" />
-                          <p className="font-black text-sm">{h2hComparison.p1.name}</p>
-                        </div>
+                        <BottomDrawer
+                          title="Select Player 1"
+                          description="Choose a player for comparison"
+                          trigger={
+                            <button className="text-center space-y-2 active-scale group">
+                              <PlayerAvatar name={h2hComparison.p1.name} size="md" className="ring-2 ring-ludu-gold ring-offset-2 transition-all group-hover:ring-4" />
+                              <div className="flex flex-col">
+                                <p className="font-black text-xs">{h2hComparison.p1.name}</p>
+                                <span className="text-[8px] font-black text-muted-foreground uppercase">{matchResults.filter(mr => mr.player_id === h2hComparison.p1.id).length} Matches</span>
+                              </div>
+                            </button>
+                          }
+                        >
+                          <div className="grid grid-cols-2 gap-3 pb-6">
+                            {players.map(p => (
+                              <button
+                                key={p.id}
+                                onClick={() => setComparisonPlayer1Id(p.id)}
+                                className={cn(
+                                  "flex flex-col items-center gap-2 p-4 rounded-3xl border-2 transition-all active-scale",
+                                  h2hComparison.p1.id === p.id ? "bg-ludu-gold/10 border-ludu-gold" : "bg-muted/30 border-transparent"
+                                )}
+                              >
+                                <PlayerAvatar name={p.name} size="sm" />
+                                <span className="font-black text-xs">{p.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </BottomDrawer>
+
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter mb-1">VS</span>
                           <div className="h-0.5 w-12 bg-muted rounded-full" />
                         </div>
-                        <div className="text-center space-y-2">
-                          <PlayerAvatar name={h2hComparison.p2.name} size="md" />
-                          <p className="font-black text-sm">{h2hComparison.p2.name}</p>
-                        </div>
+
+                        <BottomDrawer
+                          title="Select Player 2"
+                          description="Choose a player for comparison"
+                          trigger={
+                            <button className="text-center space-y-2 active-scale group">
+                              <PlayerAvatar name={h2hComparison.p2.name} size="md" className="ring-2 ring-ludu-blue ring-offset-2 transition-all group-hover:ring-4" />
+                              <div className="flex flex-col">
+                                <p className="font-black text-xs">{h2hComparison.p2.name}</p>
+                                <span className="text-[8px] font-black text-muted-foreground uppercase">{matchResults.filter(mr => mr.player_id === h2hComparison.p2.id).length} Matches</span>
+                              </div>
+                            </button>
+                          }
+                        >
+                          <div className="grid grid-cols-2 gap-3 pb-6">
+                            {players.map(p => (
+                              <button
+                                key={p.id}
+                                onClick={() => setComparisonPlayer2Id(p.id)}
+                                className={cn(
+                                  "flex flex-col items-center gap-2 p-4 rounded-3xl border-2 transition-all active-scale",
+                                  h2hComparison.p2.id === p.id ? "bg-ludu-blue/10 border-ludu-blue" : "bg-muted/30 border-transparent"
+                                )}
+                              >
+                                <PlayerAvatar name={p.name} size="sm" />
+                                <span className="font-black text-xs">{p.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </BottomDrawer>
                       </div>
 
                       <div className="space-y-6">
