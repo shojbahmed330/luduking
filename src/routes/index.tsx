@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
+import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay } from "date-fns";
 import { 
   Trophy, 
   Users, 
@@ -24,6 +24,7 @@ import { PositionBadge } from "@/components/ludu/PositionBadge";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { BottomDrawer } from "@/components/ludu/BottomDrawer";
+import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -54,6 +55,7 @@ function Dashboard() {
   const [matchResults, setMatchResults] = useState<MatchResult[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "money" | "chanasta">("overview");
   const [loading, setLoading] = useState(true);
 
@@ -83,6 +85,14 @@ function Dashboard() {
   }, [matches, expenses]);
 
   const filteredData = useMemo(() => {
+    if (selectedDate) {
+      const fMatches = matches.filter(m => isSameDay(parseISO(m.match_date), selectedDate));
+      const matchIds = new Set(fMatches.map(m => m.id));
+      const fMatchResults = matchResults.filter(mr => matchIds.has(mr.match_id));
+      const fExpenses = expenses.filter(e => isSameDay(parseISO(e.expense_date), selectedDate));
+      return { matches: fMatches, matchResults: fMatchResults, expenses: fExpenses };
+    }
+
     if (selectedMonth === "All-Time") {
       return { matches, matchResults, expenses };
     }
@@ -183,34 +193,55 @@ function Dashboard() {
             trigger={
               <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-5 py-3.5 text-base font-black active-scale shadow-sm text-left">
                 <span className="flex items-center gap-2">
-                  {selectedMonth === "All-Time" ? "All-Time History" : selectedMonth}
+                  {selectedDate 
+                    ? format(selectedDate, "MMM d, yyyy") 
+                    : selectedMonth === "All-Time" 
+                      ? "All-Time History" 
+                      : selectedMonth}
                 </span>
                 <ChevronDown className="h-5 w-5 text-muted-foreground" />
               </button>
             }
           >
             <div className="flex flex-col gap-2">
+              <div className="bg-muted/20 rounded-2xl p-2 mb-2">
+                <CalendarUI
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date);
+                    if (date) setSelectedMonth(format(date, "MMMM yyyy"));
+                  }}
+                  className="rounded-xl border-none"
+                />
+              </div>
               <button
-                onClick={() => setSelectedMonth("All-Time")}
+                onClick={() => {
+                  setSelectedMonth("All-Time");
+                  setSelectedDate(undefined);
+                }}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
-                  selectedMonth === "All-Time" ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                  (selectedMonth === "All-Time" && !selectedDate) ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
                 )}
               >
                 All-Time History
-                {selectedMonth === "All-Time" && <Check className="h-5 w-5" />}
+                {(selectedMonth === "All-Time" && !selectedDate) && <Check className="h-5 w-5" />}
               </button>
               {availableMonths.map(m => (
                 <button
                   key={m}
-                  onClick={() => setSelectedMonth(m)}
+                  onClick={() => {
+                    setSelectedMonth(m);
+                    setSelectedDate(undefined);
+                  }}
                   className={cn(
                     "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
-                    selectedMonth === m ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                    (selectedMonth === m && !selectedDate) ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
                   )}
                 >
                   {m}
-                  {selectedMonth === m && <Check className="h-5 w-5" />}
+                  {(selectedMonth === m && !selectedDate) && <Check className="h-5 w-5" />}
                 </button>
               ))}
             </div>
@@ -323,36 +354,44 @@ function Dashboard() {
                 No matches played this period 🎲
               </div>
             ) : (
-              <div className="rounded-3xl bg-white shadow-sm border-2 border-muted overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-muted/30">
-                        <th className="p-4 text-xs font-black uppercase text-muted-foreground">Player</th>
-                        <th className="p-4 text-center"><PositionBadge position={1} /></th>
-                        <th className="p-4 text-center"><PositionBadge position={2} /></th>
-                        <th className="p-4 text-center"><PositionBadge position={3} /></th>
-                        <th className="p-4 text-center"><PositionBadge position={4} /></th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-muted">
-                      {playerLeaderboard.map((player) => (
-                        <tr key={player.id} className="group hover:bg-muted/10 transition-colors">
-                          <td className="p-4 whitespace-nowrap">
-                            <div className="flex items-center gap-3">
-                              <PlayerAvatar name={player.name} size="sm" />
-                              <span className="font-bold text-foreground">{player.name}</span>
-                            </div>
-                          </td>
-                          <td className="p-4 text-center font-black text-ludu-gold">{player.counts[1] || 0}</td>
-                          <td className="p-4 text-center font-black text-ludu-green">{player.counts[2] || 0}</td>
-                          <td className="p-4 text-center font-black text-ludu-blue">{player.counts[3] || 0}</td>
-                          <td className="p-4 text-center font-black text-ludu-red">{player.counts[4] || 0}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+              <div className="grid grid-cols-1 gap-4">
+                {playerLeaderboard.map((player) => (
+                  <div 
+                    key={player.id} 
+                    className="bg-white rounded-3xl p-5 border-2 border-muted shadow-sm flex flex-col gap-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      <PlayerAvatar name={player.name} size="md" />
+                      <div className="flex-1">
+                        <p className="font-black text-lg text-foreground">{player.name}</p>
+                        <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Player Rankings</p>
+                      </div>
+                      <div className="flex items-center gap-1 bg-ludu-gold/10 px-3 py-1 rounded-full">
+                        <Star className="h-3 w-3 text-ludu-gold fill-ludu-gold" />
+                        <span className="text-xs font-black text-ludu-gold">{player.counts[1] || 0} Wins</span>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-4 gap-2 pt-2 border-t border-muted/50">
+                      <div className="flex flex-col items-center gap-1">
+                        <PositionBadge position={1} />
+                        <span className="text-sm font-black text-foreground">{player.counts[1] || 0}</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <PositionBadge position={2} />
+                        <span className="text-sm font-black text-foreground">{player.counts[2] || 0}</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <PositionBadge position={3} />
+                        <span className="text-sm font-black text-foreground">{player.counts[3] || 0}</span>
+                      </div>
+                      <div className="flex flex-col items-center gap-1">
+                        <PositionBadge position={4} />
+                        <span className="text-sm font-black text-foreground">{player.counts[4] || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </motion.div>
