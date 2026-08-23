@@ -380,14 +380,14 @@ function Dashboard() {
                           .map((result) => {
                             const player = players.find(p => p.id === result.player_id);
                             return (
-                              <div key={result.player_id} className="flex items-center gap-3">
-                                <div className="w-24 shrink-0">
+                              <div key={result.player_id} className="flex items-center gap-3 p-2 rounded-2xl transition-colors hover:bg-muted/10">
+                                <div className="w-20 shrink-0">
                                   <PositionBadge position={result.position as any} />
                                 </div>
-                                <PlayerAvatar name={player?.name || "???"} size="sm" />
-                                <span className="font-bold text-sm flex-1">{player?.name}</span>
+                                <PlayerAvatar name={player?.name || "???"} size="xs" />
+                                <span className="font-bold text-xs flex-1 truncate">{player?.name}</span>
                                 {result.fine_amount > 0 && (
-                                  <span className="text-[10px] font-black bg-ludu-red/10 text-ludu-red px-2.5 py-1 rounded-full uppercase tracking-wider">
+                                  <span className="text-[9px] font-black bg-ludu-red text-white px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm shadow-ludu-red/20">
                                     {result.fine_amount} ৳
                                   </span>
                                 )}
