@@ -6,7 +6,6 @@ const navItems = [
   { label: "Home", icon: Home, to: "/" },
   { label: "Add Match", icon: PlusCircle, to: "/add-match" },
   { label: "Add Expense", icon: Coffee, to: "/add-expense" },
-  { label: "Dashboard", icon: LayoutDashboard, to: "#" },
   { label: "History", icon: History, to: "#" },
 ];
 
