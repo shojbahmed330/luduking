@@ -232,6 +232,6 @@ function AddExpense() {
           {isSubmitting ? "Saving..." : "Save Expense ☕"}
         </PrimaryButton>
       </form>
-    </div>
+    </motion.div>
   );
 }

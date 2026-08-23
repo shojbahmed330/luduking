@@ -348,6 +348,6 @@ function Dashboard() {
           </div>
         )}
       </section>
-    </div>
+    </motion.div>
   );
 }
