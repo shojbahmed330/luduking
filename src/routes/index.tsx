@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay } from "date-fns";
+import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, eachMonthOfInterval } from "date-fns";
 import { 
   Trophy, 
   Users, 
@@ -17,8 +17,21 @@ import {
   ChevronDown,
   ChevronRight,
   Check,
-  Dice5
+  Dice5,
+  ArrowRight
 } from "lucide-react";
+import { 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Legend
+} from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { StatCard } from "@/components/ludu/StatCard";
 import { PositionBadge } from "@/components/ludu/PositionBadge";
@@ -552,6 +565,164 @@ function Dashboard() {
                 </div>
               </div>
             )}
+          </motion.div>
+        )}
+        {activeTab === 'analytics' && (
+          <motion.div 
+            key="analytics"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-6"
+          >
+            <div className="flex items-center gap-2 px-1">
+              <TrendingUp className="h-5 w-5 text-ludu-blue" />
+              <h2 className="text-xl font-black text-foreground">Insights & Trends</h2>
+            </div>
+
+            {/* Win Rate Trend Chart */}
+            <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">Win Rate Trend (1st Place %)</h3>
+              <div className="h-[200px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={useMemo(() => {
+                    const last6Months = eachMonthOfInterval({
+                      start: subMonths(new Date(), 5),
+                      end: new Date()
+                    });
+
+                    return last6Months.map(month => {
+                      const monthStr = format(month, "MMM");
+                      const interval = { start: startOfMonth(month), end: endOfMonth(month) };
+                      
+                      const monthMatches = matches.filter(m => 
+                        isWithinInterval(parseISO(m.match_date), interval)
+                      );
+                      
+                      const data: any = { name: monthStr };
+                      
+                      players.forEach(player => {
+                        const playerMatches = matchResults.filter(mr => 
+                          mr.player_id === player.id && 
+                          monthMatches.some(m => m.id === mr.match_id)
+                        );
+                        
+                        if (playerMatches.length === 0) {
+                          data[player.name] = 0;
+                        } else {
+                          const wins = playerMatches.filter(mr => mr.position === 1).length;
+                          data[player.name] = Math.round((wins / playerMatches.length) * 100);
+                        }
+                      });
+                      return data;
+                    });
+                  }, [matches, matchResults, players])}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                    <XAxis 
+                      dataKey="name" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
+                      dy={10}
+                    />
+                    <YAxis 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
+                      unit="%"
+                    />
+                    <Tooltip 
+                      contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 'bold' }}
+                    />
+                    {players.map((player, idx) => (
+                      <Line 
+                        key={player.id}
+                        type="monotone" 
+                        dataKey={player.name} 
+                        stroke={['#F5B301', '#2E9E4D', '#2D6CDF', '#E14545', '#8B5CF6', '#EC4899'][idx % 6]} 
+                        strokeWidth={3}
+                        dot={{ r: 4, strokeWidth: 2, fill: '#fff' }}
+                        activeDot={{ r: 6, strokeWidth: 0 }}
+                      />
+                    ))}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Head to Head Comparison */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">Head-to-Head Comparison</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {useMemo(() => {
+                  // Find top 2 most active players for initial comparison
+                  const playerMatchCounts = players.map(p => ({
+                    ...p,
+                    count: matchResults.filter(mr => mr.player_id === p.id).length
+                  })).sort((a, b) => b.count - a.count);
+
+                  if (players.length < 2) return null;
+                  
+                  const p1 = playerMatchCounts[0];
+                  const p2 = playerMatchCounts[1];
+
+                  const commonMatches = matches.filter(m => {
+                    const participants = matchResults.filter(mr => mr.match_id === m.id);
+                    return participants.some(mr => mr.player_id === p1.id) && 
+                           participants.some(mr => mr.player_id === p2.id);
+                  });
+
+                  const p1Wins = commonMatches.filter(m => {
+                    const r1 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p1.id);
+                    const r2 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p2.id);
+                    return r1 && r2 && r1.position < r2.position;
+                  }).length;
+
+                  const p2Wins = commonMatches.length - p1Wins;
+
+                  return (
+                    <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="text-center space-y-2">
+                          <PlayerAvatar name={p1.name} size="md" />
+                          <p className="font-black text-sm">{p1.name}</p>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter mb-1">VS</span>
+                          <div className="h-0.5 w-12 bg-muted rounded-full" />
+                        </div>
+                        <div className="text-center space-y-2">
+                          <PlayerAvatar name={p2.name} size="md" />
+                          <p className="font-black text-sm">{p2.name}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground px-1">
+                            <span>{p1Wins} Wins</span>
+                            <span>{p2Wins} Wins</span>
+                          </div>
+                          <div className="h-3 w-full bg-muted/30 rounded-full overflow-hidden flex">
+                            <div 
+                              className="h-full bg-ludu-gold transition-all" 
+                              style={{ width: `${commonMatches.length > 0 ? (p1Wins / commonMatches.length) * 100 : 50}%` }}
+                            />
+                            <div 
+                              className="h-full bg-ludu-blue transition-all" 
+                              style={{ width: `${commonMatches.length > 0 ? (p2Wins / commonMatches.length) * 100 : 50}%` }}
+                            />
+                          </div>
+                          <p className="text-center text-[10px] font-bold text-muted-foreground pt-1">
+                            Out of {commonMatches.length} common matches
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }, [players, matches, matchResults])}
+              </div>
+            </div>
           </motion.div>
         )}
       </div>
