@@ -6,7 +6,6 @@ const navItems = [
   { label: "Home", icon: Home, to: "/" },
   { label: "Add Match", icon: PlusCircle, to: "/add-match" },
   { label: "Add Expense", icon: Coffee, to: "/add-expense" },
-  // Dashboard link removed as Home is now the Dashboard
   { label: "History", icon: History, to: "#" },
 ];
 
