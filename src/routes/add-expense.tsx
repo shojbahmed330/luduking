@@ -131,20 +131,23 @@ function AddExpense() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
       className="flex flex-col gap-6 pb-24"
     >
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate({ to: editId ? "/history" : "/" })}
-          className="rounded-full bg-white p-2 shadow-sm border text-muted-foreground"
+          className="rounded-full bg-white p-2.5 shadow-sm border-2 border-muted active-scale text-muted-foreground"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-extrabold text-foreground">{editId ? "Edit Expense" : "Add Expense"}</h1>
+        <h1 className="text-2xl font-black text-foreground tracking-tight flex items-center gap-2">
+          <Coffee className="h-6 w-6 text-ludu-red" />
+          {editId ? "Edit Expense" : "Add Expense"}
+        </h1>
       </div>
 
 
