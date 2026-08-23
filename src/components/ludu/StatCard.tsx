@@ -38,7 +38,7 @@ export function StatCard({ label, value, icon, className, trend, variant = "defa
       className="w-full"
     >
       <Card className={cn(
-        "overflow-hidden border-2 card-shadow transition-all group active-scale",
+        "overflow-hidden border-2 card-shadow transition-all group active-scale inner-glow",
         variantStyles[variant],
         className
       )}>

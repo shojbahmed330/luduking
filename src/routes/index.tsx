@@ -259,7 +259,14 @@ function Dashboard() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto no-scrollbar gap-2 p-1 bg-muted/30 rounded-2xl shrink-0">
+      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0">
+        <div 
+          className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
+          style={{
+            width: `calc(20% - 2.4px)`,
+            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta'].indexOf(activeTab) * 20}% + 4px)`
+          }}
+        />
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
           { id: 'matches', label: 'Matches', icon: Dice5 },
@@ -271,10 +278,10 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "flex-1 min-w-[80px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
+              "relative z-10 flex-1 min-w-[60px] flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl text-[10px] font-black transition-all active-scale",
               activeTab === tab.id 
-                ? "bg-white text-ludu-gold shadow-sm ring-1 ring-black/5" 
-                : "text-muted-foreground hover:bg-white/50"
+                ? "text-ludu-gold" 
+                : "text-muted-foreground hover:bg-white/30"
             )}
           >
             <tab.icon className={cn("h-4 w-4", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground")} />
