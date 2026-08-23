@@ -8,6 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { BottomNavBar } from "@/components/layout/BottomNavBar";
+import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -87,6 +89,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -119,8 +127,21 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col bg-background pb-20">
+        <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md px-6 py-4">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl" role="img" aria-label="dice">
+              🎲
+            </span>
+            <span className="text-xl font-extrabold tracking-tight">Ludu Hisab</span>
+          </div>
+        </header>
+        <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
+          <Outlet />
+        </main>
+        <BottomNavBar />
+      </div>
+      <Toaster />
     </QueryClientProvider>
   );
 }

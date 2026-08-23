@@ -24,12 +24,18 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-6 text-center">
-      <span className="text-5xl" aria-hidden="true">
-        🎲
-      </span>
-      <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground">Ludu Hisab</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Setup Complete — Database Ready</p>
-    </main>
+    <div className="flex flex-col items-center justify-center pt-20 text-center">
+      <div className="rounded-full bg-white p-6 shadow-xl mb-6 animate-bounce">
+        <span className="text-6xl" aria-hidden="true">
+          🎲
+        </span>
+      </div>
+      <h1 className="text-4xl font-extrabold tracking-tight text-foreground mb-2">
+        Ready for the next step
+      </h1>
+      <p className="text-lg text-muted-foreground">
+        Visual design system established. Reusable components ready.
+      </p>
+    </div>
   );
 }
