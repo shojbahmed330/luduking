@@ -340,13 +340,19 @@ function Dashboard() {
           </BottomDrawer>
         </div>
 
-        <StatCard 
-          label="Current Fund Balance (All-Time)" 
-          value={`${allTimeBalance} ৳`} 
-          icon={<Star className="h-5 w-5" />}
-          variant="gold"
-          className="shadow-md"
-        />
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <StatCard 
+            label="Current Fund Balance (All-Time)" 
+            value={`${allTimeBalance} ৳`} 
+            icon={<Star className="h-6 w-6 fill-ludu-gold text-ludu-gold animate-pulse" />}
+            variant="gold"
+            className="py-10 border-b-ludu-gold/60 border-2"
+          />
+        </motion.div>
       </div>
 
       {/* Tabs Navigation */}
