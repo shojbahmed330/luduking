@@ -38,11 +38,18 @@ function Index() {
       <p className="text-lg text-muted-foreground mb-8">
         Track your scores, fines, and tea expenses.
       </p>
-      <Link to="/add-match" className="w-full">
-        <PrimaryButton>
-          <PlusCircle className="mr-2 h-5 w-5" /> Add New Match
-        </PrimaryButton>
-      </Link>
+      <div className="flex flex-col w-full gap-4">
+        <Link to="/add-match" className="w-full">
+          <PrimaryButton>
+            <PlusCircle className="mr-2 h-5 w-5" /> Add New Match
+          </PrimaryButton>
+        </Link>
+        <Link to="/add-expense" className="w-full">
+          <PrimaryButton className="bg-ludu-blue hover:bg-ludu-blue/90 border-ludu-blue shadow-ludu-blue/20">
+            <Coffee className="mr-2 h-5 w-5" /> Add Expense ☕
+          </PrimaryButton>
+        </Link>
+      </div>
     </div>
   );
 }
