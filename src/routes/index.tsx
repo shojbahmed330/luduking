@@ -654,6 +654,27 @@ function Dashboard() {
                   <span className="text-sm font-bold text-muted-foreground">Avg. Daily Spend</span>
                   <span className="font-black text-ludu-blue">{Math.round(expenseSummary.avgSpend)} ৳</span>
                 </div>
+                </div>
+                <div className="pt-4 space-y-3">
+                  <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-1">Recent Expenses</h3>
+                  <div className="space-y-2">
+                    {filteredData.expenses
+                      .sort((a, b) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime())
+                      .slice(0, 5)
+                      .map((exp, idx) => (
+                        <div key={idx} className="bg-muted/20 rounded-2xl p-3 flex justify-between items-center">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-black">{exp.amount} ৳</span>
+                            <span className="text-[8px] font-bold text-muted-foreground">
+                              {format(parseISO(exp.expense_date), "MMM d")} 
+                              {(exp as any).created_by_name ? ` • By ${(exp as any).created_by_name}` : ''}
+                            </span>
+                          </div>
+                          {exp.note && <span className="text-[9px] font-medium text-muted-foreground italic truncate max-w-[100px]">{exp.note}</span>}
+                        </div>
+                      ))}
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>
