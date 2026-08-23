@@ -57,7 +57,7 @@ function Dashboard() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "analytics">("overview");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -259,20 +259,21 @@ function Dashboard() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0">
+      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar">
         <div 
           className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
           style={{
-            width: `calc(20% - 2.4px)`,
-            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta'].indexOf(activeTab) * 20}% + 4px)`
+            width: `calc(16.66% - 2px)`,
+            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 4px)`
           }}
         />
         {[
           { id: 'overview', label: 'Overview', icon: LayoutDashboard },
           { id: 'matches', label: 'Matches', icon: Dice5 },
-          { id: 'leaderboard', label: 'Leaderboard', icon: Trophy },
+          { id: 'leaderboard', label: 'Stats', icon: Trophy },
           { id: 'money', label: 'Money', icon: Users },
-          { id: 'chanasta', label: 'Cha-Nasta', icon: Coffee },
+          { id: 'chanasta', label: 'Tea', icon: Coffee },
+          { id: 'analytics', label: 'Insights', icon: TrendingUp },
         ].map((tab) => (
           <button
             key={tab.id}
