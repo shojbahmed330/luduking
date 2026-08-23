@@ -83,6 +83,9 @@ function AddExpense() {
 
     setIsSubmitting(true);
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userName = (user?.user_metadata?.["full_name"] as string) || user?.email || "Unknown User";
+
       if (editId) {
         const { error } = await supabase
           .from("expenses")
@@ -90,6 +93,7 @@ function AddExpense() {
             expense_date: date,
             amount: parseInt(amount),
             note: note.trim() || null,
+            updated_by_name: userName,
           })
           .eq("id", editId);
 
@@ -102,6 +106,8 @@ function AddExpense() {
             expense_date: date,
             amount: parseInt(amount),
             note: note.trim() || null,
+            created_by_name: userName,
+            user_id: user?.id ?? null,
           });
 
         if (error) throw error;
