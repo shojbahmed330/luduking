@@ -54,7 +54,7 @@ function AddExpense() {
       const { error } = await supabase
         .from("expenses")
         .insert({
-          date,
+          expense_date: date,
           amount: parseInt(amount),
           note: note.trim() || null,
         });
