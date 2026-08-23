@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
 import { 
   History as HistoryIcon, 
@@ -122,7 +123,12 @@ function HistoryPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6 pb-24 animate-in fade-in duration-500">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-6 pb-24"
+    >
       <div className="flex items-center gap-2 px-1">
         <HistoryIcon className="h-6 w-6 text-primary" />
         <h1 className="text-2xl font-black text-foreground">History</h1>
@@ -315,6 +321,6 @@ function HistoryPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }

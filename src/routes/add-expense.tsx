@@ -130,7 +130,13 @@ function AddExpense() {
   const isNegative = afterBalance !== null && afterBalance < 0;
 
   return (
-    <div className="flex flex-col gap-6 pb-24 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <motion.div 
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-6 pb-24"
+    >
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate({ to: editId ? "/history" : "/" })}
@@ -216,7 +222,7 @@ function AddExpense() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+    </motion.div>
 
         <PrimaryButton 
           type="submit" 

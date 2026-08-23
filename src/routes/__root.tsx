@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { BottomNavBar } from "@/components/layout/BottomNavBar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -141,7 +142,9 @@ function RootComponent() {
           </div>
         </header>
         <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <Outlet />
+          </AnimatePresence>
         </main>
         <BottomNavBar />
       </div>

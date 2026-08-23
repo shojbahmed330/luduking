@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
 import { 
   Trophy, 
@@ -158,7 +159,12 @@ function Dashboard() {
   }
 
   return (
-    <div className="flex flex-col gap-8 pb-24 animate-in fade-in duration-500">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-8 pb-24"
+    >
       {/* Month Selector */}
       <div className="flex flex-col gap-2">
         <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
@@ -334,7 +340,7 @@ function Dashboard() {
             <div className="flex justify-between items-center">
               <span className="text-sm font-bold text-muted-foreground">Total Spent</span>
               <span className="font-black text-foreground">{periodStats.totalExpenses} ৳</span>
-            </div>
+    </motion.div>
             <div className="flex justify-between items-center pt-2 border-t border-dashed">
               <span className="text-sm font-bold text-muted-foreground">Avg. Daily Spend</span>
               <span className="font-black text-ludu-blue">{Math.round(expenseSummary.avgSpend)} ৳</span>
