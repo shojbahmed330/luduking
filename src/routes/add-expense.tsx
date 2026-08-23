@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Coffee, Calendar, AlertTriangle, ArrowLeft } from "lucide-react";
@@ -130,8 +131,9 @@ function AddExpense() {
   const isNegative = afterBalance !== null && afterBalance < 0;
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
+    <AuthGuard>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
@@ -238,6 +240,7 @@ function AddExpense() {
           {isSubmitting ? "Saving..." : "Save Expense ☕"}
         </PrimaryButton>
       </form>
-    </motion.div>
+      </motion.div>
+    </AuthGuard>
   );
 }
