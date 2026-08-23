@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Visual Overhaul & Professional Polish Plan\n\nRefine \"Ludu Hisab\" into a high-fidelity, colorful, and animated professional mobile experience.\n\nDesign Refinement\n\nColor Palette Expansion: Introduce high-contrast semantic variants for the Ludu colors (e.g., deeper shadows, vibrant gradients).\n\nGlassmorphism 2.0: Enhance the dashboard and navigation with richer blur effects and subtle border glows.\n\n3D Interactive Elements: Upgrade cards and buttons with deeper tactile feedback and shadows.\n\nNavigation & UI Structure\n\nProfessional Bottom Nav: Replace the current navigation with a larger, floating-effect bar using animated SVG icons and pill indicators.\n\nDynamic Tab Switching: Implement layout-aware transitions between dashboard sections.\n\nEnhanced Overview: Rebuild the overview tab with large, bento-grid style cards and real-time counter animations for numbers.\n\nAnimations & Feedback\n\nMicro-interactions: Add spring-based animations to all toggles, drawers, and form steps.\n\nPage Transitions: Use staggered entrance animations for list items in History and Stats.\n\nHaptic-like Visuals: Strengthen the \"active-scale\" effect with multi-layered shadows.\n\nTechnical Details\n\nUse framer-motion for complex layout transitions.\n\nUpdate StatCard and PrimaryButton components for higher visual density.\n\nRefine src/styles.css with advanced utility classes for professional shading and gradients.\n\nEIta full implement koro, new plan korbe na, ei sob implement koro",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            I have approved the plan" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Visual Overhaul & Professional Polish Plan\n\nRefine \"Ludu Hisab\" into a high-fidelity, colorful, and animated professional mobile experience.\n\nDesign Refinement\n\nColor Palette Expansion: Introduce high-contrast semantic variants for the Ludu colors (e.g., deeper shadows, vibrant gradients).\n\nGlassmorphism 2.0: Enhance the dashboard and navigation with richer blur effects and subtle border glows.\n\n3D Interactive Elements: Upgrade cards and buttons with deeper tactile feedback and shadows.\n\nNavigation & UI Structure\n\nProfessional Bottom Nav: Replace the current navigation with a larger, floating-effect bar using animated SVG icons and pill indicators.\n\nDynamic Tab Switching: Implement layout-aware transitions between dashboard sections.\n\nEnhanced Overview: Rebuild the overview tab with large, bento-grid style cards and real-time counter animations for numbers.\n\nAnimations & Feedback\n\nMicro-interactions: Add spring-based animations to all toggles, drawers, and form steps.\n\nPage Transitions: Use staggered entrance animations for list items in History and Stats.\n\nHaptic-like Visuals: Strengthen the \"active-scale\" effect with multi-layered shadows.\n\nTechnical Details\n\nUse framer-motion for complex layout transitions.\n\nUpdate StatCard and PrimaryButton components for higher visual density.\n\nRefine src/styles.css with advanced utility classes for professional shading and gradients.\n\nEIta full implement koro, new plan korbe na, ei sob implement koro" },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -274,10 +274,10 @@ function Dashboard() {
       className="flex flex-col gap-6 pb-24"
     >
       {/* Fixed Top Section */}
-      <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-40">
+      <div className="flex flex-col gap-4 sticky top-0 glass-header -mx-4 px-4 pt-4 pb-8 z-40 rounded-b-[2.5rem] shadow-ludu-gold/5">
         <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
-            <Calendar className="h-3 w-3" /> Select Period
+          <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.25em] flex items-center gap-2 px-1">
+            <Calendar className="h-3.5 w-3.5" /> Time Explorer
           </label>
           <BottomDrawer
             title="Choose Period"
@@ -340,22 +340,27 @@ function Dashboard() {
           </BottomDrawer>
         </div>
 
-        <StatCard 
-          label="Current Fund Balance (All-Time)" 
-          value={`${allTimeBalance} ৳`} 
-          icon={<Star className="h-5 w-5" />}
-          variant="gold"
-          className="shadow-md"
-        />
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <StatCard 
+            label="Current Fund Balance (All-Time)" 
+            value={`${allTimeBalance} ৳`} 
+            icon={<Star className="h-6 w-6 fill-ludu-gold text-ludu-gold animate-pulse" />}
+            variant="gold"
+            className="py-10 border-b-ludu-gold/60 border-2"
+          />
+        </motion.div>
       </div>
 
-      {/* Tabs Navigation */}
-      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar">
+      <div className="relative flex p-1.5 bg-muted/40 rounded-[2rem] shrink-0 overflow-x-auto no-scrollbar glass-morphism">
         <div 
-          className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
+          className="absolute h-[calc(100%-12px)] bg-white rounded-2xl shadow-md ring-1 ring-black/5 transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) z-0"
           style={{
-            width: `calc(16.66% - 2px)`,
-            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 4px)`
+            width: `calc(16.66% - 3px)`,
+            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 6px)`
           }}
         />
         {[
@@ -370,14 +375,18 @@ function Dashboard() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
-              "relative z-10 flex-1 min-w-[60px] flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl text-[10px] font-black transition-all active-scale",
+              "relative z-10 flex-1 min-w-[65px] flex flex-col items-center justify-center gap-1.5 px-1 py-3.5 rounded-2xl text-[10px] font-black transition-all active-scale",
               activeTab === tab.id 
                 ? "text-ludu-gold" 
-                : "text-muted-foreground hover:bg-white/30"
+                : "text-muted-foreground/70 hover:bg-white/40"
             )}
           >
-            <tab.icon className={cn("h-4 w-4", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground")} />
-            {tab.label}
+            <motion.div
+              animate={activeTab === tab.id ? { scale: 1.2, rotate: [0, -10, 10, 0] } : { scale: 1, rotate: 0 }}
+            >
+              <tab.icon className={cn("h-5 w-5", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground/60")} />
+            </motion.div>
+            <span className={cn(activeTab === tab.id ? "scale-105" : "scale-100")}>{tab.label}</span>
           </button>
         ))}
       </div>
@@ -393,49 +402,69 @@ function Dashboard() {
             className="grid grid-cols-1 gap-4"
           >
             <div className="grid grid-cols-2 gap-4">
-              <StatCard 
-                label="Fund Collected" 
-                value={`${periodStats.totalFines} ৳`} 
-                icon={<Wallet className="h-4 w-4" />}
-                trend={{ value: "Fines", isPositive: true }}
-              />
-              <StatCard 
-                label="Matches Played" 
-                value={periodStats.matchCount} 
-                icon={<LayoutDashboard className="h-4 w-4" />}
-                subValue="This Period"
-              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.1 }}
+              >
+                <StatCard 
+                  label="Fund Collected" 
+                  value={`${periodStats.totalFines} ৳`} 
+                  icon={<Wallet className="h-6 w-6" />}
+                  trend={{ value: "Fines", isPositive: true }}
+                  variant="green"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <StatCard 
+                  label="Matches Played" 
+                  value={periodStats.matchCount} 
+                  icon={<LayoutDashboard className="h-6 w-6" />}
+                  subValue="This Period"
+                  variant="blue"
+                />
+              </motion.div>
             </div>
-            <StatCard 
-              label="Total Cha-Nasta Expense" 
-              value={`${periodStats.totalExpenses} ৳`} 
-              icon={<Coffee className="h-4 w-4" />}
-              variant="red"
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <StatCard 
+                label="Total Cha-Nasta Expense" 
+                value={`${periodStats.totalExpenses} ৳`} 
+                icon={<Coffee className="h-6 w-6" />}
+                variant="red"
+                className="py-8"
+              />
+            </motion.div>
             
             <div className="grid grid-cols-2 gap-4">
               <Link 
                 to="/add-match" 
-                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-gold/50 transition-all group active-scale"
+                className="w-full"
               >
-                <div className="h-10 w-10 rounded-2xl bg-ludu-gold/10 flex items-center justify-center text-ludu-gold mb-2 group-hover:scale-110 transition-transform">
-                  <Dice5 className="h-5 w-5" />
-                </div>
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Match</span>
+                <PrimaryButton className="bg-ludu-gradient-gold shadow-ludu-gold/20 py-8">
+                  <Dice5 className="mr-2 h-6 w-6" /> Add Match
+                </PrimaryButton>
               </Link>
               
               <Link 
                 to="/add-expense" 
-                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-red/50 transition-all group active-scale"
+                className="w-full"
               >
-                <div className="h-10 w-10 rounded-2xl bg-ludu-red/10 flex items-center justify-center text-ludu-red mb-2 group-hover:scale-110 transition-transform">
-                  <Coffee className="h-5 w-5" />
-                </div>
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Expense</span>
+                <PrimaryButton className="bg-ludu-gradient-red shadow-ludu-red/20 py-8">
+                  <Coffee className="mr-2 h-6 w-6" /> Add Expense
+                </PrimaryButton>
               </Link>
             </div>
           </motion.div>
         )}
+
 
         {activeTab === 'matches' && (
           <motion.div 
