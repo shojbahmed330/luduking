@@ -1,37 +1,29 @@
-# Plan: Step 2 — Design System & Ludu-Themed Visual Style
+# Plan - Step 4: Add Expense Feature
 
-Implement a ludu-themed design system with custom colors, typography, and reusable components.
+Implement the "Add Expense" feature for Ludu Hisab to log tea/snack expenses paid from the shared fund.
 
-## User Review Required
-
-> [!IMPORTANT]
-> I will be using Google Fonts (Baloo 2) for the playful rounded look.
-
-## Proposed Changes
-
-### Design System & Styling
-- Update `src/styles.css` with custom theme tokens:
-  - Add Ludu colors (Gold, Green, Blue, Red) as semantic tokens.
-  - Set off-white background and high-contrast text.
-  - Configure large border-radii for the "game-like" feel.
-- Update `src/routes/__root.tsx` to include Google Fonts (Baloo 2).
-
-### Reusable UI Components
-- Create `src/components/ludu/StatCard.tsx`: Rounded card for metrics.
-- Create `src/components/ludu/PositionBadge.tsx`: Colorful badges for match rankings.
-- Create `src/components/ludu/PlayerAvatar.tsx`: Circular avatars with initials.
-- Create `src/components/ludu/PrimaryButton.tsx`: Full-width rounded buttons.
-- Create `src/components/layout/BottomNavBar.tsx`: Mobile-fixed navigation shell.
-
-### Layout & Shell
-- Update `src/routes/__root.tsx` to include a global shell with the `BottomNavBar` and a header with the "Ludu Hisab 🎲" logo.
-- Update `src/routes/index.tsx` to match the new visual style.
+## User Interface
+- Create `src/routes/add-expense.tsx`.
+- Update `src/components/layout/BottomNavBar.tsx` to link to `/add-expense`.
+- Add "Add Expense" button to the Home screen (`src/routes/index.tsx`).
 
 ## Technical Details
-- **Colors**:
-  - `pos-1` (Gold): #F5B301
-  - `pos-2` (Green): #2E9E4D
-  - `pos-3` (Blue): #2D6CDF
-  - `pos-4` (Red): #E14545
-- **Typography**: `Baloo 2` via Google Fonts.
-- **Framework**: Tailwind CSS v4 for all styling.
+- **Form Fields**:
+  - `date`: Date picker (default today).
+  - `amount`: Numeric input (positive whole number, required).
+  - `note`: Text area (optional).
+- **Live Fund Preview**:
+  - Implement a server function or client-side calculation to fetch the current fund balance.
+  - Show "Current Fund Balance" and "After this expense" live.
+  - Display a warning if the balance goes negative.
+- **Database Logic**:
+  - Use Supabase to insert a row into the `expenses` table.
+- **Validation**:
+  - Ensure amount is a positive integer.
+- **Success Flow**:
+  - Show success toast and redirect to Home (`/`).
+
+## Calculation Model
+- `Total Fund Collected` = SUM(`fine_amount` from `match_results`).
+- `Total Expenses` = SUM(`amount` from `expenses`).
+- `Current Balance` = `Total Fund Collected` - `Total Expenses`.
