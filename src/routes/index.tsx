@@ -684,75 +684,46 @@ function Dashboard() {
             <div className="space-y-4">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">Head-to-Head Comparison</h3>
               <div className="grid grid-cols-1 gap-4">
-                {useMemo(() => {
-                  // Find top 2 most active players for initial comparison
-                  const playerMatchCounts = players.map(p => ({
-                    ...p,
-                    count: matchResults.filter(mr => mr.player_id === p.id).length
-                  })).sort((a, b) => b.count - a.count);
-
-                  if (players.length < 2) return null;
-                  
-                  if (!playerMatchCounts[0] || !playerMatchCounts[1]) return null;
-                  
-                  const p1 = playerMatchCounts[0];
-                  const p2 = playerMatchCounts[1];
-
-                  const commonMatches = matches.filter(m => {
-                    const participants = matchResults.filter(mr => mr.match_id === m.id);
-                    return participants.some(mr => mr.player_id === p1.id) && 
-                           participants.some(mr => mr.player_id === p2.id);
-                  });
-
-                  const p1Wins = commonMatches.filter(m => {
-                    const r1 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p1.id);
-                    const r2 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p2.id);
-                    return r1 && r2 && r1.position < r2.position;
-                  }).length;
-
-                  const p2Wins = commonMatches.length - p1Wins;
-
-                  return (
+                {h2hComparison && (
                     <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
                       <div className="flex items-center justify-between mb-8">
                         <div className="text-center space-y-2">
-                          <PlayerAvatar name={p1.name} size="md" />
-                          <p className="font-black text-sm">{p1.name}</p>
+                          <PlayerAvatar name={h2hComparison.p1.name} size="md" />
+                          <p className="font-black text-sm">{h2hComparison.p1.name}</p>
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter mb-1">VS</span>
                           <div className="h-0.5 w-12 bg-muted rounded-full" />
                         </div>
                         <div className="text-center space-y-2">
-                          <PlayerAvatar name={p2.name} size="md" />
-                          <p className="font-black text-sm">{p2.name}</p>
+                          <PlayerAvatar name={h2hComparison.p2.name} size="md" />
+                          <p className="font-black text-sm">{h2hComparison.p2.name}</p>
                         </div>
                       </div>
 
                       <div className="space-y-6">
                         <div className="space-y-2">
                           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground px-1">
-                            <span>{p1Wins} Wins</span>
-                            <span>{p2Wins} Wins</span>
+                            <span>{h2hComparison.p1Wins} Wins</span>
+                            <span>{h2hComparison.p2Wins} Wins</span>
                           </div>
                           <div className="h-3 w-full bg-muted/30 rounded-full overflow-hidden flex">
                             <div 
                               className="h-full bg-ludu-gold transition-all" 
-                              style={{ width: `${commonMatches.length > 0 ? (p1Wins / commonMatches.length) * 100 : 50}%` }}
+                              style={{ width: `${h2hComparison.commonCount > 0 ? (h2hComparison.p1Wins / h2hComparison.commonCount) * 100 : 50}%` }}
                             />
                             <div 
                               className="h-full bg-ludu-blue transition-all" 
-                              style={{ width: `${commonMatches.length > 0 ? (p2Wins / commonMatches.length) * 100 : 50}%` }}
+                              style={{ width: `${h2hComparison.commonCount > 0 ? (h2hComparison.p2Wins / h2hComparison.commonCount) * 100 : 50}%` }}
                             />
                           </div>
                           <p className="text-center text-[10px] font-bold text-muted-foreground pt-1">
-                            Out of {commonMatches.length} common matches
+                            Out of {h2hComparison.commonCount} common matches
                           </p>
                         </div>
                       </div>
                     </div>
-                  );
-                }, [players, matches, matchResults])}
+                )}
               </div>
             </div>
           </motion.div>
