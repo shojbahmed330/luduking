@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddExpenseRouteImport } from './routes/add-expense'
 import { Route as AddMatchRouteImport } from './routes/add-match'
 import { Route as HistoryRouteImport } from './routes/history'
+import { Route as GamesIndexRouteImport } from './routes/games/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesIndexRoute = GamesIndexRouteImport.update({
+  id: '/games/',
+  path: '/games/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
   '/history': typeof HistoryRoute
+  '/games/': typeof GamesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
   '/history': typeof HistoryRoute
+  '/games': typeof GamesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
   '/history': typeof HistoryRoute
+  '/games/': typeof GamesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add-expense' | '/add-match' | '/history'
+  fullPaths: '/' | '/add-expense' | '/add-match' | '/history' | '/games/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add-expense' | '/add-match' | '/history'
-  id: '__root__' | '/' | '/add-expense' | '/add-match' | '/history'
+  to: '/' | '/add-expense' | '/add-match' | '/history' | '/games'
+  id: '__root__' | '/' | '/add-expense' | '/add-match' | '/history' | '/games/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   AddExpenseRoute: typeof AddExpenseRoute
   AddMatchRoute: typeof AddMatchRoute
   HistoryRoute: typeof HistoryRoute
+  GamesIndexRoute: typeof GamesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games/': {
+      id: '/games/'
+      path: '/games'
+      fullPath: '/games/'
+      preLoaderRoute: typeof GamesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddExpenseRoute: AddExpenseRoute,
   AddMatchRoute: AddMatchRoute,
   HistoryRoute: HistoryRoute,
+  GamesIndexRoute: GamesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
