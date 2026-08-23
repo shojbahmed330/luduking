@@ -72,6 +72,8 @@ function Dashboard() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "analytics">("overview");
   const [loading, setLoading] = useState(true);
+  const [comparisonPlayer1Id, setComparisonPlayer1Id] = useState<string | null>(null);
+  const [comparisonPlayer2Id, setComparisonPlayer2Id] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
