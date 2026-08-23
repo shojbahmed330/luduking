@@ -269,13 +269,12 @@ function HistoryPage() {
                 <Coffee className="h-12 w-12 text-muted-foreground/30" />
               </div>
               <p className="text-muted-foreground font-bold">No expenses logged yet — tap Add Expense to get started! ☕</p>
-              <Button 
-                variant="outline" 
-                className="mt-4 rounded-xl border-ludu-red text-ludu-red font-bold"
+              <button 
+                className="mt-6 w-full rounded-2xl bg-ludu-red text-white font-black py-4 shadow-lg shadow-ludu-red/20 active-scale"
                 onClick={() => navigate({ to: "/add-expense" })}
               >
                 Add Expense
-              </Button>
+              </button>
             </div>
           ) : (
             filteredExpenses.map(expense => (
