@@ -188,16 +188,7 @@ function Dashboard() {
             <Calendar className="h-3 w-3" /> 
             {`'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
 
-"timestamp": 1787511333672,
-  "error_type": "RUNTIME_ERROR",
-  "filename": "Unknown file",
-  "lineno": 0,
-  "colno": 0,
-  "stack": "Error: aborted\\n    at abortIncoming (node:_http_server:838:17)\\n    at socketOnClose (node:_http_server:832:3)\\n    at Socket.emit (node:events:531:35)\\n    at TCP.<anonymous> (node:net:346:12)\\n    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)",
-  "has_blank_screen": true
-}
-
-Ki baper? Somossa solve korte parcho na kano? valo kore check kore solve koro issue`}
+Home page theke eita bad dao.`}
           </label>
           <BottomDrawer
             title="Choose Period"
