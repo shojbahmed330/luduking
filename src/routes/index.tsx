@@ -402,6 +402,7 @@ function Dashboard() {
                 label="Matches Played" 
                 value={periodStats.matchCount} 
                 icon={<LayoutDashboard className="h-4 w-4" />}
+                subValue="This Period"
               />
             </div>
             <StatCard 
