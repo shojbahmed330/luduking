@@ -432,6 +432,7 @@ function HistoryPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </motion.div>
+      </motion.div>
+    </AuthGuard>
   );
 }
