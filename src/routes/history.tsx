@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval } from "date-fns";
+import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay } from "date-fns";
 import { 
   History as HistoryIcon, 
   Calendar, 
@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PositionBadge, type Position } from "@/components/ludu/PositionBadge";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { BottomDrawer } from "@/components/ludu/BottomDrawer";
+import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { 
   Dialog, 
   DialogContent, 
@@ -39,6 +40,7 @@ function HistoryPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>("matches");
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [matches, setMatches] = useState<any[]>([]);
   const [expenses, setExpenses] = useState<any[]>([]);
   const [players, setPlayers] = useState<any[]>([]);
@@ -75,7 +77,9 @@ function HistoryPage() {
 
   const filteredMatches = useMemo(() => {
     let result = matches;
-    if (selectedMonth !== "All-Time") {
+    if (selectedDate) {
+      result = matches.filter(m => isSameDay(parseISO(m.match_date), selectedDate));
+    } else if (selectedMonth !== "All-Time") {
       const start = startOfMonth(new Date(selectedMonth));
       const end = endOfMonth(new Date(selectedMonth));
       result = matches.filter(m => isWithinInterval(parseISO(m.match_date), { start, end }));
@@ -87,7 +91,9 @@ function HistoryPage() {
 
   const filteredExpenses = useMemo(() => {
     let result = expenses;
-    if (selectedMonth !== "All-Time") {
+    if (selectedDate) {
+      result = expenses.filter(e => isSameDay(parseISO(e.expense_date), selectedDate));
+    } else if (selectedMonth !== "All-Time") {
       const start = startOfMonth(new Date(selectedMonth));
       const end = endOfMonth(new Date(selectedMonth));
       result = expenses.filter(e => isWithinInterval(parseISO(e.expense_date), { start, end }));
@@ -197,34 +203,55 @@ function HistoryPage() {
             <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-4 py-3 text-sm font-black active-scale shadow-sm">
               <span className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                {selectedMonth === "All-Time" ? "All-Time History" : selectedMonth}
+                {selectedDate 
+                  ? format(selectedDate, "MMM d, yyyy") 
+                  : selectedMonth === "All-Time" 
+                    ? "All-Time History" 
+                    : selectedMonth}
               </span>
               <ChevronDown className="h-4 w-4 text-muted-foreground" />
             </button>
           }
         >
           <div className="flex flex-col gap-2">
+            <div className="bg-muted/20 rounded-2xl p-2 mb-2">
+              <CalendarUI
+                mode="single"
+                selected={selectedDate}
+                onSelect={(date) => {
+                  setSelectedDate(date);
+                  if (date) setSelectedMonth(format(date, "MMMM yyyy"));
+                }}
+                className="rounded-xl border-none"
+              />
+            </div>
             <button
-              onClick={() => setSelectedMonth("All-Time")}
+              onClick={() => {
+                setSelectedMonth("All-Time");
+                setSelectedDate(undefined);
+              }}
               className={cn(
                 "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
-                selectedMonth === "All-Time" ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                (selectedMonth === "All-Time" && !selectedDate) ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
               )}
             >
               All-Time History
-              {selectedMonth === "All-Time" && <Check className="h-5 w-5" />}
+              {(selectedMonth === "All-Time" && !selectedDate) && <Check className="h-5 w-5" />}
             </button>
             {availableMonths.map(m => (
               <button
                 key={m}
-                onClick={() => setSelectedMonth(m)}
+                onClick={() => {
+                  setSelectedMonth(m);
+                  setSelectedDate(undefined);
+                }}
                 className={cn(
                   "flex w-full items-center justify-between rounded-xl px-4 py-3.5 font-black transition-all active-scale",
-                  selectedMonth === m ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
+                  (selectedMonth === m && !selectedDate) ? "bg-ludu-gold text-white" : "bg-muted/30 text-foreground"
                 )}
               >
                 {m}
-                {selectedMonth === m && <Check className="h-5 w-5" />}
+                {(selectedMonth === m && !selectedDate) && <Check className="h-5 w-5" />}
               </button>
             ))}
           </div>

@@ -260,7 +260,6 @@ function AddMatch() {
                     mode="single"
                     selected={date}
                     onSelect={(d) => d && setDate(d)}
-                    initialFocus
                   />
                 </PopoverContent>
               </Popover>
