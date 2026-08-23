@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Match Insights & Analytics: Add a \"Player vs Player\" comparison tool to see head-to-head records and a \"Win Rate\" trend chart to visualize performance over time.\n\nShared Authentication (Lightweight): Implement a group password or per-user PIN to prevent accidental data entry from outside the group while keeping the \"no signup\" feel.\n\nEi duita full implement koro",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            For the code present, I get the error below.\n\nPlease think step-by-step in order to resolve it.\n```\nRendered more hooks than during the previous render.\n\n{\n  \"timestamp\": 1787513669771,\n  \"error_type\": \"RUNTIME_ERROR\",\n  \"filename\": \"/\",\n  \"lineno\": 0,\n  \"colno\": 0,\n  \"stack\": \"Error: Rendered more hooks than during the previous render.\\n    at updateWorkInProgressHook (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:4325:12)\\n    at updateMemo (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:4942:15)\\n    at Object.useMemo (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:13272:13)\\n    at exports.useMemo (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react.js?v=2aac3fea:736:31)\\n    at Dashboard (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/src/routes/index.tsx?t=1787513642637&tsr-split=component:1351:18)\\n    at Object.react_stack_bottom_frame (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:12864:12)\\n    at renderWithHooks (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:4211:19)\\n    at updateFunctionComponent (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:5567:16)\\n    at beginWork (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:6138:20)\\n    at runWithFiberInDEV (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:850:66)\",\n  \"has_blank_screen\": true\n}\n```",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Match Insights & Analytics: Add a \"Player vs Player\" comparison tool to see head-to-head records and a \"Win Rate\" trend chart to visualize performance over time.\n\nShared Authentication (Lightweight): Implement a group password or per-user PIN to prevent accidental data entry from outside the group while keeping the \"no signup\" feel.\n\nEi duita full implement koro" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            For the code present, I get the error below.\n\nPlease think step-by-step in order to resolve it.\n```\nRendered more hooks than during the previous render.\n\n{\n  \"timestamp\": 1787513669771,\n  \"error_type\": \"RUNTIME_ERROR\",\n  \"filename\": \"/\",\n  \"lineno\": 0,\n  \"colno\": 0,\n  \"stack\": \"Error: Rendered more hooks than during the previous render.\\n    at updateWorkInProgressHook (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:4325:12)\\n    at updateMemo (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:4942:15)\\n    at Object.useMemo (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:13272:13)\\n    at exports.useMemo (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react.js?v=2aac3fea:736:31)\\n    at Dashboard (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/src/routes/index.tsx?t=1787513642637&tsr-split=component:1351:18)\\n    at Object.react_stack_bottom_frame (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:12864:12)\\n    at renderWithHooks (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:4211:19)\\n    at updateFunctionComponent (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:5567:16)\\n    at beginWork (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:6138:20)\\n    at runWithFiberInDEV (https://7b669899-b6c4-4bbd-bde3-300af79db27b.lovableproject.com/node_modules/.vite/deps/react-dom_client.js?v=2aac3fea:850:66)\",\n  \"has_blank_screen\": true\n}\n```" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -173,6 +173,67 @@ function Dashboard() {
       avgSpend
     };
   }, [filteredData, periodStats]);
+
+  const winRateTrendData = useMemo(() => {
+    const last6Months = eachMonthOfInterval({
+      start: subMonths(new Date(), 5),
+      end: new Date()
+    });
+
+    return last6Months.map(month => {
+      const monthStr = format(month, "MMM");
+      const interval = { start: startOfMonth(month), end: endOfMonth(month) };
+      
+      const monthMatches = matches.filter(m => 
+        isWithinInterval(parseISO(m.match_date), interval)
+      );
+      
+      const data: any = { name: monthStr };
+      
+      players.forEach(player => {
+        const playerMatches = matchResults.filter(mr => 
+          mr.player_id === player.id && 
+          monthMatches.some(m => m.id === mr.match_id)
+        );
+        
+        if (playerMatches.length === 0) {
+          data[player.name] = 0;
+        } else {
+          const wins = playerMatches.filter(mr => mr.position === 1).length;
+          data[player.name] = Math.round((wins / playerMatches.length) * 100);
+        }
+      });
+      return data;
+    });
+  }, [matches, matchResults, players]);
+
+  const h2hComparison = useMemo(() => {
+    const playerMatchCounts = players.map(p => ({
+      ...p,
+      count: matchResults.filter(mr => mr.player_id === p.id).length
+    })).sort((a, b) => b.count - a.count);
+
+    if (players.length < 2 || !playerMatchCounts[0] || !playerMatchCounts[1]) return null;
+    
+    const p1 = playerMatchCounts[0];
+    const p2 = playerMatchCounts[1];
+
+    const commonMatches = matches.filter(m => {
+      const participants = matchResults.filter(mr => mr.match_id === m.id);
+      return participants.some(mr => mr.player_id === p1.id) && 
+             participants.some(mr => mr.player_id === p2.id);
+    });
+
+    const p1Wins = commonMatches.filter(m => {
+      const r1 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p1.id);
+      const r2 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p2.id);
+      return r1 && r2 && r1.position < r2.position;
+    }).length;
+
+    const p2Wins = commonMatches.length - p1Wins;
+
+    return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length };
+  }, [players, matches, matchResults]);
 
   if (loading) {
     return (
@@ -585,38 +646,7 @@ function Dashboard() {
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">Win Rate Trend (1st Place %)</h3>
               <div className="h-[200px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={useMemo(() => {
-                    const last6Months = eachMonthOfInterval({
-                      start: subMonths(new Date(), 5),
-                      end: new Date()
-                    });
-
-                    return last6Months.map(month => {
-                      const monthStr = format(month, "MMM");
-                      const interval = { start: startOfMonth(month), end: endOfMonth(month) };
-                      
-                      const monthMatches = matches.filter(m => 
-                        isWithinInterval(parseISO(m.match_date), interval)
-                      );
-                      
-                      const data: any = { name: monthStr };
-                      
-                      players.forEach(player => {
-                        const playerMatches = matchResults.filter(mr => 
-                          mr.player_id === player.id && 
-                          monthMatches.some(m => m.id === mr.match_id)
-                        );
-                        
-                        if (playerMatches.length === 0) {
-                          data[player.name] = 0;
-                        } else {
-                          const wins = playerMatches.filter(mr => mr.position === 1).length;
-                          data[player.name] = Math.round((wins / playerMatches.length) * 100);
-                        }
-                      });
-                      return data;
-                    });
-                  }, [matches, matchResults, players])}>
+                  <LineChart data={winRateTrendData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                     <XAxis 
                       dataKey="name" 
@@ -654,75 +684,46 @@ function Dashboard() {
             <div className="space-y-4">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">Head-to-Head Comparison</h3>
               <div className="grid grid-cols-1 gap-4">
-                {useMemo(() => {
-                  // Find top 2 most active players for initial comparison
-                  const playerMatchCounts = players.map(p => ({
-                    ...p,
-                    count: matchResults.filter(mr => mr.player_id === p.id).length
-                  })).sort((a, b) => b.count - a.count);
-
-                  if (players.length < 2) return null;
-                  
-                  if (!playerMatchCounts[0] || !playerMatchCounts[1]) return null;
-                  
-                  const p1 = playerMatchCounts[0];
-                  const p2 = playerMatchCounts[1];
-
-                  const commonMatches = matches.filter(m => {
-                    const participants = matchResults.filter(mr => mr.match_id === m.id);
-                    return participants.some(mr => mr.player_id === p1.id) && 
-                           participants.some(mr => mr.player_id === p2.id);
-                  });
-
-                  const p1Wins = commonMatches.filter(m => {
-                    const r1 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p1.id);
-                    const r2 = matchResults.find(mr => mr.match_id === m.id && mr.player_id === p2.id);
-                    return r1 && r2 && r1.position < r2.position;
-                  }).length;
-
-                  const p2Wins = commonMatches.length - p1Wins;
-
-                  return (
+                {h2hComparison && (
                     <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
                       <div className="flex items-center justify-between mb-8">
                         <div className="text-center space-y-2">
-                          <PlayerAvatar name={p1.name} size="md" />
-                          <p className="font-black text-sm">{p1.name}</p>
+                          <PlayerAvatar name={h2hComparison.p1.name} size="md" />
+                          <p className="font-black text-sm">{h2hComparison.p1.name}</p>
                         </div>
                         <div className="flex flex-col items-center">
                           <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter mb-1">VS</span>
                           <div className="h-0.5 w-12 bg-muted rounded-full" />
                         </div>
                         <div className="text-center space-y-2">
-                          <PlayerAvatar name={p2.name} size="md" />
-                          <p className="font-black text-sm">{p2.name}</p>
+                          <PlayerAvatar name={h2hComparison.p2.name} size="md" />
+                          <p className="font-black text-sm">{h2hComparison.p2.name}</p>
                         </div>
                       </div>
 
                       <div className="space-y-6">
                         <div className="space-y-2">
                           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-muted-foreground px-1">
-                            <span>{p1Wins} Wins</span>
-                            <span>{p2Wins} Wins</span>
+                            <span>{h2hComparison.p1Wins} Wins</span>
+                            <span>{h2hComparison.p2Wins} Wins</span>
                           </div>
                           <div className="h-3 w-full bg-muted/30 rounded-full overflow-hidden flex">
                             <div 
                               className="h-full bg-ludu-gold transition-all" 
-                              style={{ width: `${commonMatches.length > 0 ? (p1Wins / commonMatches.length) * 100 : 50}%` }}
+                              style={{ width: `${h2hComparison.commonCount > 0 ? (h2hComparison.p1Wins / h2hComparison.commonCount) * 100 : 50}%` }}
                             />
                             <div 
                               className="h-full bg-ludu-blue transition-all" 
-                              style={{ width: `${commonMatches.length > 0 ? (p2Wins / commonMatches.length) * 100 : 50}%` }}
+                              style={{ width: `${h2hComparison.commonCount > 0 ? (h2hComparison.p2Wins / h2hComparison.commonCount) * 100 : 50}%` }}
                             />
                           </div>
                           <p className="text-center text-[10px] font-bold text-muted-foreground pt-1">
-                            Out of {commonMatches.length} common matches
+                            Out of {h2hComparison.commonCount} common matches
                           </p>
                         </div>
                       </div>
                     </div>
-                  );
-                }, [players, matches, matchResults])}
+                )}
               </div>
             </div>
           </motion.div>
