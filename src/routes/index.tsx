@@ -151,12 +151,13 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex flex-col gap-8 animate-pulse">
-        <div className="h-16 w-full bg-muted rounded-2xl" />
-        <div className="grid grid-cols-2 gap-4">
-          <div className="h-32 bg-muted rounded-3xl" />
-          <div className="h-32 bg-muted rounded-3xl" />
-          <div className="h-32 col-span-2 bg-muted rounded-3xl" />
+      <div className="flex flex-col gap-6 animate-pulse pt-2">
+        <div className="h-14 w-full bg-muted/40 rounded-2xl" />
+        <div className="h-28 w-full bg-muted/40 rounded-3xl" />
+        <div className="h-12 w-full bg-muted/20 rounded-2xl mt-4" />
+        <div className="grid grid-cols-2 gap-4 mt-2">
+          <div className="h-28 bg-muted/30 rounded-3xl" />
+          <div className="h-28 bg-muted/30 rounded-3xl" />
         </div>
       </div>
     );
