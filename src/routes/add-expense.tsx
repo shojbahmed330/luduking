@@ -197,21 +197,21 @@ function AddExpense() {
           />
         </div>
 
-        <div className="rounded-3xl bg-white p-6 shadow-sm border-2 border-muted space-y-4">
+        <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-muted-foreground">Current Fund Balance</span>
+            <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Balance Now</span>
             <span className="text-lg font-black text-foreground">
-              {currentBalance !== null ? `${currentBalance} Taka` : "Loading..."}
+              {currentBalance !== null ? `${currentBalance} ৳` : "..."}
             </span>
           </div>
           
           <div className="flex justify-between items-center pt-2 border-t border-dashed">
-            <span className="text-sm font-bold text-muted-foreground">After this expense</span>
+            <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">After Expense</span>
             <span className={cn(
               "text-xl font-black transition-colors",
               isNegative ? "text-ludu-red" : "text-ludu-green"
             )}>
-              {afterBalance !== null ? `${afterBalance} Taka` : "—"}
+              {afterBalance !== null ? `${afterBalance} ৳` : "—"}
             </span>
           </div>
 
