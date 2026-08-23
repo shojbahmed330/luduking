@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AddExpenseRouteImport } from './routes/add-expense'
 import { Route as AddMatchRouteImport } from './routes/add-match'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddExpenseRoute = AddExpenseRouteImport.update({
+  id: '/add-expense',
+  path: '/add-expense',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AddMatchRoute = AddMatchRouteImport.update({
@@ -25,27 +31,31 @@ const AddMatchRoute = AddMatchRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add-match'
+  fullPaths: '/' | '/add-expense' | '/add-match'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add-match'
-  id: '__root__' | '/' | '/add-match'
+  to: '/' | '/add-expense' | '/add-match'
+  id: '__root__' | '/' | '/add-expense' | '/add-match'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddExpenseRoute: typeof AddExpenseRoute
   AddMatchRoute: typeof AddMatchRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-expense': {
+      id: '/add-expense'
+      path: '/add-expense'
+      fullPath: '/add-expense'
+      preLoaderRoute: typeof AddExpenseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/add-match': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddExpenseRoute: AddExpenseRoute,
   AddMatchRoute: AddMatchRoute,
 }
 export const routeTree = rootRouteImport
