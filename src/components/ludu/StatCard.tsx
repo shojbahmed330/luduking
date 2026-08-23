@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 interface StatCardProps {
   label: string;
