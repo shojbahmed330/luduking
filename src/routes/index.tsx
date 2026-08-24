@@ -354,7 +354,7 @@ function Dashboard() {
         <div 
           className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
           style={{
-            width: `calc(16.66% - 2px)`,
+            width: `calc(20% - 2px)`,
             left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 4px)`
           }}
         />
