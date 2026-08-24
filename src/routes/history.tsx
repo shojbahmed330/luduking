@@ -37,10 +37,10 @@ export const Route = createFileRoute("/history")({
       { title: "Ludu Hisab — History" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Games section ta full bad diye dao, fontend and backend sob",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Match add korar somoi back button ta emon kano? aro proessional koro",
       },
       { property: "og:title", content: "Ludu Hisab — History" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Games section ta full bad diye dao, fontend and backend sob" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Match add korar somoi back button ta emon kano? aro proessional koro" },
 
     ],
   }),

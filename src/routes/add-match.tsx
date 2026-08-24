@@ -318,7 +318,7 @@ function AddMatch() {
             )}
 
             <div className="flex gap-3">
-              <Button variant="outline" className="flex-1 py-6 rounded-2xl" onClick={() => setStep("date")}>
+              <Button variant="ghost" className="flex-1 py-6 rounded-2xl font-black text-muted-foreground active-scale" onClick={() => setStep("date")}>
                 <ChevronLeft className="mr-2 h-5 w-5" /> Back
               </Button>
               <PrimaryButton
@@ -395,7 +395,7 @@ function AddMatch() {
             </div>
 
             <div className="flex gap-3">
-              <Button variant="outline" className="flex-1 py-6 rounded-2xl" onClick={() => setStep("players")}>
+              <Button variant="ghost" className="flex-1 py-6 rounded-2xl font-black text-muted-foreground active-scale" onClick={() => setStep("players")}>
                 <ChevronLeft className="mr-2 h-5 w-5" /> Back
               </Button>
               <PrimaryButton
@@ -443,7 +443,7 @@ function AddMatch() {
             </div>
 
             <div className="flex gap-3">
-              <Button variant="outline" className="flex-1 py-6 rounded-2xl" onClick={() => setStep("positions")}>
+              <Button variant="ghost" className="flex-1 py-6 rounded-2xl font-black text-muted-foreground active-scale" onClick={() => setStep("positions")}>
                 <ChevronLeft className="mr-2 h-5 w-5" /> Back
               </Button>
               <PrimaryButton
