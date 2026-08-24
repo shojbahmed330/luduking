@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Eikhane sobai edit and delete korar permission thakbe na, just ekjon korte parbe, se hoitache rajshahi.jibon@gmail.com",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Just answer dao code valo kore dekhe, history page k edit and delete korte parbe?",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Eikhane sobai edit and delete korar permission thakbe na, just ekjon korte parbe, se hoitache rajshahi.jibon@gmail.com" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Just answer dao code valo kore dekhe, history page k edit and delete korte parbe?" },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
