@@ -47,10 +47,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Just answer dao code valo kore dekhe, history page k edit and delete korte parbe?",
+        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Just answer dao code valo kore dekhe, history page k edit and delete korte parbe?" },
+      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro" },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
