@@ -13,8 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddExpenseRouteImport } from './routes/add-expense'
 import { Route as AddMatchRouteImport } from './routes/add-match'
 import { Route as HistoryRouteImport } from './routes/history'
-import { Route as GamesIndexRouteImport } from './routes/games/index'
-import { Route as GamesRoomIdRouteImport } from './routes/games/$roomId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,32 +34,18 @@ const HistoryRoute = HistoryRouteImport.update({
   path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GamesIndexRoute = GamesIndexRouteImport.update({
-  id: '/games/',
-  path: '/games/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesRoomIdRoute = GamesRoomIdRouteImport.update({
-  id: '/games/$roomId',
-  path: '/games/$roomId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
   '/history': typeof HistoryRoute
-  '/games/$roomId': typeof GamesRoomIdRoute
-  '/games/': typeof GamesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
   '/history': typeof HistoryRoute
-  '/games/$roomId': typeof GamesRoomIdRoute
-  '/games': typeof GamesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -69,34 +53,13 @@ export interface FileRoutesById {
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
   '/history': typeof HistoryRoute
-  '/games/$roomId': typeof GamesRoomIdRoute
-  '/games/': typeof GamesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/add-expense'
-    | '/add-match'
-    | '/history'
-    | '/games/$roomId'
-    | '/games/'
+  fullPaths: '/' | '/add-expense' | '/add-match' | '/history'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/add-expense'
-    | '/add-match'
-    | '/history'
-    | '/games/$roomId'
-    | '/games'
-  id:
-    | '__root__'
-    | '/'
-    | '/add-expense'
-    | '/add-match'
-    | '/history'
-    | '/games/$roomId'
-    | '/games/'
+  to: '/' | '/add-expense' | '/add-match' | '/history'
+  id: '__root__' | '/' | '/add-expense' | '/add-match' | '/history'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -104,8 +67,6 @@ export interface RootRouteChildren {
   AddExpenseRoute: typeof AddExpenseRoute
   AddMatchRoute: typeof AddMatchRoute
   HistoryRoute: typeof HistoryRoute
-  GamesRoomIdRoute: typeof GamesRoomIdRoute
-  GamesIndexRoute: typeof GamesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,20 +99,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/games/': {
-      id: '/games/'
-      path: '/games'
-      fullPath: '/games/'
-      preLoaderRoute: typeof GamesIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/$roomId': {
-      id: '/games/$roomId'
-      path: '/games/$roomId'
-      fullPath: '/games/$roomId'
-      preLoaderRoute: typeof GamesRoomIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -160,8 +107,6 @@ const rootRouteChildren: RootRouteChildren = {
   AddExpenseRoute: AddExpenseRoute,
   AddMatchRoute: AddMatchRoute,
   HistoryRoute: HistoryRoute,
-  GamesRoomIdRoute: GamesRoomIdRoute,
-  GamesIndexRoute: GamesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
