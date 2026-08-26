@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LogIn, Dice5, Trophy, Wallet, Coffee, Star, Mail, ArrowRight } from "lucide-react";
+import { Dice5, Coffee, Star, Mail, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PrimaryButton } from "./ludu/PrimaryButton";
 import { supabase } from "@/integrations/supabase/client";
