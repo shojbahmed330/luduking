@@ -936,6 +936,33 @@ function Dashboard() {
                             Out of {h2hComparison.commonCount} common matches
                           </p>
                         </div>
+
+                        {/* Detailed Stats Comparison */}
+                        <div className="space-y-2 pt-2 border-t border-dashed border-muted">
+                          {([
+                            { label: "Matches Played", icon: "🎲", v1: h2hComparison.p1Stats.matches, v2: h2hComparison.p2Stats.matches },
+                            { label: "1st Place 🥇", icon: "", v1: h2hComparison.p1Stats.first, v2: h2hComparison.p2Stats.first },
+                            { label: "2nd Place 🥈", icon: "", v1: h2hComparison.p1Stats.second, v2: h2hComparison.p2Stats.second },
+                            { label: "3rd Place 🥉", icon: "", v1: h2hComparison.p1Stats.third, v2: h2hComparison.p2Stats.third },
+                            { label: "4th Place 4️⃣", icon: "", v1: h2hComparison.p1Stats.fourth, v2: h2hComparison.p2Stats.fourth },
+                            { label: "Total Paid", icon: "💸", v1: `${h2hComparison.p1Stats.totalFine} ৳`, v2: `${h2hComparison.p2Stats.totalFine} ৳` },
+                          ]).map(row => (
+                            <div key={row.label} className="flex items-center justify-between px-2 py-2 rounded-2xl bg-muted/20">
+                              <span className={cn(
+                                "w-14 text-center text-sm font-black",
+                                h2hComparison.p1.id === h2hComparison.p1.id && "text-ludu-gold"
+                              )}>
+                                {row.v1}
+                              </span>
+                              <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest text-center flex-1">
+                                {row.icon} {row.label}
+                              </span>
+                              <span className="w-14 text-center text-sm font-black text-ludu-blue">
+                                {row.v2}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                 )}
