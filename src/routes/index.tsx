@@ -176,6 +176,43 @@ function Dashboard() {
     return [...playerLeaderboard].sort((a, b) => b.totalFine - a.totalFine);
   }, [playerLeaderboard]);
 
+  const dailyContributions = useMemo(() => {
+    const byDate: Record<string, Record<string, { fine: number; matches: number }>> = {};
+
+    filteredData.matches.forEach(match => {
+      const day = match.match_date;
+      const results = filteredData.matchResults.filter(mr => mr.match_id === match.id);
+      if (results.length === 0) return;
+      if (!byDate[day]) byDate[day] = {};
+      results.forEach(r => {
+        const entry = byDate[day]![r.player_id] || { fine: 0, matches: 0 };
+        entry.fine += r.fine_amount;
+        entry.matches += 1;
+        byDate[day]![r.player_id] = entry;
+      });
+    });
+
+    return Object.entries(byDate)
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .map(([date, playerMap]) => {
+        const list = Object.entries(playerMap)
+          .map(([playerId, v]) => ({
+            id: playerId,
+            name: players.find(p => p.id === playerId)?.name || "Unknown",
+            fine: v.fine,
+            matches: v.matches,
+          }))
+          .sort((a, b) => b.fine - a.fine);
+        return {
+          date,
+          total: list.reduce((acc, p) => acc + p.fine, 0),
+          players: list,
+        };
+      });
+  }, [filteredData, players]);
+
+
+
   const expenseSummary = useMemo(() => {
     const distinctDays = new Set(filteredData.expenses.map(e => e.expense_date)).size;
     const avgSpend = distinctDays > 0 ? periodStats.totalExpenses / distinctDays : 0;
