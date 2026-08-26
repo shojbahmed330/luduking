@@ -28,23 +28,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleGoogleLogin = async () => {
-    try {
-      setAuthLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Auth error:", error);
-      toast.error(error.message || "Failed to sign in with Google. Check backend settings.");
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+
+
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
