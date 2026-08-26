@@ -287,7 +287,19 @@ function Dashboard() {
 
     const p2Wins = commonMatches.length - p1Wins;
 
-    return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length };
+    const statsFor = (playerId: string) => {
+      const results = matchResults.filter(mr => mr.player_id === playerId);
+      return {
+        matches: results.length,
+        first: results.filter(r => r.position === 1).length,
+        second: results.filter(r => r.position === 2).length,
+        third: results.filter(r => r.position === 3).length,
+        fourth: results.filter(r => r.position === 4).length,
+        totalFine: results.reduce((acc, r) => acc + r.fine_amount, 0),
+      };
+    };
+
+    return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length, p1Stats: statsFor(p1.id), p2Stats: statsFor(p2.id) };
   }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   if (loading) {
