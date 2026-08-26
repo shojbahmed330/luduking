@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LogIn, Dice5, Trophy, Wallet, Coffee, Star, Mail, ArrowRight } from "lucide-react";
+import { Dice5, Coffee, Star, Mail, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PrimaryButton } from "./ludu/PrimaryButton";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,23 +28,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleGoogleLogin = async () => {
-    try {
-      setAuthLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) throw error;
-    } catch (error: any) {
-      console.error("Auth error:", error);
-      toast.error(error.message || "Failed to sign in with Google. Check backend settings.");
-    } finally {
-      setAuthLoading(false);
-    }
-  };
+
+
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,23 +150,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
                     </PrimaryButton>
                   </form>
 
-                  <div className="flex items-center gap-4 px-2">
-                    <div className="h-px flex-1 bg-muted" />
-                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">or</span>
-                    <div className="h-px flex-1 bg-muted" />
-                  </div>
-
-                  <PrimaryButton 
-                    onClick={handleGoogleLogin} 
-                    disabled={authLoading}
-                    className="w-full h-14 bg-white border-2 border-muted text-foreground flex items-center justify-center gap-3 hover:bg-muted/5 transition-all shadow-sm rounded-2xl group"
-                  >
-                    <div className="h-7 w-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-muted group-active:scale-95 transition-transform shrink-0">
-                      <img src="https://www.google.com/favicon.ico" alt="Google" className="h-4 w-4" />
-                    </div>
-                    <span className="font-black text-sm">Continue with Google</span>
-                  </PrimaryButton>
                 </div>
+
               </>
             )}
             

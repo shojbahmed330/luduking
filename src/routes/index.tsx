@@ -73,6 +73,7 @@ function Dashboard() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "analytics">("overview");
   const [loading, setLoading] = useState(true);
+  const [moneyView, setMoneyView] = useState<"total" | "daily">("total");
   const [comparisonPlayer1Id, setComparisonPlayer1Id] = useState<string | null>(null);
   const [comparisonPlayer2Id, setComparisonPlayer2Id] = useState<string | null>(null);
 
@@ -174,6 +175,43 @@ function Dashboard() {
   const contributionLeaderboard = useMemo(() => {
     return [...playerLeaderboard].sort((a, b) => b.totalFine - a.totalFine);
   }, [playerLeaderboard]);
+
+  const dailyContributions = useMemo(() => {
+    const byDate: Record<string, Record<string, { fine: number; matches: number }>> = {};
+
+    filteredData.matches.forEach(match => {
+      const day = match.match_date;
+      const results = filteredData.matchResults.filter(mr => mr.match_id === match.id);
+      if (results.length === 0) return;
+      if (!byDate[day]) byDate[day] = {};
+      results.forEach(r => {
+        const entry = byDate[day]![r.player_id] || { fine: 0, matches: 0 };
+        entry.fine += r.fine_amount;
+        entry.matches += 1;
+        byDate[day]![r.player_id] = entry;
+      });
+    });
+
+    return Object.entries(byDate)
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .map(([date, playerMap]) => {
+        const list = Object.entries(playerMap)
+          .map(([playerId, v]) => ({
+            id: playerId,
+            name: players.find(p => p.id === playerId)?.name || "Unknown",
+            fine: v.fine,
+            matches: v.matches,
+          }))
+          .sort((a, b) => b.fine - a.fine);
+        return {
+          date,
+          total: list.reduce((acc, p) => acc + p.fine, 0),
+          players: list,
+        };
+      });
+  }, [filteredData, players]);
+
+
 
   const expenseSummary = useMemo(() => {
     const distinctDays = new Set(filteredData.expenses.map(e => e.expense_date)).size;
@@ -579,8 +617,37 @@ function Dashboard() {
           >
             <div className="flex items-center gap-2 px-1">
               <Users className="h-5 w-5 text-ludu-blue" />
-              <h2 className="text-xl font-black text-foreground">Fine Contributions</h2>
+              <div className="flex flex-col">
+                <h2 className="text-xl font-black text-foreground">Fine Contributions</h2>
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">
+                  {selectedDate ? format(selectedDate, "MMM d, yyyy") : selectedMonth}
+                </p>
+              </div>
             </div>
+
+            {/* Total / Individual switch */}
+            <div className="flex p-1 bg-muted/30 rounded-2xl">
+              <button
+                onClick={() => setMoneyView("total")}
+                className={cn(
+                  "flex-1 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
+                  moneyView === "total" ? "bg-white shadow-sm text-ludu-blue ring-1 ring-black/5" : "text-muted-foreground"
+                )}
+              >
+                Total
+              </button>
+              <button
+                onClick={() => setMoneyView("daily")}
+                className={cn(
+                  "flex-1 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
+                  moneyView === "daily" ? "bg-white shadow-sm text-ludu-blue ring-1 ring-black/5" : "text-muted-foreground"
+                )}
+              >
+                Individual (Day-wise)
+              </button>
+            </div>
+
+            {moneyView === "total" ? (
             <div className="grid grid-cols-1 gap-4">
               {contributionLeaderboard.map((player, index) => (
                 <div 
@@ -619,8 +686,44 @@ function Dashboard() {
                 </div>
               ))}
             </div>
+            ) : (
+              dailyContributions.length === 0 ? (
+                <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
+                  No fines recorded for this period 🎲
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {dailyContributions.map(day => (
+                    <div key={day.date} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-2 py-0.5 rounded-full">
+                          {format(parseISO(day.date), "EEEE, MMM d, yyyy")}
+                        </span>
+                        <span className="text-sm font-black text-ludu-blue">{day.total} ৳</span>
+                      </div>
+                      <div className="space-y-2 pt-1 border-t border-dashed border-muted">
+                        {day.players.map(p => (
+                          <div key={p.id} className="flex items-center gap-3 pt-1">
+                            <PlayerAvatar name={p.name} size="xs" />
+                            <span className="font-bold text-xs flex-1 truncate">{p.name}</span>
+                            <span className="text-[10px] font-black text-muted-foreground">{p.matches} match{p.matches > 1 ? "es" : ""}</span>
+                            <span className={cn(
+                              "text-[10px] font-black px-2 py-0.5 rounded-full",
+                              p.fine > 0 ? "bg-ludu-red text-white" : "bg-ludu-green/10 text-ludu-green"
+                            )}>
+                              {p.fine} ৳
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
+            )}
           </motion.div>
         )}
+
 
         {activeTab === 'chanasta' && (
           <motion.div 
