@@ -165,23 +165,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
                     </PrimaryButton>
                   </form>
 
-                  <div className="flex items-center gap-4 px-2">
-                    <div className="h-px flex-1 bg-muted" />
-                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">or</span>
-                    <div className="h-px flex-1 bg-muted" />
-                  </div>
-
-                  <PrimaryButton 
-                    onClick={handleGoogleLogin} 
-                    disabled={authLoading}
-                    className="w-full h-14 bg-white border-2 border-muted text-foreground flex items-center justify-center gap-3 hover:bg-muted/5 transition-all shadow-sm rounded-2xl group"
-                  >
-                    <div className="h-7 w-7 bg-white rounded-lg flex items-center justify-center shadow-sm border border-muted group-active:scale-95 transition-transform shrink-0">
-                      <img src="https://www.google.com/favicon.ico" alt="Google" className="h-4 w-4" />
-                    </div>
-                    <span className="font-black text-sm">Continue with Google</span>
-                  </PrimaryButton>
                 </div>
+
               </>
             )}
             
