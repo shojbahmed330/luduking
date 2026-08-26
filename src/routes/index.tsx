@@ -287,7 +287,19 @@ function Dashboard() {
 
     const p2Wins = commonMatches.length - p1Wins;
 
-    return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length };
+    const statsFor = (playerId: string) => {
+      const results = matchResults.filter(mr => mr.player_id === playerId);
+      return {
+        matches: results.length,
+        first: results.filter(r => r.position === 1).length,
+        second: results.filter(r => r.position === 2).length,
+        third: results.filter(r => r.position === 3).length,
+        fourth: results.filter(r => r.position === 4).length,
+        totalFine: results.reduce((acc, r) => acc + r.fine_amount, 0),
+      };
+    };
+
+    return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length, p1Stats: statsFor(p1.id), p2Stats: statsFor(p2.id) };
   }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   if (loading) {
@@ -923,6 +935,33 @@ function Dashboard() {
                           <p className="text-center text-[10px] font-bold text-muted-foreground pt-1">
                             Out of {h2hComparison.commonCount} common matches
                           </p>
+                        </div>
+
+                        {/* Detailed Stats Comparison */}
+                        <div className="space-y-2 pt-2 border-t border-dashed border-muted">
+                          {([
+                            { label: "Matches Played", icon: "🎲", v1: h2hComparison.p1Stats.matches, v2: h2hComparison.p2Stats.matches },
+                            { label: "1st Place 🥇", icon: "", v1: h2hComparison.p1Stats.first, v2: h2hComparison.p2Stats.first },
+                            { label: "2nd Place 🥈", icon: "", v1: h2hComparison.p1Stats.second, v2: h2hComparison.p2Stats.second },
+                            { label: "3rd Place 🥉", icon: "", v1: h2hComparison.p1Stats.third, v2: h2hComparison.p2Stats.third },
+                            { label: "4th Place 4️⃣", icon: "", v1: h2hComparison.p1Stats.fourth, v2: h2hComparison.p2Stats.fourth },
+                            { label: "Total Paid", icon: "💸", v1: `${h2hComparison.p1Stats.totalFine} ৳`, v2: `${h2hComparison.p2Stats.totalFine} ৳` },
+                          ]).map(row => (
+                            <div key={row.label} className="flex items-center justify-between px-2 py-2 rounded-2xl bg-muted/20">
+                              <span className={cn(
+                                "w-14 text-center text-sm font-black",
+                                h2hComparison.p1.id === h2hComparison.p1.id && "text-ludu-gold"
+                              )}>
+                                {row.v1}
+                              </span>
+                              <span className="text-[9px] font-black text-muted-foreground uppercase tracking-widest text-center flex-1">
+                                {row.icon} {row.label}
+                              </span>
+                              <span className="w-14 text-center text-sm font-black text-ludu-blue">
+                                {row.v2}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
