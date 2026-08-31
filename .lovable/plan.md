@@ -1,39 +1,56 @@
-# Plan: Virtual Ludu Game Integration
+# Due & Payment Hisab (প্রতি ইউজারের বকেয়া হিসাব)
 
-Integrating a fully functional, multiplayer virtual Ludu game (similar to Ludu King) into the application.
+এখন অ্যাপে শুধু ফাইন হিসাব হয় (৩য় = ৫ টাকা, ৪র্থ = ১০ টাকা), কিন্তু কে কত টাকা আসলে **জমা দিয়েছে** তার কোনো রেকর্ড নেই। তাই কার কত Due তা বের করা যায় না। এই প্ল্যানে পেমেন্ট রেকর্ড ও Due হিসাব যোগ হবে।
 
-## User Review Required
+## মূল সূত্র
 
-> [!IMPORTANT]
-> A full "Ludu King" clone with physics, 3D animations, and complex multiplayer logic is a massive undertaking. I will implement a high-quality, 2D multiplayer-ready Ludu board engine using React and Tailwind, featuring dice rolls, piece movement, and game state sync via Lovable Cloud (Realtime).
+```text
+প্লেয়ারের মোট ফাইন  =  ম্যাচ থেকে আসা সব জরিমানা
+প্লেয়ারের মোট জমা   =  সে যত টাকা দিয়েছে (নতুন payments রেকর্ড)
+Due (বকেয়া)        =  মোট ফাইন − মোট জমা
+```
 
-- **Game Name**: Virtual Ludu
-- **Style**: Classic Ludu King aesthetic (Colorful board, animated pieces).
-- **Multiplayer**: Invite-based system using shareable links/room codes.
+উদাহরণ: আজ ৩০ টাকা হলো, ৫ টাকা দিলো → Due ২৫ টাকা, যা আগের বকেয়ার সাথে যোগ হবে। পরে ২৫ টাকা দিলে Due ০ হয়ে যাবে।
 
-## Proposed Changes
+## ১. ডাটাবেজ: নতুন `payments` টেবিল
 
-### 1. Database & Realtime Setup
-- Create `game_rooms` table: `id`, `created_by`, `status` (waiting/playing/finished), `current_turn_index`, `players_data` (JSONB for positions).
-- Enable Supabase Realtime for `game_rooms` to ensure instant updates across all connected players.
+- কোন প্লেয়ার, কত টাকা, কোন তারিখে জমা দিলো, নোট, এবং কে এন্ট্রি করলো (নাম লগ)।
+- সব লগইন করা সদস্য দেখতে ও নতুন পেমেন্ট যোগ করতে পারবে; শুধু অ্যাডমিন (rajshahi.jibon@gmail.com) এডিট/ডিলিট করতে পারবে — বাকি টেবিলের মতোই নিয়ম।
 
-### 2. Game Engine Development (`src/lib/ludu-engine.ts`)
-- Logic for board mapping (safe zones, home path, finishing line).
-- Piece movement rules (dice 6 for entry, kicking opponents, blockades).
-- Turn management and win conditions.
+## ২. নতুন মেনু: "Due" (Insights ট্যাবের ঠিক আগে)
 
-### 3. Game Components (`src/components/game/`)
-- `LuduBoard.tsx`: The visual rendering of the board and pieces.
-- `Dice.tsx`: Animated dice rolling component.
-- `GameUI.tsx`: Player indicators, chat, and status messages.
+ড্যাশবোর্ডে Money আর Insights-এর মাঝে নতুন একটি ট্যাব, তিনটি অংশে:
 
-### 4. Integration
-- Add a "Games" tab to the `BottomNavBar` with a game controller icon.
-- Create `src/routes/games/index.tsx`: Lobby to join or create rooms.
-- Create `src/routes/games/$roomId.tsx`: The actual game arena.
+1. **Summary কার্ড** — মোট ফাইন, মোট জমা, মোট বকেয়া (সব প্লেয়ার মিলিয়ে)।
+2. **প্রতি প্লেয়ারের লাইন** — নাম, মোট ফাইন, মোট জমা, বর্তমান Due। Due > 0 হলে লাল, ০ হলে সবুজ "Clear" ব্যাজ। ডানে "Pay" বাটন।
+3. **প্লেয়ার ডিটেইল (ট্যাপ করলে খুলবে)** — তারিখ অনুযায়ী পুরো লেজার:
+   - কোন তারিখে কত ফাইন হলো (ম্যাচ থেকে)
+   - কোন তারিখে কত টাকা জমা দিলো
+   - প্রতিটি সারির পাশে চলমান (running) বকেয়া, যাতে "কবে কত Due ছিল" দেখা যায়
 
-## Technical Details
+উপরের মাস/তারিখ ফিল্টার এই ট্যাবেও কাজ করবে; পাশাপাশি "All-Time Due" আলাদা করে দেখানো হবে যাতে আগের বকেয়া হারিয়ে না যায়।
 
-- **Rendering**: SVG/CSS for the board to ensure responsiveness on all mobile screens.
-- **State Management**: React state synced with Supabase Realtime `broadcast` channel for low-latency piece movement.
-- **Animations**: `framer-motion` for smooth piece gliding and dice shakes.
+## ৩. পেমেন্ট এন্ট্রি স্ক্রিন
+
+- নতুন রুট `/add-payment`: প্লেয়ার সিলেক্ট, টাকার পরিমাণ, তারিখ (ডিফল্ট আজ), নোট।
+- ফর্মে ওই প্লেয়ারের **বর্তমান Due** এবং জমা দেওয়ার পর **নতুন Due** লাইভ দেখাবে।
+- "Full Due পরিশোধ" শর্টকাট বাটন — বাকি পুরো টাকা এক ক্লিকে বসে যাবে।
+- Due ট্যাবের "Pay" বাটন সরাসরি ওই প্লেয়ার প্রি-সিলেক্ট করে এই স্ক্রিনে নিয়ে যাবে।
+
+## ৪. History তে Payments
+
+History পেজে Matches / Expenses এর পাশে নতুন **Payments** ট্যাব — তারিখ অনুযায়ী সব জমার তালিকা, অ্যাডমিনের জন্য এডিট/ডিলিট।
+
+## ৫. Fund হিসাব আপডেট
+
+এখন Fund = মোট ফাইন − খরচ (ধরে নেওয়া হয় সবাই দিয়ে দিয়েছে)। পেমেন্ট চালু হলে দুটো আলাদা দেখানো হবে:
+
+- **Cash in Hand** = মোট জমা − খরচ (হাতে আসল টাকা)
+- **Expected Fund** = মোট ফাইন − খরচ (সবাই দিলে যা থাকত)
+- পার্থক্যটাই মোট বকেয়া।
+
+## টেকনিক্যাল নোট
+
+- `payments` টেবিল: `player_id`, `amount` (integer), `paid_date` (date), `note`, `created_by_name`, `updated_by_name`, timestamps; RLS: authenticated read+insert, `is_group_admin()` update/delete; সাথে যথাযথ GRANT।
+- `src/routes/index.tsx` এ ট্যাব লিস্ট ৬ থেকে ৭ হবে — স্লাইডিং পিল ইন্ডিকেটরের প্রস্থ ১৬.৬৬% থেকে ১৪.২৮% করতে হবে।
+- Due হিসাব একটি শেয়ার্ড হেল্পার (`src/lib/dues.ts`) এ থাকবে যাতে Dashboard, add-payment ও History একই লজিক ব্যবহার করে।
