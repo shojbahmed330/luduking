@@ -116,6 +116,50 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by_name: string | null
+          id: string
+          note: string | null
+          paid_date: string
+          player_id: string
+          updated_at: string
+          updated_by_name: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by_name?: string | null
+          id?: string
+          note?: string | null
+          paid_date?: string
+          player_id: string
+          updated_at?: string
+          updated_by_name?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by_name?: string | null
+          id?: string
+          note?: string | null
+          paid_date?: string
+          player_id?: string
+          updated_at?: string
+          updated_by_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       players: {
         Row: {
           created_at: string
