@@ -139,7 +139,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_group_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
