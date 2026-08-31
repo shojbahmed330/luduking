@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AddExpenseRouteImport } from './routes/add-expense'
 import { Route as AddMatchRouteImport } from './routes/add-match'
+import { Route as AddPaymentRouteImport } from './routes/add-payment'
 import { Route as HistoryRouteImport } from './routes/history'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const AddMatchRoute = AddMatchRouteImport.update({
   path: '/add-match',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AddPaymentRoute = AddPaymentRouteImport.update({
+  id: '/add-payment',
+  path: '/add-payment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HistoryRoute = HistoryRouteImport.update({
   id: '/history',
   path: '/history',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
+  '/add-payment': typeof AddPaymentRoute
   '/history': typeof HistoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
+  '/add-payment': typeof AddPaymentRoute
   '/history': typeof HistoryRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/add-expense': typeof AddExpenseRoute
   '/add-match': typeof AddMatchRoute
+  '/add-payment': typeof AddPaymentRoute
   '/history': typeof HistoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/add-expense' | '/add-match' | '/history'
+  fullPaths: '/' | '/add-expense' | '/add-match' | '/add-payment' | '/history'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/add-expense' | '/add-match' | '/history'
-  id: '__root__' | '/' | '/add-expense' | '/add-match' | '/history'
+  to: '/' | '/add-expense' | '/add-match' | '/add-payment' | '/history'
+  id:
+    | '__root__'
+    | '/'
+    | '/add-expense'
+    | '/add-match'
+    | '/add-payment'
+    | '/history'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddExpenseRoute: typeof AddExpenseRoute
   AddMatchRoute: typeof AddMatchRoute
+  AddPaymentRoute: typeof AddPaymentRoute
   HistoryRoute: typeof HistoryRoute
 }
 
@@ -92,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AddMatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/add-payment': {
+      id: '/add-payment'
+      path: '/add-payment'
+      fullPath: '/add-payment'
+      preLoaderRoute: typeof AddPaymentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/history': {
       id: '/history'
       path: '/history'
@@ -106,6 +129,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddExpenseRoute: AddExpenseRoute,
   AddMatchRoute: AddMatchRoute,
+  AddPaymentRoute: AddPaymentRoute,
   HistoryRoute: HistoryRoute,
 }
 export const routeTree = rootRouteImport
