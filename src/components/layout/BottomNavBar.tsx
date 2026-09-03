@@ -1,15 +1,16 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, PlusCircle, Coffee, History, Gamepad2 } from "lucide-react";
+import { Home, PlusCircle, Coffee, History, HandCoins } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Home", icon: Home, to: "/" },
   { label: "Add Match", icon: PlusCircle, to: "/add-match" },
-  
+  { label: "Payment", icon: HandCoins, to: "/add-payment" },
   { label: "Add Expense", icon: Coffee, to: "/add-expense" },
   { label: "History", icon: History, to: "/history" },
 ];
+
 
 export function BottomNavBar() {
   const location = useLocation();

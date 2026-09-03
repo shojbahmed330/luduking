@@ -10,6 +10,7 @@ import {
   Trash2, 
   Dice5, 
   Coffee,
+  Wallet,
   ChevronRight,
   ChevronDown,
   Check
@@ -30,6 +31,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 export const Route = createFileRoute("/history")({
   head: () => ({
@@ -47,16 +49,18 @@ export const Route = createFileRoute("/history")({
   component: HistoryPage,
 });
 
-type Tab = "matches" | "expenses";
+type Tab = "matches" | "expenses" | "payments";
 
 function HistoryPage() {
   const navigate = useNavigate();
+  const isAdmin = useIsAdmin();
   const [activeTab, setActiveTab] = useState<Tab>("matches");
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [matches, setMatches] = useState<any[]>([]);
   const [expenses, setExpenses] = useState<any[]>([]);
   const [players, setPlayers] = useState<any[]>([]);
+  const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
   // Delete dialog state
@@ -65,15 +69,17 @@ function HistoryPage() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [pRes, mRes, eRes] = await Promise.all([
+    const [pRes, mRes, eRes, payRes] = await Promise.all([
       supabase.from("players").select("*"),
       supabase.from("matches").select("*, match_results(*, players(*))").order("match_date", { ascending: false }),
-      supabase.from("expenses").select("*").order("expense_date", { ascending: false })
+      supabase.from("expenses").select("*").order("expense_date", { ascending: false }),
+      supabase.from("payments").select("*, players(*)").order("paid_date", { ascending: false })
     ]);
 
     setPlayers(pRes.data || []);
     setMatches(mRes.data || []);
     setExpenses(eRes.data || []);
+    setPayments(payRes.data || []);
     setLoading(false);
   };
 
@@ -85,8 +91,9 @@ function HistoryPage() {
     const months = new Set<string>();
     matches.forEach(m => months.add(format(parseISO(m.match_date), "MMMM yyyy")));
     expenses.forEach(e => months.add(format(parseISO(e.expense_date), "MMMM yyyy")));
+    payments.forEach(p => months.add(format(parseISO(p.paid_date), "MMMM yyyy")));
     return Array.from(months).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-  }, [matches, expenses]);
+  }, [matches, expenses, payments]);
 
   const filteredMatches = useMemo(() => {
     let result = matches;
@@ -113,6 +120,28 @@ function HistoryPage() {
     }
     return result;
   }, [expenses, selectedMonth]);
+
+  const filteredPayments = useMemo(() => {
+    let result = payments;
+    if (selectedDate) {
+      result = payments.filter(p => isSameDay(parseISO(p.paid_date), selectedDate));
+    } else if (selectedMonth !== "All-Time") {
+      const start = startOfMonth(new Date(selectedMonth));
+      const end = endOfMonth(new Date(selectedMonth));
+      result = payments.filter(p => isWithinInterval(parseISO(p.paid_date), { start, end }));
+    }
+    return result;
+  }, [payments, selectedMonth, selectedDate]);
+
+  const paymentsGroupedByDay = useMemo(() => {
+    const groups: Record<string, any[]> = {};
+    filteredPayments.forEach(p => {
+      const day = format(parseISO(p.paid_date), "yyyy-MM-dd");
+      if (!groups[day]) groups[day] = [];
+      groups[day].push(p);
+    });
+    return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
+  }, [filteredPayments]);
 
   const matchesGroupedByDay = useMemo(() => {
     const groups: Record<string, any[]> = {};
@@ -145,10 +174,14 @@ function HistoryPage() {
         const { error } = await supabase.from("matches").delete().eq("id", deleteConfirm.id);
         if (error) throw error;
         toast.success("Match deleted");
-      } else {
+      } else if (deleteConfirm.type === "expenses") {
         const { error } = await supabase.from("expenses").delete().eq("id", deleteConfirm.id);
         if (error) throw error;
         toast.success("Expense deleted");
+      } else {
+        const { error } = await supabase.from("payments").delete().eq("id", deleteConfirm.id);
+        if (error) throw error;
+        toast.success("Payment deleted");
       }
       fetchData();
     } catch (error: any) {
@@ -205,6 +238,15 @@ function HistoryPage() {
           )}
         >
           Expenses
+        </button>
+        <button
+          onClick={() => setActiveTab("payments")}
+          className={cn(
+            "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
+            activeTab === "payments" ? "bg-white shadow-sm text-ludu-green ring-1 ring-black/5" : "text-muted-foreground/60"
+          )}
+        >
+          Payments
         </button>
       </div>
 
@@ -305,6 +347,7 @@ function HistoryPage() {
                         <Dice5 className="h-3 w-3 text-ludu-gold" />
                         Match #{match.id.slice(0, 4)}
                       </div>
+                      {isAdmin && (
                       <div className="flex gap-1">
                         <button 
                           className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
@@ -319,6 +362,7 @@ function HistoryPage() {
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
+                      )}
                     </div>
                     
                     <div className="grid grid-cols-1 gap-2">
@@ -358,7 +402,7 @@ function HistoryPage() {
               </div>
             ))
           )
-        ) : (
+        ) : activeTab === "expenses" ? (
           filteredExpenses.length === 0 ? (
             <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
               <div className="flex justify-center mb-4">
@@ -399,6 +443,7 @@ function HistoryPage() {
                           </p>
                         )}
                       </div>
+                      {isAdmin && (
                       <div className="flex gap-2 ml-2">
                         <button 
                           className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
@@ -413,6 +458,7 @@ function HistoryPage() {
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
+                      )}
                     </div>
                     {(expense.created_by_name || expense.updated_by_name) && (
                       <div className="mt-4 pt-4 border-t border-dashed border-muted flex items-center gap-2">
@@ -435,6 +481,84 @@ function HistoryPage() {
               </div>
             ))
           )
+        ) : (
+          filteredPayments.length === 0 ? (
+            <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
+              <div className="flex justify-center mb-4">
+                <Wallet className="h-12 w-12 text-muted-foreground/30" />
+              </div>
+              <p className="text-muted-foreground font-bold">No payments recorded yet 💰</p>
+              <button
+                className="mt-6 w-full rounded-2xl bg-ludu-green text-white font-black py-4 shadow-lg shadow-ludu-green/20 active-scale"
+                onClick={() => navigate({ to: "/add-payment" })}
+              >
+                Add Payment
+              </button>
+            </div>
+          ) : (
+            paymentsGroupedByDay.map(([day, dayPayments]) => (
+              <div key={day} className="space-y-3">
+                <div className="flex items-center gap-2 px-1 sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2">
+                  <div className="h-px flex-1 bg-muted" />
+                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/40 px-2 py-0.5 rounded-full">
+                    {format(parseISO(day), "EEEE, MMM d")}
+                  </span>
+                  <div className="h-px flex-1 bg-muted" />
+                </div>
+                {dayPayments.map(payment => (
+                  <div key={payment.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar name={payment.players?.name || "?"} size="sm" />
+                        <div>
+                          <p className="font-black text-base text-foreground">{payment.players?.name}</p>
+                          <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">Payment Received</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl font-black text-ludu-green">{payment.amount} <span className="text-base">৳</span></span>
+                        {isAdmin && (
+                          <div className="flex gap-2 ml-1">
+                            <button
+                              className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
+                              onClick={() => navigate({ to: "/add-payment", search: { editId: payment.id } })}
+                            >
+                              <Edit2 className="h-4 w-4" />
+                            </button>
+                            <button
+                              className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-red/5 text-ludu-red active-scale border border-ludu-red/10"
+                              onClick={() => setDeleteConfirm({ type: "payments", id: payment.id })}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {payment.note && (
+                      <p className="mt-3 text-sm font-bold text-muted-foreground/80 bg-muted/20 p-3 rounded-2xl border-l-4 border-ludu-green leading-snug">
+                        {payment.note}
+                      </p>
+                    )}
+                    {(payment.created_by_name || payment.updated_by_name) && (
+                      <div className="mt-4 pt-4 border-t border-dashed border-muted flex flex-col">
+                        {payment.created_by_name && (
+                          <span className="text-[8px] font-black text-muted-foreground uppercase tracking-tighter">
+                            Added by: {payment.created_by_name}
+                          </span>
+                        )}
+                        {payment.updated_by_name && (
+                          <span className="text-[8px] font-black text-ludu-blue uppercase tracking-tighter">
+                            Last edit by: {payment.updated_by_name}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))
+          )
         )}
       </div>
 
@@ -444,7 +568,7 @@ function HistoryPage() {
           <DialogHeader>
             <DialogTitle className="text-xl font-black">Delete Entry?</DialogTitle>
             <DialogDescription className="font-bold">
-              This will permanently remove the {deleteConfirm?.type === "matches" ? "match and all its results" : "expense"}. This cannot be undone.
+              This will permanently remove the {deleteConfirm?.type === "matches" ? "match and all its results" : deleteConfirm?.type === "expenses" ? "expense" : "payment"}. This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-row gap-3 mt-4">
