@@ -347,6 +347,7 @@ function HistoryPage() {
                         <Dice5 className="h-3 w-3 text-ludu-gold" />
                         Match #{match.id.slice(0, 4)}
                       </div>
+                      {isAdmin && (
                       <div className="flex gap-1">
                         <button 
                           className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
@@ -361,6 +362,7 @@ function HistoryPage() {
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
+                      )}
                     </div>
                     
                     <div className="grid grid-cols-1 gap-2">
@@ -441,6 +443,7 @@ function HistoryPage() {
                           </p>
                         )}
                       </div>
+                      {isAdmin && (
                       <div className="flex gap-2 ml-2">
                         <button 
                           className="h-9 w-9 flex items-center justify-center rounded-xl bg-ludu-blue/5 text-ludu-blue active-scale border border-ludu-blue/10"
@@ -455,6 +458,7 @@ function HistoryPage() {
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
+                      )}
                     </div>
                     {(expense.created_by_name || expense.updated_by_name) && (
                       <div className="mt-4 pt-4 border-t border-dashed border-muted flex items-center gap-2">
@@ -564,7 +568,7 @@ function HistoryPage() {
           <DialogHeader>
             <DialogTitle className="text-xl font-black">Delete Entry?</DialogTitle>
             <DialogDescription className="font-bold">
-              This will permanently remove the {deleteConfirm?.type === "matches" ? "match and all its results" : "expense"}. This cannot be undone.
+              This will permanently remove the {deleteConfirm?.type === "matches" ? "match and all its results" : deleteConfirm?.type === "expenses" ? "expense" : "payment"}. This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-row gap-3 mt-4">
