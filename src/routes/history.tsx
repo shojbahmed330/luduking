@@ -400,7 +400,7 @@ function HistoryPage() {
               </div>
             ))
           )
-        ) : (
+        ) : activeTab === "expenses" ? (
           filteredExpenses.length === 0 ? (
             <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
               <div className="flex justify-center mb-4">
@@ -477,8 +477,6 @@ function HistoryPage() {
               </div>
             ))
           )
-        ) : activeTab === "expenses" ? (
-          <ExpensesUnreachable />
         ) : (
           filteredPayments.length === 0 ? (
             <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
