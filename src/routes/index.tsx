@@ -18,7 +18,8 @@ import {
   ChevronRight,
   Check,
   Dice5,
-  ArrowRight
+  ArrowRight,
+  HandCoins
 } from "lucide-react";
 import { 
   LineChart, 
@@ -40,6 +41,7 @@ import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import { computeDues, type DuePayment } from "@/lib/dues";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,6 +64,7 @@ export const Route = createFileRoute("/")({
 type Player = { id: string; name: string };
 type Match = { id: string; match_date: string; created_by_name: string | null };
 type MatchResult = { match_id: string; player_id: string; position: number; fine_amount: number };
+type Payment = DuePayment;
 type Expense = { amount: number; expense_date: string; note: string | null; created_by_name: string | null };
 
 function Dashboard() {
@@ -69,9 +72,11 @@ function Dashboard() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [matchResults, setMatchResults] = useState<MatchResult[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [expandedDueId, setExpandedDueId] = useState<string | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "analytics">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "dues" | "analytics">("overview");
   const [loading, setLoading] = useState(true);
   const [moneyView, setMoneyView] = useState<"total" | "daily">("total");
   const [comparisonPlayer1Id, setComparisonPlayer1Id] = useState<string | null>(null);
@@ -79,17 +84,19 @@ function Dashboard() {
 
   useEffect(() => {
     async function fetchData() {
-      const [pRes, mRes, mrRes, eRes] = await Promise.all([
+      const [pRes, mRes, mrRes, eRes, payRes] = await Promise.all([
         supabase.from("players").select("*"),
         supabase.from("matches").select("*"),
         supabase.from("match_results").select("*"),
-        supabase.from("expenses").select("*")
+        supabase.from("expenses").select("*"),
+        supabase.from("payments").select("*")
       ]);
 
       setPlayers(pRes.data || []);
       setMatches(mRes.data || []);
       setMatchResults(mrRes.data || []);
       setExpenses(eRes.data || []);
+      setPayments(payRes.data || []);
       setLoading(false);
     }
     fetchData();
@@ -156,6 +163,24 @@ function Dashboard() {
       matchCount: filteredData.matches.length
     };
   }, [filteredData]);
+
+  const dues = useMemo(
+    () => computeDues(players, matches, matchResults, payments),
+    [players, matches, matchResults, payments],
+  );
+
+  const dueTotals = useMemo(() => {
+    const totalFine = dues.reduce((a, d) => a + d.totalFine, 0);
+    const totalPaid = dues.reduce((a, d) => a + d.totalPaid, 0);
+    const totalExpenses = expenses.reduce((a, e) => a + e.amount, 0);
+    return {
+      totalFine,
+      totalPaid,
+      totalDue: totalFine - totalPaid,
+      cashInHand: totalPaid - totalExpenses,
+      expectedFund: totalFine - totalExpenses,
+    };
+  }, [dues, expenses]);
 
   const playerLeaderboard = useMemo(() => {
     const stats = players.map(player => {
@@ -404,8 +429,8 @@ function Dashboard() {
         <div 
           className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
           style={{
-            width: `calc(16.66% - 2px)`,
-            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'analytics'].indexOf(activeTab) * 16.66}% + 4px)`
+            width: `calc(14.28% - 2px)`,
+            left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'dues', 'analytics'].indexOf(activeTab) * 14.28}% + 4px)`
           }}
         />
         {[
@@ -414,6 +439,7 @@ function Dashboard() {
           { id: 'leaderboard', label: 'Stats', icon: Trophy },
           { id: 'money', label: 'Money', icon: Users },
           { id: 'chanasta', label: 'Tea', icon: Coffee },
+          { id: 'dues', label: 'Due', icon: HandCoins },
           { id: 'analytics', label: 'Insights', icon: TrendingUp },
         ].map((tab) => (
           <button
@@ -462,6 +488,23 @@ function Dashboard() {
               icon={<Coffee className="h-4 w-4" />}
               variant="red"
             />
+
+            <div className="grid grid-cols-2 gap-4">
+              <StatCard
+                label="Cash in Hand"
+                value={`${dueTotals.cashInHand} ৳`}
+                icon={<Wallet className="h-4 w-4" />}
+                variant="green"
+                subValue="Paid − Expenses"
+              />
+              <StatCard
+                label="Total Due"
+                value={`${dueTotals.totalDue} ৳`}
+                icon={<HandCoins className="h-4 w-4" />}
+                variant="red"
+                subValue="All-Time"
+              />
+            </div>
             
             <div className="grid grid-cols-2 gap-4">
               <Link 
@@ -791,6 +834,108 @@ function Dashboard() {
             )}
           </motion.div>
         )}
+        {activeTab === 'dues' && (
+          <motion.div
+            key="dues"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-5"
+          >
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-2">
+                <HandCoins className="h-5 w-5 text-ludu-red" />
+                <div className="flex flex-col">
+                  <h2 className="text-xl font-black text-foreground">Due & Payment</h2>
+                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">All-Time Hisab</p>
+                </div>
+              </div>
+              <Link
+                to="/add-payment"
+                className="rounded-2xl bg-ludu-green text-white px-4 py-2.5 text-xs font-black shadow-lg shadow-ludu-green/20 active-scale"
+              >
+                + Payment
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div className="rounded-3xl bg-white p-4 border-2 border-muted card-shadow text-center">
+                <p className="text-lg font-black text-foreground">{dueTotals.totalFine} ৳</p>
+                <p className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Total Fine</p>
+              </div>
+              <div className="rounded-3xl bg-white p-4 border-2 border-ludu-green/20 card-shadow text-center">
+                <p className="text-lg font-black text-ludu-green">{dueTotals.totalPaid} ৳</p>
+                <p className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Total Paid</p>
+              </div>
+              <div className="rounded-3xl bg-white p-4 border-2 border-ludu-red/20 card-shadow text-center">
+                <p className="text-lg font-black text-ludu-red">{dueTotals.totalDue} ৳</p>
+                <p className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Total Due</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {dues.map(player => {
+                const open = expandedDueId === player.id;
+                return (
+                  <div key={player.id} className="rounded-3xl bg-white border-2 border-muted card-shadow overflow-hidden">
+                    <button
+                      onClick={() => setExpandedDueId(open ? null : player.id)}
+                      className="w-full flex items-center gap-3 p-4 text-left active-scale"
+                    >
+                      <PlayerAvatar name={player.name} size="sm" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-black text-base text-foreground truncate">{player.name}</p>
+                        <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">
+                          Fine {player.totalFine} ৳ · Paid {player.totalPaid} ৳
+                        </p>
+                      </div>
+                      {player.due > 0 ? (
+                        <span className="text-sm font-black text-ludu-red">{player.due} ৳</span>
+                      ) : (
+                        <span className="text-[9px] font-black bg-ludu-green/10 text-ludu-green px-2 py-1 rounded-full uppercase tracking-widest">
+                          Clear
+                        </span>
+                      )}
+                      <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform", open && "rotate-180")} />
+                    </button>
+
+                    {open && (
+                      <div className="border-t border-dashed border-muted p-4 space-y-2">
+                        {player.ledger.length === 0 ? (
+                          <p className="text-xs font-bold text-muted-foreground text-center py-2">No fine or payment yet 🎲</p>
+                        ) : (
+                          player.ledger.map((row, i) => (
+                            <div key={`${row.date}-${row.type}-${i}`} className="flex items-center gap-2 text-xs">
+                              <span className="font-black text-muted-foreground w-20 shrink-0">
+                                {format(parseISO(row.date), "MMM d")}
+                              </span>
+                              <span className={cn(
+                                "font-black px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest",
+                                row.type === "fine" ? "bg-ludu-red/10 text-ludu-red" : "bg-ludu-green/10 text-ludu-green"
+                              )}>
+                                {row.type === "fine" ? "Fine" : "Paid"} {row.amount} ৳
+                              </span>
+                              <span className="flex-1 truncate text-[10px] font-bold text-muted-foreground/70">{row.note || ""}</span>
+                              <span className="font-black text-foreground">Due {row.runningDue} ৳</span>
+                            </div>
+                          ))
+                        )}
+                        <Link
+                          to="/add-payment"
+                          search={{ playerId: player.id }}
+                          className="mt-2 flex w-full items-center justify-center rounded-2xl bg-ludu-green text-white font-black py-3 text-sm shadow-lg shadow-ludu-green/20 active-scale"
+                        >
+                          Pay {player.due > 0 ? `${player.due} ৳` : ""}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+
         {activeTab === 'analytics' && (
           <motion.div 
             key="analytics"
