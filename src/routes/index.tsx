@@ -269,12 +269,8 @@ function Dashboard() {
           monthMatches.some(m => m.id === mr.match_id)
         );
         
-        if (playerMatches.length === 0) {
-          data[player.name] = 0;
-        } else {
-          const wins = playerMatches.filter(mr => mr.position === 1).length;
-          data[player.name] = Math.round((wins / playerMatches.length) * 100);
-        }
+        const wins = playerMatches.filter(mr => mr.position === 1).length;
+        data[player.name] = wins;
       });
       return data;
     });
@@ -951,7 +947,7 @@ function Dashboard() {
 
             {/* Win Rate Trend Chart */}
             <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
-              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">Win Rate Trend (1st Place %)</h3>
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">1st Place Wins (Count)</h3>
               <div className="h-[200px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={winRateTrendData}>
@@ -967,7 +963,7 @@ function Dashboard() {
                       axisLine={false} 
                       tickLine={false} 
                       tick={{ fontSize: 10, fontWeight: 700, fill: '#94a3b8' }}
-                      unit="%"
+                      allowDecimals={false}
                     />
                     <Tooltip 
                       contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 'bold' }}
