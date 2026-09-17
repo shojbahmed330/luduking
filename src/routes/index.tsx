@@ -606,9 +606,17 @@ function Dashboard() {
             transition={{ duration: 0.2 }}
             className="space-y-4"
           >
-            <div className="flex items-center gap-2 px-1">
-              <Trophy className="h-5 w-5 text-ludu-gold" />
-              <h2 className="text-xl font-black text-foreground">Position Stats</h2>
+            <div className="flex items-center justify-between gap-2 px-1">
+              <div className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-ludu-gold" />
+                <h2 className="text-xl font-black text-foreground">Position Stats</h2>
+              </div>
+              <Link
+                to="/players"
+                className="flex items-center gap-1.5 rounded-xl bg-ludu-blue/10 px-3 py-2 text-[11px] font-black text-ludu-blue active-scale"
+              >
+                <Users className="h-3.5 w-3.5" /> Manage Players
+              </Link>
             </div>
             {filteredData.matches.length === 0 ? (
               <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
