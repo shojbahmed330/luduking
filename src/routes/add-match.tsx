@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch, Link } from "@tanstack/react-router";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format, parseISO } from "date-fns";
-import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2, Trophy } from "lucide-react";
+import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2, Trophy, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -309,6 +309,12 @@ function AddMatch() {
                   );
                 })}
               </div>
+              <Link
+                to="/players"
+                className="mt-1 flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-muted py-3 text-sm font-black text-muted-foreground active-scale"
+              >
+                <UserPlus className="h-4 w-4" /> Add a new player
+              </Link>
             </div>
             
             {selectedPlayers.length < 3 && (
