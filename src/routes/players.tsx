@@ -5,7 +5,6 @@ import { ArrowLeft, UserPlus, Pencil, Trash2, Check, X, Users } from "lucide-rea
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
@@ -157,9 +156,13 @@ function PlayersPage() {
               placeholder="e.g. Sadaf"
               className="flex-1 rounded-2xl border-2 border-muted bg-background px-4 py-3 text-base font-black outline-none focus:border-ludu-gold"
             />
-            <PrimaryButton type="submit" disabled={saving} className="w-auto px-5">
+            <button
+              type="submit"
+              disabled={saving}
+              className="shrink-0 rounded-2xl bg-ludu-gold px-5 text-white font-black shadow-lg active-scale disabled:opacity-50"
+            >
               <UserPlus className="h-5 w-5" />
-            </PrimaryButton>
+            </button>
           </div>
         </form>
 
