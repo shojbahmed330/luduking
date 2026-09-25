@@ -1118,6 +1118,102 @@ function Dashboard() {
                 )}
               </div>
             </div>
+
+            {/* Player Ranking Section */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">Player Ranking</h3>
+
+              {/* Best Player Card */}
+              {bestPlayer && (
+                <Card className="border-2 border-ludu-gold/30 bg-gradient-to-br from-ludu-gold/15 to-ludu-gold/5 card-shadow overflow-hidden">
+                  <CardContent className="p-5 flex items-center gap-4">
+                    <div className="relative">
+                      <PlayerAvatar name={bestPlayer.name} size="lg" className="ring-4 ring-ludu-gold ring-offset-2" />
+                      <span className="absolute -top-2 -right-2 text-xl">👑</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[9px] font-black text-ludu-gold uppercase tracking-widest">
+                        {selectedDate ? "Best of the Day" : selectedMonth === "All-Time" ? "Best Player (All Time)" : `Best of ${selectedMonth}`}
+                      </p>
+                      <p className="text-lg font-black text-foreground truncate">{bestPlayer.name}</p>
+                      <p className="text-[10px] font-bold text-muted-foreground">
+                        {bestPlayer.avgPoints.toFixed(2)} avg pts • {bestPlayer.matches} matches
+                      </p>
+                    </div>
+                    <div className="flex gap-1.5 shrink-0">
+                      {([1, 2, 3, 4] as const).map(pos => (
+                        <div key={pos} className="flex flex-col items-center">
+                          <span className="text-xs">{["🥇", "🥈", "🥉", "4️⃣"][pos - 1]}</span>
+                          <span className="text-[10px] font-black">{[bestPlayer.first, bestPlayer.second, bestPlayer.third, bestPlayer.fourth][pos - 1]}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Ranking List */}
+              <Card className="border-2 border-muted/50 card-shadow overflow-hidden">
+                <CardContent className="p-3 space-y-2">
+                  {playerRankings.filter(r => r.matches > 0).map(r => (
+                    <div
+                      key={r.id}
+                      className={cn(
+                        "flex items-center gap-3 p-2.5 rounded-2xl",
+                        r.rank === 1 && r.eligible ? "bg-ludu-gold/10 ring-1 ring-ludu-gold/30" : "bg-muted/20"
+                      )}
+                    >
+                      <span className={cn(
+                        "w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0",
+                        r.rank === 1 && r.eligible ? "bg-ludu-gold text-white" : "bg-muted text-muted-foreground"
+                      )}>
+                        {r.rank}
+                      </span>
+                      <PlayerAvatar name={r.name} size="sm" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-black truncate flex items-center gap-1.5">
+                          {r.name}
+                          {r.rank === 1 && r.eligible && <span>👑</span>}
+                          {!r.eligible && (
+                            <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
+                              ⚠️ কম ম্যাচ
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-[9px] font-bold text-muted-foreground">
+                          {r.matches} matches • 🥇{r.first} 🥈{r.second} 🥉{r.third} 4️⃣{r.fourth}
+                        </p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-sm font-black text-ludu-gold">{r.avgPoints.toFixed(2)}</p>
+                        <p className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">avg pts</p>
+                      </div>
+                    </div>
+                  ))}
+                  {playerRankings.every(r => r.matches === 0) && (
+                    <p className="text-center text-xs font-bold text-muted-foreground py-6">No matches in this period yet.</p>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* How it works */}
+              <Card className="border-2 border-muted/50 card-shadow overflow-hidden">
+                <CardContent className="p-4 space-y-2">
+                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">কিভাবে হিসাব হয়</p>
+                  <div className="flex gap-2">
+                    {([1, 2, 3, 4] as const).map(pos => (
+                      <div key={pos} className="flex-1 rounded-xl bg-muted/20 py-2 flex flex-col items-center">
+                        <span className="text-sm">{["🥇", "🥈", "🥉", "4️⃣"][pos - 1]}</span>
+                        <span className="text-xs font-black">{POSITION_POINTS[pos]} pts</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[10px] font-bold text-muted-foreground leading-relaxed">
+                    Score = মোট পয়েন্ট ÷ মোট ম্যাচ। কম ম্যাচ খেললেও ভালো খেললে best হওয়া যায়। Best Player ক্রাউন পেতে কমপক্ষে {MIN_MATCHES_FOR_BEST} ম্যাচ খেলতে হবে। প্রতি মাসের ১ তারিখ থেকে হিসাব নতুন করে শুরু হয় — মাস ফিল্টার বদলে সেই মাসের best দেখুন।
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </motion.div>
         )}
       </div>
