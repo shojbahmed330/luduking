@@ -42,6 +42,7 @@ import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { computeDues, type DuePayment } from "@/lib/dues";
+import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCHES_FOR_BEST } from "@/lib/ranking";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -322,6 +323,13 @@ function Dashboard() {
 
     return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length, p1Stats: statsFor(p1.id), p2Stats: statsFor(p2.id) };
   }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
+
+  const playerRankings = useMemo(
+    () => computeRanking(players, filteredData.matchResults),
+    [players, filteredData],
+  );
+
+  const bestPlayer = useMemo(() => getBestPlayer(playerRankings), [playerRankings]);
 
   if (loading) {
     return (
