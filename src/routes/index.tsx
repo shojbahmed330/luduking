@@ -40,6 +40,7 @@ import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { BottomDrawer } from "@/components/ludu/BottomDrawer";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { computeDues, type DuePayment } from "@/lib/dues";
 import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCHES_FOR_BEST } from "@/lib/ranking";
