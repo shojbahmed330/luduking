@@ -326,7 +326,7 @@ function Dashboard() {
   }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   const playerRankings = useMemo(
-    () => computeRanking(players, filteredData.matchResults),
+    () => computeRanking(players, filteredData.matchResults, filteredData.matches.length),
     [players, filteredData],
   );
 
