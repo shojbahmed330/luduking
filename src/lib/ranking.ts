@@ -62,16 +62,20 @@ export function computeRanking(
       fourth,
       totalPoints,
       avgPoints: matches > 0 ? totalPoints / matches : 0,
-      eligible: totalMatches > 0 && matches >= requiredMatches,
+      eligible:
+        totalMatches > 0 && matches >= requiredMatches && !player.is_irregular,
       requiredMatches,
+      isIrregular: !!player.is_irregular,
       rank: 0,
     };
   });
 
   // Sort: eligible players (enough matches) first by avgPoints desc,
   // then 1st places, then matches, then fewer 4th places.
-  // Ineligible players stay at the bottom of the list.
+  // Ineligible players stay at the bottom of the list; irregular players
+  // are always pinned at the very bottom.
   stats.sort((a, b) => {
+    if (a.isIrregular !== b.isIrregular) return a.isIrregular ? 1 : -1;
     if (a.eligible !== b.eligible) return a.eligible ? -1 : 1;
     if (b.avgPoints !== a.avgPoints) return b.avgPoints - a.avgPoints;
     if (b.first !== a.first) return b.first - a.first;
