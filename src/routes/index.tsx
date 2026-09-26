@@ -43,7 +43,7 @@ import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { computeDues, type DuePayment } from "@/lib/dues";
-import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCHES_FOR_BEST } from "@/lib/ranking";
+import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCH_RATIO } from "@/lib/ranking";
 
 export const Route = createFileRoute("/")({
   head: () => ({
