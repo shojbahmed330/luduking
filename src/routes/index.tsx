@@ -63,7 +63,7 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-type Player = { id: string; name: string };
+type Player = { id: string; name: string; is_irregular?: boolean | null };
 type Match = { id: string; match_date: string; created_by_name: string | null };
 type MatchResult = { match_id: string; player_id: string; position: number; fine_amount: number };
 type Payment = DuePayment;
@@ -1177,7 +1177,7 @@ function Dashboard() {
                           {r.rank === 1 && r.eligible && <span>👑</span>}
                           {!r.eligible && (
                             <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
-                              {r.requiredMatches - r.matches > 0 ? `আরও ${r.requiredMatches - r.matches} ম্যাচ` : "কম ম্যাচ"}
+                              {r.isIrregular ? "অনিয়মিত" : r.requiredMatches - r.matches > 0 ? `আরও ${r.requiredMatches - r.matches} ম্যাচ` : "কম ম্যাচ"}
                             </span>
                           )}
                         </p>

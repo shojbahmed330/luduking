@@ -1,12 +1,13 @@
 // Player Ranking: position-based points.
 // Points: 1st = 4, 2nd = 3, 3rd = 2, 4th = 1
 // Score = total points / matches played (average points per match)
-// A player must play at least MIN_MATCH_RATIO (60%) of all matches in the
+// A player must play at least MIN_MATCH_RATIO (50%) of all matches in the
 // period to earn a score; otherwise their name stays at the bottom of the list.
+// Players marked irregular (isIrregular) are always pinned at the very bottom.
 
 export const POSITION_POINTS: Record<number, number> = { 1: 4, 2: 3, 3: 2, 4: 1 };
 
-export const MIN_MATCH_RATIO = 0.6;
+export const MIN_MATCH_RATIO = 0.5;
 
 /** Minimum matches a player must have played to be eligible, given total matches in the period. */
 export function getRequiredMatches(totalMatches: number): number {
@@ -14,7 +15,7 @@ export function getRequiredMatches(totalMatches: number): number {
   return Math.ceil(totalMatches * MIN_MATCH_RATIO);
 }
 
-export type RankingPlayer = { id: string; name: string };
+export type RankingPlayer = { id: string; name: string; is_irregular?: boolean | null };
 export type RankingMatchResult = { player_id: string; position: number };
 
 export type PlayerRanking = {
@@ -29,6 +30,7 @@ export type PlayerRanking = {
   avgPoints: number;
   eligible: boolean;
   requiredMatches: number;
+  isIrregular: boolean;
   rank: number;
 };
 
@@ -60,16 +62,20 @@ export function computeRanking(
       fourth,
       totalPoints,
       avgPoints: matches > 0 ? totalPoints / matches : 0,
-      eligible: totalMatches > 0 && matches >= requiredMatches,
+      eligible:
+        totalMatches > 0 && matches >= requiredMatches && !player.is_irregular,
       requiredMatches,
+      isIrregular: !!player.is_irregular,
       rank: 0,
     };
   });
 
   // Sort: eligible players (enough matches) first by avgPoints desc,
   // then 1st places, then matches, then fewer 4th places.
-  // Ineligible players stay at the bottom of the list.
+  // Ineligible players stay at the bottom of the list; irregular players
+  // are always pinned at the very bottom.
   stats.sort((a, b) => {
+    if (a.isIrregular !== b.isIrregular) return a.isIrregular ? 1 : -1;
     if (a.eligible !== b.eligible) return a.eligible ? -1 : 1;
     if (b.avgPoints !== a.avgPoints) return b.avgPoints - a.avgPoints;
     if (b.first !== a.first) return b.first - a.first;
