@@ -4,7 +4,7 @@
 
 export const POSITION_POINTS: Record<number, number> = { 1: 4, 2: 3, 3: 2, 4: 1 };
 
-export const MIN_MATCHES_FOR_BEST = 3;
+export const MIN_MATCHES_FOR_BEST = 60;
 
 export type RankingPlayer = { id: string; name: string };
 export type RankingMatchResult = { player_id: string; position: number };
@@ -53,8 +53,11 @@ export function computeRanking(
     };
   });
 
-  // Sort: avgPoints desc, then 1st places, then matches, then fewer 4th places
+  // Sort: eligible players (enough matches) first by avgPoints desc,
+  // then 1st places, then matches, then fewer 4th places.
+  // Ineligible players stay at the bottom of the list.
   stats.sort((a, b) => {
+    if (a.eligible !== b.eligible) return a.eligible ? -1 : 1;
     if (b.avgPoints !== a.avgPoints) return b.avgPoints - a.avgPoints;
     if (b.first !== a.first) return b.first - a.first;
     if (b.matches !== a.matches) return b.matches - a.matches;
