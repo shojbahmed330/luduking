@@ -164,16 +164,19 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          is_irregular: boolean
           name: string
         }
         Insert: {
           created_at?: string
           id?: string
+          is_irregular?: boolean
           name: string
         }
         Update: {
           created_at?: string
           id?: string
+          is_irregular?: boolean
           name?: string
         }
         Relationships: []
