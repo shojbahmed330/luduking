@@ -1,6 +1,7 @@
-// Player Ranking: position-based points, match-count independent.
+// Player Ranking: position-based points.
 // Points: 1st = 4, 2nd = 3, 3rd = 2, 4th = 1
 // Score = total points / matches played (average points per match)
+// Players below MIN_MATCHES_FOR_BEST stay at the bottom of the list, no score.
 
 export const POSITION_POINTS: Record<number, number> = { 1: 4, 2: 3, 3: 2, 4: 1 };
 
