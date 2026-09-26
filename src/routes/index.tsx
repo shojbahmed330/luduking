@@ -1156,19 +1156,19 @@ function Dashboard() {
               {/* Ranking List */}
               <Card className="border-2 border-muted/50 card-shadow overflow-hidden">
                 <CardContent className="p-3 space-y-2">
-                  {playerRankings.filter(r => r.matches > 0).map(r => (
+                  {playerRankings.map(r => (
                     <div
                       key={r.id}
                       className={cn(
                         "flex items-center gap-3 p-2.5 rounded-2xl",
-                        r.rank === 1 && r.eligible ? "bg-ludu-gold/10 ring-1 ring-ludu-gold/30" : "bg-muted/20"
+                        r.rank === 1 && r.eligible ? "bg-ludu-gold/10 ring-1 ring-ludu-gold/30" : r.eligible ? "bg-muted/20" : "bg-muted/10 opacity-70"
                       )}
                     >
                       <span className={cn(
                         "w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0",
-                        r.rank === 1 && r.eligible ? "bg-ludu-gold text-white" : "bg-muted text-muted-foreground"
+                        r.rank === 1 && r.eligible ? "bg-ludu-gold text-white" : r.eligible ? "bg-muted text-muted-foreground" : "bg-muted/50 text-muted-foreground/60"
                       )}>
-                        {r.rank}
+                        {r.eligible ? r.rank : "–"}
                       </span>
                       <PlayerAvatar name={r.name} size="sm" />
                       <div className="flex-1 min-w-0">
@@ -1177,7 +1177,7 @@ function Dashboard() {
                           {r.rank === 1 && r.eligible && <span>👑</span>}
                           {!r.eligible && (
                             <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
-                              ⚠️ কম ম্যাচ
+                              {MIN_MATCHES_FOR_BEST - r.matches > 0 ? `আরও ${MIN_MATCHES_FOR_BEST - r.matches} ম্যাচ` : "কম ম্যাচ"}
                             </span>
                           )}
                         </p>
@@ -1186,8 +1186,14 @@ function Dashboard() {
                         </p>
                       </div>
                       <div className="text-right shrink-0">
-                        <p className="text-sm font-black text-ludu-gold">{r.avgPoints.toFixed(2)}</p>
-                        <p className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">avg pts</p>
+                        {r.eligible ? (
+                          <>
+                            <p className="text-sm font-black text-ludu-gold">{r.avgPoints.toFixed(2)}</p>
+                            <p className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">avg pts</p>
+                          </>
+                        ) : (
+                          <p className="text-[9px] font-black text-muted-foreground/60">স্কোর বাকি</p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -1210,7 +1216,7 @@ function Dashboard() {
                     ))}
                   </div>
                   <p className="text-[10px] font-bold text-muted-foreground leading-relaxed">
-                    Score = মোট পয়েন্ট ÷ মোট ম্যাচ। কম ম্যাচ খেললেও ভালো খেললে best হওয়া যায়। Best Player ক্রাউন পেতে কমপক্ষে {MIN_MATCHES_FOR_BEST} ম্যাচ খেলতে হবে। প্রতি মাসের ১ তারিখ থেকে হিসাব নতুন করে শুরু হয় — মাস ফিল্টার বদলে সেই মাসের best দেখুন।
+                    Score = মোট পয়েন্ট ÷ মোট ম্যাচ। Best Player ক্রাউন ও স্কোর পেতে কমপক্ষে {MIN_MATCHES_FOR_BEST} ম্যাচ খেলতে হবে — কম ম্যাচ খেললে নাম তালিকার নিচে থাকবে, স্কোর দেখাবে না। প্রতি মাসের ১ তারিখ থেকে হিসাব নতুন করে শুরু হয় — মাস ফিল্টার বদলে সেই মাসের best দেখুন।
                   </p>
                 </CardContent>
               </Card>
