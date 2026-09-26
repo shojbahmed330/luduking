@@ -43,7 +43,7 @@ import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { computeDues, type DuePayment } from "@/lib/dues";
-import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCHES_FOR_BEST } from "@/lib/ranking";
+import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCH_RATIO } from "@/lib/ranking";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -326,7 +326,7 @@ function Dashboard() {
   }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   const playerRankings = useMemo(
-    () => computeRanking(players, filteredData.matchResults),
+    () => computeRanking(players, filteredData.matchResults, filteredData.matches.length),
     [players, filteredData],
   );
 
@@ -1177,7 +1177,7 @@ function Dashboard() {
                           {r.rank === 1 && r.eligible && <span>👑</span>}
                           {!r.eligible && (
                             <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
-                              {MIN_MATCHES_FOR_BEST - r.matches > 0 ? `আরও ${MIN_MATCHES_FOR_BEST - r.matches} ম্যাচ` : "কম ম্যাচ"}
+                              {r.requiredMatches - r.matches > 0 ? `আরও ${r.requiredMatches - r.matches} ম্যাচ` : "কম ম্যাচ"}
                             </span>
                           )}
                         </p>
@@ -1216,7 +1216,7 @@ function Dashboard() {
                     ))}
                   </div>
                   <p className="text-[10px] font-bold text-muted-foreground leading-relaxed">
-                    Score = মোট পয়েন্ট ÷ মোট ম্যাচ। Best Player ক্রাউন ও স্কোর পেতে কমপক্ষে {MIN_MATCHES_FOR_BEST} ম্যাচ খেলতে হবে — কম ম্যাচ খেললে নাম তালিকার নিচে থাকবে, স্কোর দেখাবে না। প্রতি মাসের ১ তারিখ থেকে হিসাব নতুন করে শুরু হয় — মাস ফিল্টার বদলে সেই মাসের best দেখুন।
+                    Score = মোট পয়েন্ট ÷ মোট ম্যাচ। Best Player ক্রাউন ও স্কোর পেতে এই সময়ের মোট ম্যাচের কমপক্ষে {Math.round(MIN_MATCH_RATIO * 100)}% খেলতে হবে — কম খেললে নাম তালিকার নিচে থাকবে, স্কোর দেখাবে না। প্রতি মাসের ১ তারিখ থেকে হিসাব নতুন করে শুরু হয় — মাস ফিল্টার বদলে সেই মাসের best দেখুন।
                   </p>
                 </CardContent>
               </Card>

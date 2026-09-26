@@ -1,11 +1,18 @@
 // Player Ranking: position-based points.
 // Points: 1st = 4, 2nd = 3, 3rd = 2, 4th = 1
 // Score = total points / matches played (average points per match)
-// Players below MIN_MATCHES_FOR_BEST stay at the bottom of the list, no score.
+// A player must play at least MIN_MATCH_RATIO (60%) of all matches in the
+// period to earn a score; otherwise their name stays at the bottom of the list.
 
 export const POSITION_POINTS: Record<number, number> = { 1: 4, 2: 3, 3: 2, 4: 1 };
 
-export const MIN_MATCHES_FOR_BEST = 60;
+export const MIN_MATCH_RATIO = 0.6;
+
+/** Minimum matches a player must have played to be eligible, given total matches in the period. */
+export function getRequiredMatches(totalMatches: number): number {
+  if (totalMatches <= 0) return 0;
+  return Math.ceil(totalMatches * MIN_MATCH_RATIO);
+}
 
 export type RankingPlayer = { id: string; name: string };
 export type RankingMatchResult = { player_id: string; position: number };
@@ -21,13 +28,17 @@ export type PlayerRanking = {
   totalPoints: number;
   avgPoints: number;
   eligible: boolean;
+  requiredMatches: number;
   rank: number;
 };
 
 export function computeRanking(
   players: RankingPlayer[],
   matchResults: RankingMatchResult[],
+  totalMatches: number,
 ): PlayerRanking[] {
+  const requiredMatches = getRequiredMatches(totalMatches);
+
   const stats: PlayerRanking[] = players.map((player) => {
     const results = matchResults.filter((mr) => mr.player_id === player.id);
     const first = results.filter((r) => r.position === 1).length;
@@ -49,7 +60,8 @@ export function computeRanking(
       fourth,
       totalPoints,
       avgPoints: matches > 0 ? totalPoints / matches : 0,
-      eligible: matches >= MIN_MATCHES_FOR_BEST,
+      eligible: totalMatches > 0 && matches >= requiredMatches,
+      requiredMatches,
       rank: 0,
     };
   });
