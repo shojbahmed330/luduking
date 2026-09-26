@@ -30,6 +30,7 @@ export type PlayerRanking = {
   avgPoints: number;
   eligible: boolean;
   requiredMatches: number;
+  isIrregular: boolean;
   rank: number;
 };
 
