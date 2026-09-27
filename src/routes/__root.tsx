@@ -9,7 +9,8 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut } from "lucide-react";
+import { LogOut, Dice5 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { BottomNavBar } from "@/components/layout/BottomNavBar";
 import { Toaster } from "sonner";
@@ -84,13 +85,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
       { title: "Ludu Hisab" },
-      { name: "description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro" },
+      { name: "description", content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund." },
       { name: "author", content: "Ludu Friends" },
-      { name: "theme-color", content: "#F8F9F5" },
+      { name: "theme-color", content: "#131722" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "default" },
       { property: "og:title", content: "Ludu Hisab" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro" },
+      { property: "og:description", content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
 
@@ -144,26 +145,26 @@ function AuthStatus() {
   if (!user) return null;
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex flex-col items-end mr-1">
-        <span className="text-[10px] font-black text-foreground truncate max-w-[80px]">
+    <div className="flex shrink-0 items-center gap-2">
+      <div className="mr-0.5 flex flex-col items-end">
+        <span className="max-w-[88px] truncate text-[11px] font-extrabold on-gold">
           {(user.user_metadata?.["full_name"] as string) || user.email?.split('@')[0]}
         </span>
-        <button 
+        <button
           onClick={() => supabase.auth.signOut()}
-          className="text-[8px] font-black text-ludu-red uppercase tracking-widest hover:opacity-80 transition-opacity"
+          className="on-gold-soft flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-opacity hover:opacity-80"
         >
-          Logout
+          <LogOut className="h-3 w-3" /> Logout
         </button>
       </div>
       {user.user_metadata?.["avatar_url"] ? (
-        <img 
-          src={user.user_metadata["avatar_url"]} 
-          alt="Avatar" 
-          className="h-8 w-8 rounded-full border-2 border-white shadow-sm"
+        <img
+          src={user.user_metadata["avatar_url"]}
+          alt="Avatar"
+          className="h-9 w-9 rounded-full border-2 border-white/70 shadow-sm"
         />
       ) : (
-        <div className="h-8 w-8 rounded-full bg-ludu-gold/10 flex items-center justify-center text-ludu-gold text-xs font-black border-2 border-white shadow-sm">
+        <div className="grid h-9 w-9 place-items-center rounded-full border-2 border-white/70 bg-white/25 text-xs font-black on-gold">
           {user.email?.[0].toUpperCase()}
         </div>
       )}
@@ -173,22 +174,44 @@ function AuthStatus() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background pb-[calc(4rem+var(--sab))] pt-[var(--sat)]">
-        <header className="sticky top-0 z-40 w-full glass-header px-6 py-4 pt-[calc(0.5rem+var(--sat))]">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl active-scale" role="img" aria-label="dice">
-                🎲
-              </span>
-              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">Ludu Hisab</span>
+      <div className="flex min-h-screen flex-col bg-background pb-[calc(4rem+var(--sab))]">
+        <header
+          className={cn(
+            "brand-header sticky top-0 z-40 w-full transition-all duration-200",
+            scrolled
+              ? "pb-1.5 pt-[calc(0.25rem+var(--sat))]"
+              : "pb-3 pt-[calc(0.75rem+var(--sat))]",
+          )}
+        >
+          <div className="mx-auto flex w-full max-w-md items-center justify-between gap-3 px-4">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white/25 shadow-sm active-scale">
+                <Dice5 className="on-gold h-6 w-6" />
+              </div>
+              <div className="min-w-0">
+                <p className={cn("truncate font-extrabold on-gold transition-all duration-200", scrolled ? "text-base" : "text-xl")}>
+                  Ludu Hisab
+                </p>
+                <p className={cn("on-gold-soft text-[10px] font-bold uppercase tracking-[0.18em] transition-all duration-200", scrolled ? "hidden" : "block")}>
+                  Score · Fines · Tea Fund
+                </p>
+              </div>
             </div>
             <AuthStatus />
           </div>
         </header>
-        <main className="flex-1 w-full max-w-md mx-auto px-4 py-6">
+        <main className="mx-auto w-full max-w-md flex-1 px-4 pb-6 pt-4">
           <AuthGuard>
             <AnimatePresence mode="wait">
               <Outlet />

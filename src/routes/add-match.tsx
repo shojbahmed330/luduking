@@ -365,7 +365,7 @@ function AddMatch() {
                     key={player.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-3 bg-white p-3 rounded-2xl shadow-sm border"
+                    className="flex items-center gap-3 bg-card p-3 rounded-2xl shadow-sm border"
                   >
                     <PositionBadge position={(idx + 1) as Position} className="w-28 justify-center shrink-0" />
                     <PlayerAvatar name={player.name} className="h-8 w-8" />
