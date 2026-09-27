@@ -7,15 +7,8 @@
 /*
  * Design system definition.
  *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Dark Premium theme: deep navy surfaces with a gold (Ludu Gold) highlight.
+ * All colors use oklch. Semantic tokens only — no hardcoded colors in components.
  */
 
 @theme inline {
@@ -57,32 +50,36 @@
 
 :root {
   --radius: 1rem;
-  --background: oklch(0.98 0.005 240); /* Slightly cooler, cleaner background */
-  --foreground: oklch(0.2 0.02 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.2 0.02 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.2 0.02 260);
-  --primary: oklch(0.2 0.02 260);
-  --primary-foreground: oklch(0.98 0.005 60);
-  --secondary: oklch(0.96 0.01 60);
-  --secondary-foreground: oklch(0.2 0.02 260);
-  --muted: oklch(0.96 0.01 60);
-  --muted-foreground: oklch(0.4 0.02 260);
-  --accent: oklch(0.96 0.01 60);
-  --accent-foreground: oklch(0.2 0.02 260);
-  --destructive: oklch(0.6 0.2 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0.01 260);
-  --input: oklch(0.9 0.01 260);
-  --ring: oklch(0.2 0.02 260);
-  
-  /* Ludu Colors */
+  /* Dark premium surfaces */
+  --background: oklch(0.17 0.03 265);
+  --foreground: oklch(0.95 0.01 250);
+  --card: oklch(0.22 0.03 265);
+  --card-foreground: oklch(0.95 0.01 250);
+  --popover: oklch(0.24 0.03 265);
+  --popover-foreground: oklch(0.95 0.01 250);
+  --primary: #F5B301;
+  --primary-foreground: oklch(0.2 0.04 265);
+  --secondary: oklch(0.27 0.03 265);
+  --secondary-foreground: oklch(0.95 0.01 250);
+  --muted: oklch(0.27 0.03 265);
+  --muted-foreground: oklch(0.72 0.02 260);
+  --accent: oklch(0.27 0.03 265);
+  --accent-foreground: oklch(0.95 0.01 250);
+  --destructive: oklch(0.66 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.95 0.01 250 / 10%);
+  --input: oklch(0.95 0.01 250 / 14%);
+  --ring: #F5B301;
+
+  /* Ludu Colors — brightened for dark-background contrast */
   --ludu-gold: #F5B301;
-  --ludu-green: #2E9E4D;
-  --ludu-blue: #2D6CDF;
-  --ludu-red: #E14545;
-  
+  --ludu-green: #34B85B;
+  --ludu-blue: #4C8DF7;
+  --ludu-red: #F05656;
+
+  /* Text on the gold brand header */
+  --on-gold: oklch(0.24 0.05 70);
+
   --font-baloo: "Baloo 2", cursive;
 
   /* Safe Area Variables */
@@ -95,6 +92,7 @@ html, body {
   overscroll-behavior-y: none; /* Disable pull-to-refresh */
   -webkit-tap-highlight-color: transparent;
   user-select: none; /* Disable text selection by default */
+  background-color: var(--background);
 }
 
 input, textarea {
@@ -116,26 +114,37 @@ button, [role="button"], a {
   transform: scale(0.97);
 }
 
-.glass-header {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+/* Brand-rich gold header */
+.brand-header {
+  background:
+    radial-gradient(120% 140% at 15% 0%, #FFD34D 0%, transparent 45%),
+    linear-gradient(120deg, #E9A700 0%, #F5B301 45%, #FFC531 100%);
+  box-shadow: 0 8px 24px -8px rgba(245, 179, 1, 0.35), 0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
 }
 
+.on-gold {
+  color: var(--on-gold);
+}
+
+.on-gold-soft {
+  color: color-mix(in oklab, var(--on-gold) 72%, transparent);
+}
+
+/* Dark glass surfaces */
 .glass-nav {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(24, 29, 46, 0.92);
   backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 -4px 20px -5px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 -8px 24px -6px rgba(0, 0, 0, 0.45);
 }
 
+/* Elevation for cards on dark surfaces */
 .soft-shadow {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02), 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.5);
 }
 
-/* Custom shadow for cards */
 .card-shadow {
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02), inset 0 1px 0 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45), 0 2px 8px -4px rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 .inner-glow {
@@ -147,7 +156,7 @@ button, [role="button"], a {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.06);
   pointer-events: none;
 }
 
@@ -160,7 +169,7 @@ button, [role="button"], a {
   scrollbar-width: none;
 }
 
-
+/* Light palette kept for any future theme switch */
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -168,7 +177,7 @@ button, [role="button"], a {
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
+  --primary: #F5B301;
   --primary-foreground: oklch(0.208 0.042 265.755);
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
@@ -180,20 +189,7 @@ button, [role="button"], a {
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --ring: #F5B301;
 }
 
 @layer base {
