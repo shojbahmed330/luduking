@@ -419,14 +419,6 @@ function Dashboard() {
             </div>
           </BottomDrawer>
         </div>
-
-        <StatCard 
-          label="Current Fund Balance (All-Time)" 
-          value={`${allTimeBalance} ৳`} 
-          icon={<Star className="h-5 w-5" />}
-          variant="gold"
-          className="shadow-md"
-        />
       </div>
 
       {/* Tabs Navigation */}
@@ -473,63 +465,74 @@ function Dashboard() {
             transition={{ duration: 0.2 }}
             className="grid grid-cols-1 gap-4"
           >
-            <div className="grid grid-cols-2 gap-4">
-              <StatCard 
-                label="Fund Collected" 
-                value={`${periodStats.totalFines} ৳`} 
-                icon={<Wallet className="h-4 w-4" />}
-                trend={{ value: "Fines", isPositive: true }}
-              />
+            {/* Fund Hero */}
+            <div className="relative overflow-hidden rounded-3xl border border-ludu-gold/30 bg-gradient-to-br from-ludu-gold/20 via-ludu-gold/5 to-transparent p-6 card-shadow">
+              <div className="pointer-events-none absolute -right-4 -top-4 opacity-10">
+                <Dice5 className="h-24 w-24 text-ludu-gold" />
+              </div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Current Fund Balance</p>
+              <p className="mt-1 text-4xl font-black tracking-tight text-ludu-gold">
+                {allTimeBalance} <span className="text-xl">৳</span>
+              </p>
+              <p className="mt-1 text-[11px] font-bold text-muted-foreground">All-Time · Fines − Expenses</p>
+            </div>
+
+            {/* All stats at a glance */}
+            <div className="grid grid-cols-2 gap-3">
               <StatCard 
                 label="Matches Played" 
                 value={periodStats.matchCount} 
-                icon={<LayoutDashboard className="h-4 w-4" />}
-                subValue="This Period"
+                icon={<LayoutDashboard className="h-4 w-4" />} 
+                subValue="This Period" 
+              />
+              <StatCard 
+                label="Fines Collected" 
+                value={`${periodStats.totalFines} ৳`} 
+                icon={<Wallet className="h-4 w-4" />} 
+                variant="green" 
+              />
+              <StatCard 
+                label="Cha-Nasta Expense" 
+                value={`${periodStats.totalExpenses} ৳`} 
+                icon={<Coffee className="h-4 w-4" />} 
+                variant="red" 
+              />
+              <StatCard 
+                label="Expected Fund" 
+                value={`${dueTotals.expectedFund} ৳`} 
+                icon={<Star className="h-4 w-4" />} 
+                variant="gold" 
+                subValue="All-Time" 
+              />
+              <StatCard 
+                label="Cash in Hand" 
+                value={`${dueTotals.cashInHand} ৳`} 
+                icon={<Wallet className="h-4 w-4" />} 
+                variant="green" 
+                subValue="Paid − Expenses" 
+              />
+              <StatCard 
+                label="Total Due" 
+                value={`${dueTotals.totalDue} ৳`} 
+                icon={<HandCoins className="h-4 w-4" />} 
+                variant="red" 
+                subValue="All-Time" 
               />
             </div>
-            <StatCard 
-              label="Total Cha-Nasta Expense" 
-              value={`${periodStats.totalExpenses} ৳`} 
-              icon={<Coffee className="h-4 w-4" />}
-              variant="red"
-            />
 
-            <div className="grid grid-cols-2 gap-4">
-              <StatCard
-                label="Cash in Hand"
-                value={`${dueTotals.cashInHand} ৳`}
-                icon={<Wallet className="h-4 w-4" />}
-                variant="green"
-                subValue="Paid − Expenses"
-              />
-              <StatCard
-                label="Total Due"
-                value={`${dueTotals.totalDue} ৳`}
-                icon={<HandCoins className="h-4 w-4" />}
-                variant="red"
-                subValue="All-Time"
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
+            {/* Quick actions */}
+            <div className="grid grid-cols-2 gap-3">
               <Link 
                 to="/add-match" 
-                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-card card-shadow hover:border-ludu-gold/50 transition-all group active-scale"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-ludu-gold py-4 text-sm font-black text-white shadow-lg shadow-ludu-gold/25 active-scale"
               >
-                <div className="h-10 w-10 rounded-2xl bg-ludu-gold/10 flex items-center justify-center text-ludu-gold mb-2 group-hover:scale-110 transition-transform">
-                  <Dice5 className="h-5 w-5" />
-                </div>
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Match</span>
+                <Dice5 className="h-4 w-4" /> New Match
               </Link>
-              
               <Link 
                 to="/add-expense" 
-                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-card card-shadow hover:border-ludu-red/50 transition-all group active-scale"
+                className="flex items-center justify-center gap-2 rounded-2xl border-2 border-ludu-red/30 bg-ludu-red/10 py-4 text-sm font-black text-ludu-red active-scale"
               >
-                <div className="h-10 w-10 rounded-2xl bg-ludu-red/10 flex items-center justify-center text-ludu-red mb-2 group-hover:scale-110 transition-transform">
-                  <Coffee className="h-5 w-5" />
-                </div>
-                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">New Expense</span>
+                <Coffee className="h-4 w-4" /> New Expense
               </Link>
             </div>
           </motion.div>
@@ -983,7 +986,7 @@ function Dashboard() {
                       allowDecimals={false}
                     />
                     <Tooltip 
-                      contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 'bold' }}
+                      contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.4)', fontWeight: 'bold', backgroundColor: 'var(--card)', color: 'var(--foreground)' }}
                     />
                     {players.map((player, idx) => (
                       <Line 
