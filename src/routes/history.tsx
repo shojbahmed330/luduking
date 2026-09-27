@@ -39,10 +39,10 @@ export const Route = createFileRoute("/history")({
       { title: "Ludu Hisab — History" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro",
+        content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund.",
       },
       { property: "og:title", content: "Ludu Hisab — History" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro" },
+      { property: "og:description", content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund." },
 
     ],
   }),
@@ -225,7 +225,7 @@ function HistoryPage() {
           onClick={() => setActiveTab("matches")}
           className={cn(
             "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
-            activeTab === "matches" ? "bg-white shadow-sm text-ludu-gold ring-1 ring-black/5" : "text-muted-foreground/60"
+            activeTab === "matches" ? "bg-card shadow-sm text-ludu-gold ring-1 ring-white/10" : "text-muted-foreground/60"
           )}
         >
           Matches
@@ -234,7 +234,7 @@ function HistoryPage() {
           onClick={() => setActiveTab("expenses")}
           className={cn(
             "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
-            activeTab === "expenses" ? "bg-white shadow-sm text-ludu-red ring-1 ring-black/5" : "text-muted-foreground/60"
+            activeTab === "expenses" ? "bg-card shadow-sm text-ludu-red ring-1 ring-white/10" : "text-muted-foreground/60"
           )}
         >
           Expenses
@@ -243,7 +243,7 @@ function HistoryPage() {
           onClick={() => setActiveTab("payments")}
           className={cn(
             "flex-1 py-3 rounded-xl font-black text-sm transition-all active-scale",
-            activeTab === "payments" ? "bg-white shadow-sm text-ludu-green ring-1 ring-black/5" : "text-muted-foreground/60"
+            activeTab === "payments" ? "bg-card shadow-sm text-ludu-green ring-1 ring-white/10" : "text-muted-foreground/60"
           )}
         >
           Payments
@@ -256,7 +256,7 @@ function HistoryPage() {
           title="Filter History"
           description="View entries for a specific month or all history."
           trigger={
-            <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-4 py-3 text-sm font-black active-scale shadow-sm">
+            <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-card px-4 py-3 text-sm font-black active-scale shadow-sm">
               <span className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
                 {selectedDate 
@@ -318,7 +318,7 @@ function HistoryPage() {
       <div className="space-y-4">
         {activeTab === "matches" ? (
           filteredMatches.length === 0 ? (
-            <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
+            <div className="rounded-3xl bg-card p-12 text-center border-2 border-dashed border-muted">
               <div className="flex justify-center mb-4">
                 <Dice5 className="h-12 w-12 text-muted-foreground/30" />
               </div>
@@ -341,7 +341,7 @@ function HistoryPage() {
                   <div className="h-px flex-1 bg-muted" />
                 </div>
                 {dayMatches.map(match => (
-                  <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
+                  <div key={match.id} className="rounded-3xl bg-card p-5 card-shadow border-2 border-muted group relative">
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
                         <Dice5 className="h-3 w-3 text-ludu-gold" />
@@ -385,12 +385,12 @@ function HistoryPage() {
                       <div className="mt-4 pt-4 border-t border-dashed border-muted flex items-center gap-2">
                         <div className="flex flex-col">
                           {match.created_by_name && (
-                            <span className="text-[8px] font-black text-muted-foreground uppercase tracking-tighter">
+                            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">
                               Added by: {match.created_by_name}
                             </span>
                           )}
                           {match.updated_by_name && (
-                            <span className="text-[8px] font-black text-ludu-blue uppercase tracking-tighter">
+                            <span className="text-[10px] font-black text-ludu-blue uppercase tracking-tighter">
                               Last edit by: {match.updated_by_name}
                             </span>
                           )}
@@ -404,7 +404,7 @@ function HistoryPage() {
           )
         ) : activeTab === "expenses" ? (
           filteredExpenses.length === 0 ? (
-            <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
+            <div className="rounded-3xl bg-card p-12 text-center border-2 border-dashed border-muted">
               <div className="flex justify-center mb-4">
                 <Coffee className="h-12 w-12 text-muted-foreground/30" />
               </div>
@@ -427,7 +427,7 @@ function HistoryPage() {
                   <div className="h-px flex-1 bg-muted" />
                 </div>
                 {dayExpenses.map(expense => (
-                  <div key={expense.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted group relative">
+                  <div key={expense.id} className="rounded-3xl bg-card p-5 card-shadow border-2 border-muted group relative">
                     <div className="flex justify-between items-start">
                       <div className="space-y-2 flex-1">
                         <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
@@ -464,12 +464,12 @@ function HistoryPage() {
                       <div className="mt-4 pt-4 border-t border-dashed border-muted flex items-center gap-2">
                         <div className="flex flex-col">
                           {expense.created_by_name && (
-                            <span className="text-[8px] font-black text-muted-foreground uppercase tracking-tighter">
+                            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">
                               Added by: {expense.created_by_name}
                             </span>
                           )}
                           {expense.updated_by_name && (
-                            <span className="text-[8px] font-black text-ludu-blue uppercase tracking-tighter">
+                            <span className="text-[10px] font-black text-ludu-blue uppercase tracking-tighter">
                               Last edit by: {expense.updated_by_name}
                             </span>
                           )}
@@ -483,7 +483,7 @@ function HistoryPage() {
           )
         ) : (
           filteredPayments.length === 0 ? (
-            <div className="rounded-3xl bg-white p-12 text-center border-2 border-dashed border-muted">
+            <div className="rounded-3xl bg-card p-12 text-center border-2 border-dashed border-muted">
               <div className="flex justify-center mb-4">
                 <Wallet className="h-12 w-12 text-muted-foreground/30" />
               </div>
@@ -506,7 +506,7 @@ function HistoryPage() {
                   <div className="h-px flex-1 bg-muted" />
                 </div>
                 {dayPayments.map(payment => (
-                  <div key={payment.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted">
+                  <div key={payment.id} className="rounded-3xl bg-card p-5 card-shadow border-2 border-muted">
                     <div className="flex justify-between items-start">
                       <div className="flex items-center gap-3">
                         <PlayerAvatar name={payment.players?.name || "?"} size="sm" />
@@ -543,12 +543,12 @@ function HistoryPage() {
                     {(payment.created_by_name || payment.updated_by_name) && (
                       <div className="mt-4 pt-4 border-t border-dashed border-muted flex flex-col">
                         {payment.created_by_name && (
-                          <span className="text-[8px] font-black text-muted-foreground uppercase tracking-tighter">
+                          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter">
                             Added by: {payment.created_by_name}
                           </span>
                         )}
                         {payment.updated_by_name && (
-                          <span className="text-[8px] font-black text-ludu-blue uppercase tracking-tighter">
+                          <span className="text-[10px] font-black text-ludu-blue uppercase tracking-tighter">
                             Last edit by: {payment.updated_by_name}
                           </span>
                         )}

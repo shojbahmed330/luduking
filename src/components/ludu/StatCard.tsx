@@ -18,7 +18,7 @@ interface StatCardProps {
 
 export function StatCard({ label, value, icon, className, subValue, trend, variant = "default" }: StatCardProps) {
   const variantStyles = {
-    default: "bg-white border-muted/50",
+    default: "bg-card border-muted/50",
     gold: "bg-gradient-to-br from-ludu-gold/20 to-ludu-gold/5 border-ludu-gold/20",
     blue: "bg-gradient-to-br from-ludu-blue/20 to-ludu-blue/5 border-ludu-blue/20",
     green: "bg-gradient-to-br from-ludu-green/20 to-ludu-green/5 border-ludu-green/20",

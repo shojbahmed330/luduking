@@ -145,7 +145,7 @@ function PlayersPage() {
           </div>
         </div>
 
-        <form onSubmit={handleAdd} className="flex flex-col gap-3 rounded-3xl border-2 border-muted bg-white p-4 card-shadow">
+        <form onSubmit={handleAdd} className="flex flex-col gap-3 rounded-3xl border-2 border-muted bg-card p-4 card-shadow">
           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
             New Player Name
           </label>
@@ -171,7 +171,7 @@ function PlayersPage() {
           {!loading && players.map((player) => (
             <div
               key={player.id}
-              className="flex items-center gap-3 rounded-3xl border-2 border-muted bg-white p-3 card-shadow"
+              className="flex items-center gap-3 rounded-3xl border-2 border-muted bg-card p-3 card-shadow"
             >
               <PlayerAvatar name={player.name} size="sm" />
               {editingId === player.id ? (

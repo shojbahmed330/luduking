@@ -90,7 +90,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               className="absolute inset-[-20px] border border-dashed border-ludu-gold/20 rounded-full"
             />
-            <div className="h-28 w-28 bg-white rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-black/5 border-2 border-muted active-scale transition-transform overflow-hidden p-4">
+            <div className="h-28 w-28 bg-card rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-black/5 border-2 border-muted active-scale transition-transform overflow-hidden p-4">
               <span className="text-5xl" role="img" aria-label="dice">🎲</span>
             </div>
           </div>
@@ -109,7 +109,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 border-2 border-ludu-gold/20 card-shadow"
+                className="bg-card/50 backdrop-blur-sm rounded-3xl p-6 border-2 border-ludu-gold/20 card-shadow"
               >
                 <div className="h-12 w-12 bg-ludu-gold/10 rounded-2xl flex items-center justify-center text-ludu-gold mx-auto mb-4">
                   <Mail className="h-6 w-6" />
@@ -136,7 +136,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
                         placeholder="Enter your email" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full h-14 bg-white border-2 border-muted rounded-2xl pl-12 pr-4 text-sm font-bold focus:border-ludu-gold outline-none transition-all shadow-sm"
+                        className="w-full h-14 bg-card border-2 border-muted rounded-2xl pl-12 pr-4 text-sm font-bold focus:border-ludu-gold outline-none transition-all shadow-sm"
                         required
                       />
                     </div>

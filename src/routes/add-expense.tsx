@@ -148,7 +148,7 @@ function AddExpense() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate({ to: editId ? "/history" : "/" })}
-          className="rounded-full bg-white p-2.5 shadow-sm border-2 border-muted active-scale text-muted-foreground"
+          className="rounded-full bg-card p-2.5 shadow-sm border-2 border-muted active-scale text-muted-foreground"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
@@ -168,7 +168,7 @@ function AddExpense() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-lg font-black outline-none focus:border-ludu-red transition-colors shadow-sm"
+            className="w-full rounded-2xl border-2 border-muted bg-card p-4 text-lg font-black outline-none focus:border-ludu-red transition-colors shadow-sm"
             required
           />
         </div>
@@ -184,7 +184,7 @@ function AddExpense() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0"
-              className="w-full rounded-2xl border-2 border-muted bg-white p-4 pl-12 text-3xl font-black text-ludu-red outline-none focus:border-ludu-red transition-colors shadow-sm"
+              className="w-full rounded-2xl border-2 border-muted bg-card p-4 pl-12 text-3xl font-black text-ludu-red outline-none focus:border-ludu-red transition-colors shadow-sm"
               required
               min="1"
               step="1"
@@ -201,11 +201,11 @@ function AddExpense() {
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="e.g. Biscuits and tea for evening session"
-            className="w-full rounded-2xl border-2 border-muted bg-white p-4 text-base font-bold outline-none focus:border-ludu-gold transition-colors resize-none h-28 shadow-sm"
+            className="w-full rounded-2xl border-2 border-muted bg-card p-4 text-base font-bold outline-none focus:border-ludu-gold transition-colors resize-none h-28 shadow-sm"
           />
         </div>
 
-        <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted space-y-4">
+        <div className="rounded-3xl bg-card p-6 card-shadow border-2 border-muted space-y-4">
           <div className="flex justify-between items-center">
             <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Balance Now</span>
             <span className="text-lg font-black text-foreground">

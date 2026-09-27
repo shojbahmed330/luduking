@@ -51,10 +51,10 @@ export const Route = createFileRoute("/")({
       { title: "Ludu Hisab — Dashboard" },
       {
         name: "description",
-        content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro",
+        content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund.",
       },
       { property: "og:title", content: "Ludu Hisab — Dashboard" },
-      { property: "og:description", content: "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                        \n                                            \n                                            Ami to tomak bollaj j edit and delete jeno sudhu matro rajshahi.jibon@gmail ei user korte pare emon koro" },
+      { property: "og:description", content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund." },
 
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -363,7 +363,7 @@ function Dashboard() {
             title="Choose Period"
             description="Filter dashboard data by month or view all history."
             trigger={
-              <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-white px-5 py-3.5 text-base font-black active-scale shadow-sm text-left">
+              <button className="flex w-full items-center justify-between rounded-2xl border-2 border-muted bg-card px-5 py-3.5 text-base font-black active-scale shadow-sm text-left">
                 <span className="flex items-center gap-2">
                   {selectedDate 
                     ? format(selectedDate, "MMM d, yyyy") 
@@ -432,7 +432,7 @@ function Dashboard() {
       {/* Tabs Navigation */}
       <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar">
         <div 
-          className="absolute h-[calc(100%-8px)] bg-white rounded-xl shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-out z-0"
+          className="absolute h-[calc(100%-8px)] bg-card rounded-xl shadow-sm ring-1 ring-white/10 transition-all duration-300 ease-out z-0"
           style={{
             width: `calc(14.28% - 2px)`,
             left: `calc(${['overview', 'matches', 'leaderboard', 'money', 'chanasta', 'dues', 'analytics'].indexOf(activeTab) * 14.28}% + 4px)`
@@ -454,7 +454,7 @@ function Dashboard() {
               "relative z-10 flex-1 min-w-[60px] flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl text-[10px] font-black transition-all active-scale",
               activeTab === tab.id 
                 ? "text-ludu-gold" 
-                : "text-muted-foreground hover:bg-white/30"
+                : "text-muted-foreground hover:bg-card/30"
             )}
           >
             <tab.icon className={cn("h-4 w-4", activeTab === tab.id ? "text-ludu-gold" : "text-muted-foreground")} />
@@ -514,7 +514,7 @@ function Dashboard() {
             <div className="grid grid-cols-2 gap-4">
               <Link 
                 to="/add-match" 
-                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-gold/50 transition-all group active-scale"
+                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-card card-shadow hover:border-ludu-gold/50 transition-all group active-scale"
               >
                 <div className="h-10 w-10 rounded-2xl bg-ludu-gold/10 flex items-center justify-center text-ludu-gold mb-2 group-hover:scale-110 transition-transform">
                   <Dice5 className="h-5 w-5" />
@@ -524,7 +524,7 @@ function Dashboard() {
               
               <Link 
                 to="/add-expense" 
-                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-white card-shadow hover:border-ludu-red/50 transition-all group active-scale"
+                className="flex flex-col items-center justify-center py-5 rounded-3xl border-2 border-muted bg-card card-shadow hover:border-ludu-red/50 transition-all group active-scale"
               >
                 <div className="h-10 w-10 rounded-2xl bg-ludu-red/10 flex items-center justify-center text-ludu-red mb-2 group-hover:scale-110 transition-transform">
                   <Coffee className="h-5 w-5" />
@@ -552,7 +552,7 @@ function Dashboard() {
             </div>
             
             {filteredData.matches.length === 0 ? (
-              <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
+              <div className="rounded-3xl bg-card p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
                 No matches played this period 🎲
               </div>
             ) : (
@@ -560,7 +560,7 @@ function Dashboard() {
                 {filteredData.matches
                   .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())
                   .map(match => (
-                    <div key={match.id} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted">
+                    <div key={match.id} className="rounded-3xl bg-card p-5 card-shadow border-2 border-muted">
                       <div className="flex justify-between items-center mb-4">
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2 text-muted-foreground font-black text-[10px] uppercase tracking-widest">
@@ -568,7 +568,7 @@ function Dashboard() {
                             Match #{match.id.slice(0, 4)}
                           </div>
                           {match.created_by_name && (
-                            <span className="text-[7px] font-black text-muted-foreground/60 uppercase tracking-tighter">
+                            <span className="text-[9px] font-black text-muted-foreground/60 uppercase tracking-tighter">
                               By: {match.created_by_name}
                             </span>
                           )}
@@ -628,7 +628,7 @@ function Dashboard() {
               </Link>
             </div>
             {filteredData.matches.length === 0 ? (
-              <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
+              <div className="rounded-3xl bg-card p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
                 No matches played this period 🎲
               </div>
             ) : (
@@ -636,7 +636,7 @@ function Dashboard() {
                 {playerLeaderboard.map((player) => (
                   <div 
                     key={player.id} 
-                    className="bg-white rounded-3xl p-5 border-2 border-muted shadow-sm flex flex-col gap-4"
+                    className="bg-card rounded-3xl p-5 border-2 border-muted shadow-sm flex flex-col gap-4"
                   >
                     <div className="flex items-center gap-3">
                       <PlayerAvatar name={player.name} size="md" />
@@ -699,7 +699,7 @@ function Dashboard() {
                 onClick={() => setMoneyView("total")}
                 className={cn(
                   "flex-1 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
-                  moneyView === "total" ? "bg-white shadow-sm text-ludu-blue ring-1 ring-black/5" : "text-muted-foreground"
+                  moneyView === "total" ? "bg-card shadow-sm text-ludu-blue ring-1 ring-white/10" : "text-muted-foreground"
                 )}
               >
                 Total
@@ -708,7 +708,7 @@ function Dashboard() {
                 onClick={() => setMoneyView("daily")}
                 className={cn(
                   "flex-1 py-2.5 rounded-xl text-xs font-black transition-all active-scale",
-                  moneyView === "daily" ? "bg-white shadow-sm text-ludu-blue ring-1 ring-black/5" : "text-muted-foreground"
+                  moneyView === "daily" ? "bg-card shadow-sm text-ludu-blue ring-1 ring-white/10" : "text-muted-foreground"
                 )}
               >
                 Individual (Day-wise)
@@ -721,21 +721,21 @@ function Dashboard() {
                 <div 
                   key={player.id} 
                   className={cn(
-                    "bg-white rounded-3xl p-5 border-2 border-muted card-shadow flex items-center justify-between active-scale transition-all",
-                    index === 0 && "border-ludu-red/20 bg-gradient-to-br from-ludu-red/5 to-white",
-                    index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && "border-ludu-green/20 bg-gradient-to-br from-ludu-green/5 to-white"
+                    "bg-card rounded-3xl p-5 border-2 border-muted card-shadow flex items-center justify-between active-scale transition-all",
+                    index === 0 && "border-ludu-red/20 bg-gradient-to-br from-ludu-red/5 to-transparent",
+                    index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && "border-ludu-green/20 bg-gradient-to-br from-ludu-green/5 to-transparent"
                   )}
                 >
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <PlayerAvatar name={player.name} size="md" />
                       {index === 0 && (
-                        <div className="absolute -top-1 -right-1 bg-ludu-red text-white p-1 rounded-full shadow-sm ring-2 ring-white">
+                        <div className="absolute -top-1 -right-1 bg-ludu-red text-white p-1 rounded-full shadow-sm ring-2 ring-card">
                           <TrendingUp className="h-3 w-3" />
                         </div>
                       )}
                       {index === contributionLeaderboard.length - 1 && contributionLeaderboard.length > 1 && (
-                        <div className="absolute -top-1 -right-1 bg-ludu-green text-white p-1 rounded-full shadow-sm ring-2 ring-white">
+                        <div className="absolute -top-1 -right-1 bg-ludu-green text-white p-1 rounded-full shadow-sm ring-2 ring-card">
                           <Star className="h-3 w-3" />
                         </div>
                       )}
@@ -756,13 +756,13 @@ function Dashboard() {
             </div>
             ) : (
               dailyContributions.length === 0 ? (
-                <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
+                <div className="rounded-3xl bg-card p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
                   No fines recorded for this period 🎲
                 </div>
               ) : (
                 <div className="space-y-4">
                   {dailyContributions.map(day => (
-                    <div key={day.date} className="rounded-3xl bg-white p-5 card-shadow border-2 border-muted space-y-3">
+                    <div key={day.date} className="rounded-3xl bg-card p-5 card-shadow border-2 border-muted space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/30 px-2 py-0.5 rounded-full">
                           {format(parseISO(day.date), "EEEE, MMM d, yyyy")}
@@ -806,11 +806,11 @@ function Dashboard() {
               <h2 className="text-xl font-black text-foreground">Tea & Snacks Summary</h2>
             </div>
             {filteredData.expenses.length === 0 ? (
-              <div className="rounded-3xl bg-white p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
+              <div className="rounded-3xl bg-card p-8 text-center border-2 border-dashed border-muted text-muted-foreground font-bold">
                 No expenses recorded this period ☕
               </div>
             ) : (
-              <div className="rounded-3xl bg-white p-6 shadow-sm border-2 border-muted space-y-4">
+              <div className="rounded-3xl bg-card p-6 shadow-sm border-2 border-muted space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-bold text-muted-foreground">Expense Entries</span>
                   <span className="font-black text-foreground">{expenseSummary.entryCount}</span>
@@ -833,7 +833,7 @@ function Dashboard() {
                         <div key={idx} className="bg-muted/20 rounded-2xl p-3 flex justify-between items-center">
                           <div className="flex flex-col">
                             <span className="text-xs font-black">{exp.amount} ৳</span>
-                            <span className="text-[8px] font-bold text-muted-foreground">
+                            <span className="text-[10px] font-bold text-muted-foreground">
                               {format(parseISO(exp.expense_date), "MMM d")} 
                               {exp.created_by_name ? ` • By ${exp.created_by_name}` : ''}
                             </span>
@@ -872,17 +872,17 @@ function Dashboard() {
             </div>
 
             <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-3xl bg-white p-4 border-2 border-muted card-shadow text-center">
+              <div className="rounded-3xl bg-card p-4 border-2 border-muted card-shadow text-center">
                 <p className="text-lg font-black text-foreground">{dueTotals.totalFine} ৳</p>
-                <p className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Total Fine</p>
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Fine</p>
               </div>
-              <div className="rounded-3xl bg-white p-4 border-2 border-ludu-green/20 card-shadow text-center">
+              <div className="rounded-3xl bg-card p-4 border-2 border-ludu-green/20 card-shadow text-center">
                 <p className="text-lg font-black text-ludu-green">{dueTotals.totalPaid} ৳</p>
-                <p className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Total Paid</p>
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Paid</p>
               </div>
-              <div className="rounded-3xl bg-white p-4 border-2 border-ludu-red/20 card-shadow text-center">
+              <div className="rounded-3xl bg-card p-4 border-2 border-ludu-red/20 card-shadow text-center">
                 <p className="text-lg font-black text-ludu-red">{dueTotals.totalDue} ৳</p>
-                <p className="text-[8px] font-black text-muted-foreground uppercase tracking-widest">Total Due</p>
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Due</p>
               </div>
             </div>
 
@@ -890,7 +890,7 @@ function Dashboard() {
               {dues.map(player => {
                 const open = expandedDueId === player.id;
                 return (
-                  <div key={player.id} className="rounded-3xl bg-white border-2 border-muted card-shadow overflow-hidden">
+                  <div key={player.id} className="rounded-3xl bg-card border-2 border-muted card-shadow overflow-hidden">
                     <button
                       onClick={() => setExpandedDueId(open ? null : player.id)}
                       className="w-full flex items-center gap-3 p-4 text-left active-scale"
@@ -963,12 +963,12 @@ function Dashboard() {
             </div>
 
             {/* Win Rate Trend Chart */}
-            <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
+            <div className="rounded-3xl bg-card p-6 card-shadow border-2 border-muted">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">1st Place Wins (Count)</h3>
               <div className="h-[200px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={winRateTrendData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.08)" />
                     <XAxis 
                       dataKey="name" 
                       axisLine={false} 
@@ -1006,7 +1006,7 @@ function Dashboard() {
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">Head-to-Head Comparison</h3>
               <div className="grid grid-cols-1 gap-4">
                 {h2hComparison && (
-                    <div className="rounded-3xl bg-white p-6 card-shadow border-2 border-muted">
+                    <div className="rounded-3xl bg-card p-6 card-shadow border-2 border-muted">
                       {/* Explicit player selectors */}
                       <div className="grid grid-cols-2 gap-3 mb-5">
                         <div className="space-y-1.5">
@@ -1048,7 +1048,7 @@ function Dashboard() {
                           <PlayerAvatar name={h2hComparison.p1.name} size="md" className="ring-2 ring-ludu-gold ring-offset-2" />
                           <div className="flex flex-col">
                             <p className="font-black text-xs">{h2hComparison.p1.name}</p>
-                            <span className="text-[8px] font-black text-muted-foreground uppercase">{h2hComparison.p1Stats.matches} Matches</span>
+                            <span className="text-[10px] font-black text-muted-foreground uppercase">{h2hComparison.p1Stats.matches} Matches</span>
                           </div>
                         </div>
 
@@ -1061,7 +1061,7 @@ function Dashboard() {
                           <PlayerAvatar name={h2hComparison.p2.name} size="md" className="ring-2 ring-ludu-blue ring-offset-2" />
                           <div className="flex flex-col">
                             <p className="font-black text-xs">{h2hComparison.p2.name}</p>
-                            <span className="text-[8px] font-black text-muted-foreground uppercase">{h2hComparison.p2Stats.matches} Matches</span>
+                            <span className="text-[10px] font-black text-muted-foreground uppercase">{h2hComparison.p2Stats.matches} Matches</span>
                           </div>
                         </div>
                       </div>
@@ -1176,7 +1176,7 @@ function Dashboard() {
                           {r.name}
                           {r.rank === 1 && r.eligible && <span>👑</span>}
                           {!r.eligible && (
-                            <span className="text-[8px] font-black px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
+                            <span className="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground uppercase tracking-wider">
                               {r.isIrregular ? "অনিয়মিত" : r.requiredMatches - r.matches > 0 ? `আরও ${r.requiredMatches - r.matches} ম্যাচ` : "কম ম্যাচ"}
                             </span>
                           )}
@@ -1189,7 +1189,7 @@ function Dashboard() {
                         {r.eligible ? (
                           <>
                             <p className="text-sm font-black text-ludu-gold">{r.avgPoints.toFixed(2)}</p>
-                            <p className="text-[8px] font-black text-muted-foreground uppercase tracking-wider">avg pts</p>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">avg pts</p>
                           </>
                         ) : (
                           <p className="text-[9px] font-black text-muted-foreground/60">স্কোর বাকি</p>
