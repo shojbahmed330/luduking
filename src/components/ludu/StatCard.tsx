@@ -60,7 +60,7 @@ export function StatCard({ label, value, icon, className, subValue, trend, varia
               </div>
             )}
           </div>
-          <div className="mt-0.5 text-[9px] font-black text-muted-foreground uppercase tracking-[0.15em] opacity-80">
+          <div className="mt-0.5 text-[10px] font-black text-muted-foreground uppercase tracking-[0.15em] opacity-80">
             {label}
           </div>
           {trend && (
