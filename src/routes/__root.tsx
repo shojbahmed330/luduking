@@ -9,8 +9,14 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, Dice5 } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import brandLogo from "@/assets/ludu-king-logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { BottomNavBar } from "@/components/layout/BottomNavBar";
 import { Toaster } from "sonner";
@@ -107,7 +113,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/icon-192.png" },
       { rel: "manifest", href: "/manifest.json" },
     ],
   }),
@@ -144,31 +151,40 @@ function AuthStatus() {
 
   if (!user) return null;
 
+  const name = (user.user_metadata?.["full_name"] as string | undefined) || user.email?.split("@")[0] || "Player";
+  const avatarUrl = user.user_metadata?.["avatar_url"] as string | undefined;
+  const avatar = avatarUrl ? (
+    <img src={avatarUrl} alt="" referrerPolicy="no-referrer" className="h-full w-full rounded-full object-cover" />
+  ) : (
+    <span className="text-sm font-black text-primary-foreground">{name.charAt(0).toUpperCase()}</span>
+  );
+
   return (
-    <div className="flex shrink-0 items-center gap-2">
-      <div className="mr-0.5 flex flex-col items-end">
-        <span className="max-w-[88px] truncate text-[11px] font-extrabold on-gold">
-          {(user.user_metadata?.["full_name"] as string) || user.email?.split('@')[0]}
-        </span>
-        <button
-          onClick={() => supabase.auth.signOut()}
-          className="on-gold-soft flex items-center gap-1 text-[9px] font-black uppercase tracking-widest transition-opacity hover:opacity-80"
-        >
-          <LogOut className="h-3 w-3" /> Logout
-        </button>
-      </div>
-      {user.user_metadata?.["avatar_url"] ? (
-        <img
-          src={user.user_metadata["avatar_url"]}
-          alt="Avatar"
-          className="h-9 w-9 rounded-full border-2 border-white/70 shadow-sm"
-        />
-      ) : (
-        <div className="grid h-9 w-9 place-items-center rounded-full border-2 border-white/70 bg-white/25 text-xs font-black on-gold">
-          {user.email?.[0].toUpperCase()}
-        </div>
-      )}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" aria-label="Open profile menu" className="group h-12 min-w-0 max-w-[45%] gap-2 rounded-md border border-primary-foreground/15 bg-primary-foreground/10 px-2 text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground focus-visible:ring-primary-foreground">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-primary-foreground/30 bg-primary-foreground/15 shadow-sm">{avatar}</span>
+          <span className="hidden min-w-0 flex-col items-start sm:flex">
+            <span className="w-full truncate text-xs font-extrabold leading-tight">{name}</span>
+            <span className="text-[10px] font-semibold leading-tight opacity-70">My profile</span>
+          </span>
+          <ChevronDown className="hidden h-3 w-3 shrink-0 opacity-70 sm:block" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" sideOffset={8} className="w-[min(19rem,calc(100vw-2rem))] rounded-md border-border bg-popover p-2 shadow-xl">
+        <DropdownMenuLabel className="flex items-center gap-3 px-2 py-3">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-primary/15 text-primary">{avatarUrl ? avatar : <span className="text-sm font-black">{name.charAt(0).toUpperCase()}</span>}</span>
+          <span className="min-w-0 flex flex-col">
+            <span className="truncate text-base font-extrabold text-foreground">{name}</span>
+            <span className="truncate text-xs font-normal text-muted-foreground">{user.email}</span>
+          </span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => void supabase.auth.signOut()} className="min-h-11 cursor-pointer gap-2 rounded-md px-3 font-bold text-destructive focus:bg-destructive/10 focus:text-destructive">
+          <LogOut className="h-4 w-4" /> Sign out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -194,20 +210,20 @@ function RootComponent() {
               : "pb-3 pt-[calc(0.75rem+var(--sat))]",
           )}
         >
-          <div className="mx-auto flex w-full max-w-md items-center justify-between gap-3 px-4">
-            <div className="flex min-w-0 items-center gap-2.5">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-white/25 shadow-sm active-scale">
-                <Dice5 className="on-gold h-6 w-6" />
-              </div>
-              <div className="min-w-0">
-                <p className={cn("truncate font-extrabold on-gold transition-all duration-200", scrolled ? "text-base" : "text-xl")}>
-                  Ludu Hisab
-                </p>
-                <p className={cn("on-gold-soft text-[10px] font-bold uppercase tracking-[0.18em] transition-all duration-200", scrolled ? "hidden" : "block")}>
-                  Score · Fines · Tea Fund
-                </p>
-              </div>
-            </div>
+           <div className="mx-auto flex w-full max-w-md items-center justify-between gap-2 px-4">
+             <Link to="/" aria-label="Ludu Hisab home" className="flex min-w-0 items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground">
+               <span className={cn("flex shrink-0 items-center justify-center overflow-hidden rounded-md border border-primary-foreground/20 bg-primary-foreground/10 shadow-sm transition-all duration-200", scrolled ? "h-10 w-10" : "h-12 w-12")}>
+                 <img src={brandLogo} alt="" className="h-full w-full object-contain p-0.5 drop-shadow-sm" />
+               </span>
+               <span className="min-w-0">
+                 <span className={cn("block truncate font-extrabold leading-none text-primary-foreground transition-all duration-200", scrolled ? "text-base" : "text-xl")}>
+                   Ludu Hisab
+                 </span>
+                 <span className={cn("mt-1 block truncate text-[10px] font-bold uppercase text-primary-foreground/75 transition-all duration-200", scrolled ? "hidden" : "block")}>
+                   Score · Fines · Tea Fund
+                 </span>
+               </span>
+             </Link>
             <AuthStatus />
           </div>
         </header>
