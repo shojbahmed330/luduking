@@ -5,6 +5,7 @@ import { PrimaryButton } from "./ludu/PrimaryButton";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import brandLogo from "@/assets/ludu-king-logo.png";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<any>(null);
@@ -62,7 +63,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         <div className="relative">
           <div className="h-16 w-16 border-4 border-ludu-gold/20 border-t-ludu-gold rounded-full animate-spin" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <Dice5 className="h-6 w-6 text-ludu-gold animate-pulse" />
+            <img src={brandLogo} alt="" className="h-9 w-9 object-contain animate-pulse" />
           </div>
         </div>
         <p className="text-xs font-black text-muted-foreground uppercase tracking-widest animate-pulse">Loading Game Data...</p>
@@ -90,8 +91,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               className="absolute inset-[-20px] border border-dashed border-ludu-gold/20 rounded-full"
             />
-            <div className="h-28 w-28 bg-card rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-black/5 border-2 border-muted active-scale transition-transform overflow-hidden p-4">
-              <span className="text-5xl" role="img" aria-label="dice">🎲</span>
+            <div className="h-32 w-32 bg-card rounded-md flex items-center justify-center card-shadow border border-ludu-gold/25 active-scale transition-transform overflow-hidden p-1">
+              <img src={brandLogo} alt="Ludu King logo" className="h-full w-full object-contain" />
             </div>
           </div>
           
