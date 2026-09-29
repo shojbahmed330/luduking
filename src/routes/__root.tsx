@@ -173,7 +173,7 @@ function AuthStatus() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" sideOffset={8} className="w-[min(19rem,calc(100vw-2rem))] rounded-md border-border bg-popover p-2 shadow-xl">
         <DropdownMenuLabel className="flex items-center gap-3 px-2 py-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-primary/15">{avatar}</span>
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-primary/30 bg-primary/15 text-primary">{avatarUrl ? avatar : <span className="text-sm font-black">{name.charAt(0).toUpperCase()}</span>}</span>
           <span className="min-w-0 flex flex-col">
             <span className="truncate text-base font-extrabold text-foreground">{name}</span>
             <span className="truncate text-xs font-normal text-muted-foreground">{user.email}</span>

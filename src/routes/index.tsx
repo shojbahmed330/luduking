@@ -467,8 +467,8 @@ function Dashboard() {
           >
             {/* Fund Hero */}
             <div className="relative overflow-hidden rounded-3xl border border-ludu-gold/30 bg-gradient-to-br from-ludu-gold/20 via-ludu-gold/5 to-transparent p-6 card-shadow">
-              <div className="pointer-events-none absolute -right-4 -top-4 opacity-10">
-                <Dice5 className="h-24 w-24 text-ludu-gold" />
+              <div className="pointer-events-none absolute -right-3 -top-5 h-32 w-32 opacity-15">
+                <img src="/icon-192.png" alt="" className="h-full w-full object-contain" />
               </div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Current Fund Balance</p>
               <p className="mt-1 text-4xl font-black tracking-tight text-ludu-gold">

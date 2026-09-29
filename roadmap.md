@@ -9,3 +9,8 @@
 - [x] AuthGuard: dark premium login screen
 - [x] Other routes (add-match, add-expense, add-payment, history, players): dark consistency
 - [x] Verify: tsgo + build log + Playwright mobile screenshots
+
+## Uploaded logo and profile
+- [x] Make the supplied crest transparent; use it in installed icons, favicon, header, and sign-in
+- [x] Polish the dashboard header and signed-in account menu
+- [ ] Check the installed icon, mobile header, and profile menu in preview
