@@ -37,7 +37,7 @@ export function PositionBadge({ position, className }: PositionBadgeProps) {
   return (
     <Badge
       className={cn(
-        "flex items-center gap-1.5 px-3 py-1 text-sm font-bold border-none rounded-full",
+        "flex items-center gap-1.5 px-3 py-1 text-sm font-bold border-none rounded-full whitespace-nowrap",
         config.color,
         className
       )}
