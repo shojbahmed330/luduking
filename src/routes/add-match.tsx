@@ -56,6 +56,7 @@ function AddMatch() {
       const { data, error } = await supabase
         .from("players")
         .select("id, name")
+        .eq("is_archived", false)
         .order("name");
       if (data) setAllPlayers(data);
       if (error) toast.error("Failed to load players");
