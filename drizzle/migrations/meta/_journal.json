@@ -8,6 +8,13 @@
       "when": 1789646240849,
       "tag": "0000_allow_authenticated_insert_players",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790793958528,
+      "tag": "0001_add_player_archive",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { fireChampionConfetti } from "@/lib/confetti";
 import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, eachMonthOfInterval } from "date-fns";
 import { 
@@ -332,16 +333,39 @@ function Dashboard() {
 
   const bestPlayer = useMemo(() => getBestPlayer(playerRankings), [playerRankings]);
 
+  // Champion announcement: confetti burst whenever a new best player appears for the selected period
+  const celebratedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (loading || !bestPlayer) return;
+    const key = `${bestPlayer.id}|${selectedMonth}|${selectedDate?.toISOString() ?? ""}`;
+    if (celebratedRef.current === key) return;
+    celebratedRef.current = key;
+    fireChampionConfetti();
+  }, [loading, bestPlayer, selectedMonth, selectedDate]);
+
   if (loading) {
     return (
       <div className="flex flex-col gap-6 animate-pulse pt-2">
-        <div className="h-14 w-full bg-muted/40 rounded-2xl" />
-        <div className="h-28 w-full bg-muted/40 rounded-3xl" />
-        <div className="h-12 w-full bg-muted/20 rounded-2xl mt-4" />
-        <div className="grid grid-cols-2 gap-4 mt-2">
-          <div className="h-28 bg-muted/30 rounded-3xl" />
-          <div className="h-28 bg-muted/30 rounded-3xl" />
+        {/* Period selector */}
+        <div className="flex flex-col gap-2">
+          <div className="h-3 w-24 bg-muted/40 rounded-full" />
+          <div className="h-12 w-full bg-muted/30 rounded-2xl" />
         </div>
+        {/* Fund hero card */}
+        <div className="h-36 w-full bg-muted/30 rounded-3xl card-shadow" />
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-24 bg-muted/25 rounded-3xl" />
+          ))}
+        </div>
+        {/* Quick actions */}
+        <div className="flex gap-3">
+          <div className="h-14 flex-1 bg-muted/30 rounded-2xl" />
+          <div className="h-14 flex-1 bg-muted/30 rounded-2xl" />
+        </div>
+        {/* Tab pills */}
+        <div className="h-11 w-full bg-muted/20 rounded-full" />
       </div>
     );
   }
