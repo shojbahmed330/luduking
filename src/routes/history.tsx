@@ -43,7 +43,8 @@ export const Route = createFileRoute("/history")({
       },
       { property: "og:title", content: "Ludu Hisab — History" },
       { property: "og:description", content: "Shared Ludu score and expense tracker — matches, fines, dues and tea fund." },
-
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: HistoryPage,
