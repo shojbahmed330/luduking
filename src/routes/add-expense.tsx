@@ -16,6 +16,14 @@ const expenseSearchSchema = z.object({
 
 export const Route = createFileRoute("/add-expense")({
   validateSearch: (search) => expenseSearchSchema.parse(search),
+  head: () => ({ meta: [
+    { title: "Add Expense — Ludu Hisab" },
+    { name: "description", content: "Record a tea fund expense and check the remaining balance." },
+    { property: "og:title", content: "Add Expense — Ludu Hisab" },
+    { property: "og:description", content: "Record a tea fund expense and check the remaining balance." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: AddExpense,
 });
 

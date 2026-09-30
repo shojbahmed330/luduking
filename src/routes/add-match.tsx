@@ -22,6 +22,14 @@ const matchSearchSchema = z.object({
 
 export const Route = createFileRoute("/add-match")({
   validateSearch: (search) => matchSearchSchema.parse(search),
+  head: () => ({ meta: [
+    { title: "Add Match — Ludu Hisab" },
+    { name: "description", content: "Record a Ludu match and track player positions and fines." },
+    { property: "og:title", content: "Add Match — Ludu Hisab" },
+    { property: "og:description", content: "Record a Ludu match and track player positions and fines." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: AddMatch,
 });
 
