@@ -7,6 +7,7 @@ import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { fireConfetti } from "@/lib/confetti";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { computeDues } from "@/lib/dues";

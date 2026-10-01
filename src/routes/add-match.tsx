@@ -13,6 +13,7 @@ import { format, parseISO } from "date-fns";
 import { CalendarIcon, ChevronRight, ChevronLeft, Check, Trash2, Trophy, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { fireConfetti } from "@/lib/confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
 
