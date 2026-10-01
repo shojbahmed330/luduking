@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
-import { ArrowLeft, UserPlus, Pencil, Trash2, Check, X, Users } from "lucide-react";
+import { ArrowLeft, UserPlus, Pencil, Trash2, Check, X, Users, Archive, ArchiveRestore } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/players")({
   component: PlayersPage,
 });
 
-type Player = { id: string; name: string; created_at: string };
+type Player = { id: string; name: string; created_at: string; is_archived?: boolean | null };
 type Stat = { matches: number; fines: number };
 
 function PlayersPage() {
@@ -119,6 +119,20 @@ function PlayersPage() {
     load();
   };
 
+  const handleToggleArchive = async (player: Player) => {
+    const next = !player.is_archived;
+    const { error } = await supabase.from("players").update({ is_archived: next }).eq("id", player.id);
+    if (error) {
+      toast.error("Could not update player");
+      return;
+    }
+    toast.success(next ? `${player.name} archived — hidden from new matches` : `${player.name} is active again`);
+    load();
+  };
+
+  const activePlayers = players.filter((p) => !p.is_archived);
+  const archivedPlayers = players.filter((p) => p.is_archived);
+
   return (
     <AuthGuard>
       <motion.div
@@ -168,7 +182,7 @@ function PlayersPage() {
 
         <div className="flex flex-col gap-3">
           {loading && <div className="h-20 rounded-3xl bg-muted/30 animate-pulse" />}
-          {!loading && players.map((player) => (
+          {!loading && activePlayers.map((player) => (
             <div
               key={player.id}
               className="flex items-center gap-3 rounded-3xl border-2 border-muted bg-card p-3 card-shadow"
@@ -219,6 +233,13 @@ function PlayersPage() {
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
+                        onClick={() => handleToggleArchive(player)}
+                        title="Archive player"
+                        className="h-9 w-9 rounded-xl bg-muted/40 text-muted-foreground flex items-center justify-center active-scale"
+                      >
+                        <Archive className="h-4 w-4" />
+                      </button>
+                      <button
                         onClick={() => handleDelete(player)}
                         className="h-9 w-9 rounded-xl bg-ludu-red/10 text-ludu-red flex items-center justify-center active-scale"
                       >
@@ -231,6 +252,37 @@ function PlayersPage() {
             </div>
           ))}
         </div>
+
+        {!loading && archivedPlayers.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground px-1">
+              Archived — history kept, hidden from new matches
+            </p>
+            {archivedPlayers.map((player) => (
+              <div
+                key={player.id}
+                className="flex items-center gap-3 rounded-3xl border-2 border-muted bg-card/50 p-3 opacity-70"
+              >
+                <PlayerAvatar name={player.name} size="sm" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-black text-muted-foreground truncate">{player.name}</p>
+                  <p className="text-[11px] font-bold text-muted-foreground">
+                    {stats[player.id]?.matches || 0} matches · {stats[player.id]?.fines || 0} ৳ fines
+                  </p>
+                </div>
+                {isAdmin && (
+                  <button
+                    onClick={() => handleToggleArchive(player)}
+                    title="Bring back"
+                    className="h-9 w-9 rounded-xl bg-ludu-green/10 text-ludu-green flex items-center justify-center active-scale"
+                  >
+                    <ArchiveRestore className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </motion.div>
     </AuthGuard>
   );
