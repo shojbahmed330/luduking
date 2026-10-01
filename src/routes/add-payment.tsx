@@ -186,7 +186,7 @@ function AddPayment() {
                         "text-[9px] font-black uppercase tracking-widest",
                         (d?.due ?? 0) > 0 ? "text-ludu-red" : "text-ludu-green",
                       )}>
-                        Due {d?.due ?? 0} ৳
+                        {(d?.due ?? 0) < 0 ? `Advance ${-(d?.due ?? 0)}` : `Due ${d?.due ?? 0}`} ৳
                       </p>
                     </div>
                     {active && <Check className="h-4 w-4 text-ludu-green shrink-0" />}
@@ -256,7 +256,7 @@ function AddPayment() {
             <div className="flex justify-between items-center">
               <span className="text-xs font-black text-muted-foreground uppercase tracking-widest">Current Due</span>
               <span className="text-lg font-black text-foreground">
-                {loading ? "..." : currentDue !== null ? `${currentDue} ৳` : "—"}
+                {loading ? "..." : currentDue !== null ? (currentDue < 0 ? `Advance ${-currentDue} ৳` : `${currentDue} ৳`) : "—"}
               </span>
             </div>
             <div className="flex justify-between items-center pt-2 border-t border-dashed">
@@ -265,7 +265,7 @@ function AddPayment() {
                 "text-xl font-black transition-colors",
                 (afterDue ?? 0) > 0 ? "text-ludu-red" : "text-ludu-green",
               )}>
-                {afterDue !== null ? `${afterDue} ৳` : "—"}
+                {afterDue !== null ? (afterDue < 0 ? `Advance ${-afterDue} ৳` : `${afterDue} ৳`) : "—"}
               </span>
             </div>
           </div>

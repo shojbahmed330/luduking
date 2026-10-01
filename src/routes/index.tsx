@@ -77,7 +77,9 @@ function Dashboard() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [expandedDueId, setExpandedDueId] = useState<string | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState<string>("All-Time");
+  const [selectedMonth, setSelectedMonth] = useState<string>(() =>
+    format(new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })), "MMMM yyyy"),
+  );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "dues" | "analytics">("overview");
   const [loading, setLoading] = useState(true);
@@ -114,6 +116,7 @@ function Dashboard() {
 
   const availableMonths = useMemo(() => {
     const months = new Set<string>();
+    months.add(format(new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })), "MMMM yyyy"));
     matches.forEach(m => months.add(format(parseISO(m.match_date), "MMMM yyyy")));
     expenses.forEach(e => months.add(format(parseISO(e.expense_date), "MMMM yyyy")));
     return Array.from(months).sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
@@ -179,7 +182,8 @@ function Dashboard() {
     return {
       totalFine,
       totalPaid,
-      totalDue: totalFine - totalPaid,
+      totalDue: dues.reduce((a, d) => a + Math.max(d.due, 0), 0),
+      totalAdvance: dues.reduce((a, d) => a + Math.max(-d.due, 0), 0),
       cashInHand: totalPaid - totalExpenses,
       expectedFund: totalFine - totalExpenses,
     };
@@ -912,6 +916,12 @@ function Dashboard() {
                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Due</p>
               </div>
             </div>
+            {dueTotals.totalAdvance > 0 && (
+              <div className="rounded-3xl bg-card p-4 border-2 border-ludu-blue/20 card-shadow flex items-center justify-between">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Advance (auto-deducts from future fines)</p>
+                <p className="text-lg font-black text-ludu-blue">{dueTotals.totalAdvance} ৳</p>
+              </div>
+            )}
 
             <div className="space-y-3">
               {dues.map(player => {
@@ -931,6 +941,10 @@ function Dashboard() {
                       </div>
                       {player.due > 0 ? (
                         <span className="text-sm font-black text-ludu-red">{player.due} ৳</span>
+                      ) : player.due < 0 ? (
+                        <span className="text-[9px] font-black bg-ludu-blue/10 text-ludu-blue px-2 py-1 rounded-full uppercase tracking-widest">
+                          Advance {-player.due} ৳
+                        </span>
                       ) : (
                         <span className="text-[9px] font-black bg-ludu-green/10 text-ludu-green px-2 py-1 rounded-full uppercase tracking-widest">
                           Clear
@@ -956,7 +970,7 @@ function Dashboard() {
                                 {row.type === "fine" ? "Fine" : "Paid"} {row.amount} ৳
                               </span>
                               <span className="flex-1 truncate text-[10px] font-bold text-muted-foreground/70">{row.note || ""}</span>
-                              <span className="font-black text-foreground">Due {row.runningDue} ৳</span>
+                              <span className="font-black text-foreground">{row.runningDue < 0 ? `Advance ${-row.runningDue}` : `Due ${row.runningDue}`} ৳</span>
                             </div>
                           ))
                         )}
@@ -965,7 +979,7 @@ function Dashboard() {
                           search={{ playerId: player.id }}
                           className="mt-2 flex w-full items-center justify-center rounded-2xl bg-ludu-green text-white font-black py-3 text-sm shadow-lg shadow-ludu-green/20 active-scale"
                         >
-                          Pay {player.due > 0 ? `${player.due} ৳` : ""}
+                          {player.due > 0 ? `Pay ${player.due} ৳` : "Add Advance Payment"}
                         </Link>
                       </div>
                     )}
