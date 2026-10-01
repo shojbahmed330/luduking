@@ -188,6 +188,29 @@ function AuthStatus() {
   );
 }
 
+function OfflineBanner() {
+  const [offline, setOffline] = useState(false);
+
+  useEffect(() => {
+    const update = () => setOffline(!navigator.onLine);
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
+
+  if (!offline) return null;
+
+  return (
+    <div className="sticky top-0 z-50 flex items-center justify-center gap-2 bg-destructive px-4 py-2 text-xs font-black text-destructive-foreground">
+      <WifiOff className="h-4 w-4" /> You're offline — data may not be up to date
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const [scrolled, setScrolled] = useState(false);
@@ -202,6 +225,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col bg-background pb-[calc(4rem+var(--sab))]">
+        <OfflineBanner />
         <header
           className={cn(
             "brand-header sticky top-0 z-40 w-full transition-all duration-200",
