@@ -128,6 +128,7 @@ function AddPayment() {
         });
         if (error) throw error;
         toast.success("Payment recorded! 💰");
+        fireConfetti();
       }
       navigate({ to: editId ? "/history" : "/" });
     } catch (error: any) {

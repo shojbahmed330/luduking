@@ -195,6 +195,7 @@ function AddMatch() {
         if (resultsError) throw resultsError;
 
         toast.success("Match saved! 🎲");
+        fireConfetti();
       }
       navigate({ to: editId ? "/history" : "/" });
     } catch (error: any) {
