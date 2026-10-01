@@ -182,7 +182,7 @@ function PlayersPage() {
 
         <div className="flex flex-col gap-3">
           {loading && <div className="h-20 rounded-3xl bg-muted/30 animate-pulse" />}
-          {!loading && players.map((player) => (
+          {!loading && activePlayers.map((player) => (
             <div
               key={player.id}
               className="flex items-center gap-3 rounded-3xl border-2 border-muted bg-card p-3 card-shadow"
@@ -231,6 +231,13 @@ function PlayersPage() {
                         className="h-9 w-9 rounded-xl bg-ludu-blue/10 text-ludu-blue flex items-center justify-center active-scale"
                       >
                         <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => handleToggleArchive(player)}
+                        title="Archive player"
+                        className="h-9 w-9 rounded-xl bg-muted/40 text-muted-foreground flex items-center justify-center active-scale"
+                      >
+                        <Archive className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(player)}
