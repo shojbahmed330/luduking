@@ -7,4 +7,4 @@
 - [x] Skeleton loading cards matching dashboard layout
 - [x] Online/offline banner in __root (navigator.onLine)
 - [x] Confetti on match save / payment save / champion announcement
-- [ ] Verify: tsgo + build log
+- [x] Verify: tsgo + build log
