@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
-import { ArrowLeft, UserPlus, Pencil, Trash2, Check, X, Users } from "lucide-react";
+import { ArrowLeft, UserPlus, Pencil, Trash2, Check, X, Users, Archive, ArchiveRestore } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/players")({
   component: PlayersPage,
 });
 
-type Player = { id: string; name: string; created_at: string };
+type Player = { id: string; name: string; created_at: string; is_archived?: boolean | null };
 type Stat = { matches: number; fines: number };
 
 function PlayersPage() {
@@ -118,6 +118,20 @@ function PlayersPage() {
     toast.success("Player removed");
     load();
   };
+
+  const handleToggleArchive = async (player: Player) => {
+    const next = !player.is_archived;
+    const { error } = await supabase.from("players").update({ is_archived: next }).eq("id", player.id);
+    if (error) {
+      toast.error("Could not update player");
+      return;
+    }
+    toast.success(next ? `${player.name} archived — hidden from new matches` : `${player.name} is active again`);
+    load();
+  };
+
+  const activePlayers = players.filter((p) => !p.is_archived);
+  const archivedPlayers = players.filter((p) => p.is_archived);
 
   return (
     <AuthGuard>
