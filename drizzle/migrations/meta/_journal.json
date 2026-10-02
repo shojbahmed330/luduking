@@ -15,6 +15,13 @@
       "when": 1790793958528,
       "tag": "0001_add_player_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790971399353,
+      "tag": "0002_cascade_player_delete",
+      "breakpoints": true
     }
   ]
 }
