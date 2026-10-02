@@ -78,10 +78,15 @@ function AddPayment() {
     load();
   }, [editId]);
 
-  const dues = useMemo(
-    () => computeDues(players, matches, matchResults, payments),
-    [players, matches, matchResults, payments],
-  );
+  // Dues reset every month (Bangladesh time): only the current month counts.
+  const dues = useMemo(() => {
+    const monthKey = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Dhaka" }).slice(0, 7);
+    const mMatches = matches.filter((m: { match_date: string }) => m.match_date.startsWith(monthKey));
+    const ids = new Set(mMatches.map((m: { id: string }) => m.id));
+    const mResults = matchResults.filter((r: { match_id: string }) => ids.has(r.match_id));
+    const mPayments = payments.filter((p: { paid_date: string }) => p.paid_date.startsWith(monthKey));
+    return computeDues(players, mMatches, mResults, mPayments);
+  }, [players, matches, matchResults, payments]);
 
   const selectedDue = dues.find((d) => d.id === selectedPlayerId);
   // When editing, the old amount is already counted as paid — add it back.

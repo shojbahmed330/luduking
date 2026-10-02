@@ -104,12 +104,7 @@ function PlayersPage() {
   };
 
   const handleDelete = async (player: Player) => {
-    const stat = stats[player.id];
-    if (stat && stat.matches > 0) {
-      toast.error("This player already has match records and cannot be removed");
-      return;
-    }
-    if (!confirm(`Remove ${player.name}?`)) return;
+    if (!confirm(`Remove ${player.name}? All of their match results and payments will be deleted permanently.`)) return;
     const { error } = await supabase.from("players").delete().eq("id", player.id);
     if (error) {
       toast.error("Could not remove player");

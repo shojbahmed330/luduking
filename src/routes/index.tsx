@@ -128,37 +128,32 @@ function Dashboard() {
       const matchIds = new Set(fMatches.map(m => m.id));
       const fMatchResults = matchResults.filter(mr => matchIds.has(mr.match_id));
       const fExpenses = expenses.filter(e => isSameDay(parseISO(e.expense_date), selectedDate));
-      return { matches: fMatches, matchResults: fMatchResults, expenses: fExpenses };
+      const fPayments = payments.filter(p => isSameDay(parseISO(p.paid_date), selectedDate));
+      return { matches: fMatches, matchResults: fMatchResults, expenses: fExpenses, payments: fPayments };
     }
 
     if (selectedMonth === "All-Time") {
-      return { matches, matchResults, expenses };
+      return { matches, matchResults, expenses, payments };
     }
 
     const start = startOfMonth(new Date(selectedMonth));
     const end = endOfMonth(new Date(selectedMonth));
+    const inRange = (d: string) => isWithinInterval(parseISO(d), { start, end });
 
-    const fMatches = matches.filter(m => {
-      const date = parseISO(m.match_date);
-      return isWithinInterval(date, { start, end });
-    });
-
+    const fMatches = matches.filter(m => inRange(m.match_date));
     const matchIds = new Set(fMatches.map(m => m.id));
     const fMatchResults = matchResults.filter(mr => matchIds.has(mr.match_id));
+    const fExpenses = expenses.filter(e => inRange(e.expense_date));
+    const fPayments = payments.filter(p => inRange(p.paid_date));
 
-    const fExpenses = expenses.filter(e => {
-      const date = parseISO(e.expense_date);
-      return isWithinInterval(date, { start, end });
-    });
-
-    return { matches: fMatches, matchResults: fMatchResults, expenses: fExpenses };
-  }, [selectedMonth, matches, matchResults, expenses]);
+    return { matches: fMatches, matchResults: fMatchResults, expenses: fExpenses, payments: fPayments };
+  }, [selectedMonth, selectedDate, matches, matchResults, expenses, payments]);
 
   const allTimeBalance = useMemo(() => {
-    const totalFines = matchResults.reduce((acc, curr) => acc + curr.fine_amount, 0);
-    const totalExp = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+    const totalFines = filteredData.matchResults.reduce((acc, curr) => acc + curr.fine_amount, 0);
+    const totalExp = filteredData.expenses.reduce((acc, curr) => acc + curr.amount, 0);
     return totalFines - totalExp;
-  }, [matchResults, expenses]);
+  }, [filteredData]);
 
   const periodStats = useMemo(() => {
     const totalFines = filteredData.matchResults.reduce((acc, curr) => acc + curr.fine_amount, 0);
@@ -171,14 +166,14 @@ function Dashboard() {
   }, [filteredData]);
 
   const dues = useMemo(
-    () => computeDues(players, matches, matchResults, payments),
-    [players, matches, matchResults, payments],
+    () => computeDues(players, filteredData.matches, filteredData.matchResults, filteredData.payments),
+    [players, filteredData],
   );
 
   const dueTotals = useMemo(() => {
     const totalFine = dues.reduce((a, d) => a + d.totalFine, 0);
     const totalPaid = dues.reduce((a, d) => a + d.totalPaid, 0);
-    const totalExpenses = expenses.reduce((a, e) => a + e.amount, 0);
+    const totalExpenses = filteredData.expenses.reduce((a, e) => a + e.amount, 0);
     return {
       totalFine,
       totalPaid,
@@ -187,7 +182,7 @@ function Dashboard() {
       cashInHand: totalPaid - totalExpenses,
       expectedFund: totalFine - totalExpenses,
     };
-  }, [dues, expenses]);
+  }, [dues, filteredData]);
 
   const playerLeaderboard = useMemo(() => {
     const stats = players.map(player => {
@@ -285,6 +280,8 @@ function Dashboard() {
 
   const h2hComparison = useMemo(() => {
     if (players.length < 2) return null;
+    const matches = filteredData.matches;
+    const matchResults = filteredData.matchResults;
 
     const playerMatchCounts = players.map(p => ({
       ...p,
@@ -328,7 +325,7 @@ function Dashboard() {
     };
 
     return { p1, p2, p1Wins, p2Wins, commonCount: commonMatches.length, p1Stats: statsFor(p1.id), p2Stats: statsFor(p2.id) };
-  }, [players, matches, matchResults, comparisonPlayer1Id, comparisonPlayer2Id]);
+  }, [players, filteredData, comparisonPlayer1Id, comparisonPlayer2Id]);
 
   const playerRankings = useMemo(
     () => computeRanking(players, filteredData.matchResults, filteredData.matches.length),
