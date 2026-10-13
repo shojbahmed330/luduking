@@ -1,13 +1,13 @@
 // Player Ranking: position-based points.
 // Points: 1st = 4, 2nd = 3, 3rd = 2, 4th = 1
 // Score = total points / matches played (average points per match)
-// A player must play at least MIN_MATCH_RATIO (50%) of all matches in the
+// A player must play at least MIN_MATCH_RATIO (30%) of all matches in the
 // period to earn a score; otherwise their name stays at the bottom of the list.
 // Players marked irregular (isIrregular) are always pinned at the very bottom.
 
 export const POSITION_POINTS: Record<number, number> = { 1: 4, 2: 3, 3: 2, 4: 1 };
 
-export const MIN_MATCH_RATIO = 0.5;
+export const MIN_MATCH_RATIO = 0.3;
 
 /** Minimum matches a player must have played to be eligible, given total matches in the period. */
 export function getRequiredMatches(totalMatches: number): number {

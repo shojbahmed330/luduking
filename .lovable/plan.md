@@ -1,33 +1,46 @@
-# Ludu Hisab — পরবর্তী উন্নতির পরিকল্পনা (আইডিয়া লিস্ট)
+# Ludu Hisab — UI Improvement Plan
 
-নিচের আইটেমগুলো থেকে যেগুলো চান সেগুলো বেছে নিলে সেই অনুযায়ী বাস্তবায়ন করব। কোনো কোড এখনো লেখা হচ্ছে না।
+The ranking rule is already changed to 30% participation. Below are the proposed UI upgrades — pick the ones you want.
 
-## A. নিরাপত্তা ও পারমিশন (সবচেয়ে জরুরি)
-1. **Admin-only Edit/Delete ডাটাবেজে আটকে দেওয়া** — এখন শুধু স্ক্রিনে বাটন লুকানো আছে; ডাটাবেজ লেভেলে (RLS policy) matches/expenses/payments এডিট-ডিলিট শুধু rajshahi.jibon@gmail.com-এর জন্য আটকে দেওয়া হবে, যাতে অন্য কেউ চাইলেও পারবে না।
-2. **সেশন সিকিউরিটি ওয়ার্নিং ফিক্স** — আগের মাইগ্রেশনের JWT-function ওয়ার্নিংটি ঠিক করা।
+## 1. Home / Overview
+- Month switcher as a swipeable pill row (prev / current / next) right under the header, instead of a dropdown.
+- "This Month at a glance" strip: matches played, current leader, days left in month.
+- Count-up animation on Fund and stat numbers when a month changes.
 
-## B. হিসাব ও রিপোর্ট
-3. **Head-to-Head-এ তারিখ ফিল্টার** — এখন all-time দেখায়; উপরের মাস ফিল্টার অনুযায়ী তুলনা কাজ করবে।
-4. **মাসিক সারসংক্ষেপ শেয়ার/এক্সপোর্ট** — মাস শেষে "Monthly Report" কার্ড: চ্যাম্পিয়ন, মোট ফাইন, জমা, বকেয়া — স্ক্রিনশট-ফ্রেন্ডলি ভিউ বা WhatsApp-এ পাঠানোর মতো টেক্সট কপি বাটন।
-5. **Due রিমাইন্ডার ব্যাজ** — হোমে কারো বকেয়া নির্দিষ্ট সীমা (যেমন ১০০ টাকা) পার হলে লাল অ্যালার্ট।
-6. **খেলোয়াড় প্রোফাইল পেজ** — একজনের নামে ট্যাপ করলে তার পুরো ইতিহাস: ম্যাচ, পজিশন ব্রেকডাউন, জমা-বকেয়া লেজার, মাসভিত্তিক র‍্যাংকিং।
+## 2. Tabs and navigation
+- Sticky tab bar (Overview, Matches, Money, Due, Insights, Ranking) that stays visible while scrolling, with icons.
+- Swipe left/right between tabs on mobile.
+- Bigger center "+" button in the bottom bar opening a sheet: Add Match, Add Expense, Add Payment.
 
-## C. গেমপ্লে অভিজ্ঞতা
-7. **ম্যাচ এন্ট্রি দ্রুততর** — শেষ ম্যাচের খেলোয়াড়রা অটো-সিলেক্ট ("Same players as last match"), পজিশন দ্রুত সোয়াপ।
-8. **স্ট্রিক ও মাইলস্টোন** — টানা ১ম হওয়ার স্ট্রিক, ১০০তম ম্যাচ ইত্যাদি মজার ব্যাজ Insights-এ।
+## 3. Player Ranking
+- Top-3 podium card (gold / silver / bronze) with avatars above the list.
+- Progress bar for players not yet eligible: "4 / 6 matches to qualify".
+- Collapsible "How it's calculated" box so it doesn't take space.
 
-## D. UI/UX পলিশ
-9. **Pull-to-refresh / স্কেলেটন লোডিং** — ডেটা আসার সময় "LOADING GAME DATA" টেক্সটের বদলে সুন্দর স্কেলেটন কার্ড।
-10. **অনলাইন/অফলাইন ইন্ডিকেটর** — নেট না থাকলে ছোট ব্যানার; PWA হিসেবে বেসিক অফলাইন ক্যাশ।
-11. **হ্যাপটিক-স্টাইল ফিডব্যাক** — ম্যাচ সেভ/পেমেন্ট সফল হলে ছোট অ্যানিমেশন + কনফেতি (চ্যাম্পিয়ন ঘোষণায়)।
+## 4. Due & Payment
+- Colored status per player: Due (red), Clear (green), Advance (blue) with a single summary bar.
+- Tap a player to expand their ledger instead of showing everything at once.
 
-## E. ব্যবস্থাপনা
-12. **প্লেয়ার আর্কাইভ** — ইরেগুলার/বিদায়ী খেলোয়াড়কে ডিলিট না করে "Archived" করা, যাতে পুরোনো হিসাব অক্ষত থাকে কিন্তু নতুন ম্যাচে নাম না আসে।
-13. **ডেটা ব্যাকআপ এক্সপোর্ট** — অ্যাডমিনের জন্য সব ম্যাচ/পেমেন্ট CSV ডাউনলোড।
+## 5. Matches / History
+- Group matches by day with date headers ("Today", "Yesterday", "12 Oct").
+- Compact match card: winner avatar large, others small with position colors.
+- Filter chips: by player, by position.
 
-## প্রস্তাবিত অগ্রাধিকার
-- **প্রথমে:** A1 + A2 (নিরাপত্তা — ছোট কাজ, বড় ঝুঁকি কমায়)
-- **তারপর:** B3 + B4 (রোজকার ব্যবহারে সবচেয়ে বেশি কাজে লাগবে)
-- **পরে:** বাকিগুলো আপনার পছন্দমতো
+## 6. Head to Head / Insights
+- Side-by-side player cards with avatars, a "VS" badge, and win bars.
+- Chart cards with a small legend and empty-state illustration when a month has no data.
 
-বলুন কোন নম্বরগুলো করব — সেগুলো নিয়ে বিস্তারিত বাস্তবায়ন প্ল্যান বানাব।
+## 7. General polish
+- Consistent empty states with the Ludu King crest ("No matches yet this month").
+- Player profile page: tap any name to see that player's month stats.
+- Unified spacing and card sizes across all pages.
+
+## Suggested order
+1. Ranking podium + progress bars (3)
+2. Sticky tabs + center "+" button (2)
+3. Due status colors + expandable ledger (4)
+4. History grouping (5), then the rest
+
+## Technical notes
+- Frontend-only changes in src/routes/index.tsx, history.tsx, BottomNavBar, plus small new components under src/components/ludu.
+- No database changes; existing design tokens reused.
