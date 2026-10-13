@@ -17,6 +17,7 @@ import {
   LayoutDashboard,
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Check,
   Dice5,
   ArrowRight,
@@ -384,6 +385,16 @@ function Dashboard() {
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
             <Calendar className="h-3 w-3" /> Select Period
           </label>
+          <div className="flex items-stretch gap-2">
+          <button
+            aria-label="Previous month"
+            disabled={!!selectedDate || selectedMonth === "All-Time" || availableMonths.indexOf(selectedMonth) >= availableMonths.length - 1}
+            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i + 1]); }}
+            className="flex items-center justify-center rounded-2xl border-2 border-muted bg-card px-3 active-scale disabled:opacity-30"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <div className="flex-1 min-w-0">
           <BottomDrawer
             title="Choose Period"
             description="Filter dashboard data by month or view all history."
@@ -443,6 +454,16 @@ function Dashboard() {
               ))}
             </div>
           </BottomDrawer>
+          </div>
+          <button
+            aria-label="Next month"
+            disabled={!!selectedDate || selectedMonth === "All-Time" || availableMonths.indexOf(selectedMonth) <= 0}
+            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i - 1]); }}
+            className="flex items-center justify-center rounded-2xl border-2 border-muted bg-card px-3 active-scale disabled:opacity-30"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          </div>
         </div>
       </div>
 
