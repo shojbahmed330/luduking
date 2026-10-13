@@ -379,7 +379,7 @@ function Dashboard() {
       className="flex flex-col gap-6 pb-24"
     >
       {/* Fixed Top Section */}
-      <div className="flex flex-col gap-4 sticky top-0 bg-background/95 backdrop-blur-md pt-2 pb-4 z-40">
+      <div className="flex flex-col gap-4 pt-2">
         <div className="flex flex-col gap-2">
           <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
             <Calendar className="h-3 w-3" /> Select Period
@@ -447,6 +447,7 @@ function Dashboard() {
       </div>
 
       {/* Tabs Navigation */}
+      <div className="sticky top-0 z-40 -mx-1 px-1 py-2 bg-background/95 backdrop-blur-md">
       <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar">
         <div 
           className="absolute h-[calc(100%-8px)] bg-card rounded-xl shadow-sm ring-1 ring-white/10 transition-all duration-300 ease-out z-0"
@@ -479,6 +480,7 @@ function Dashboard() {
           </button>
         ))}
       </div>
+      </div>
 
       {/* Tab Content */}
       <div className="min-h-[400px]">
@@ -501,6 +503,29 @@ function Dashboard() {
               </p>
               <p className="mt-1 text-[11px] font-bold text-muted-foreground">All-Time · Fines − Expenses</p>
             </div>
+
+            {/* This month at a glance */}
+            {(() => {
+              const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
+              const isCurrent = !selectedDate && selectedMonth === format(now, "MMMM yyyy");
+              const daysLeft = endOfMonth(now).getDate() - now.getDate();
+              return (
+                <div className="grid grid-cols-3 gap-2 rounded-3xl border-2 border-muted bg-card p-3 card-shadow text-center">
+                  <div>
+                    <p className="text-lg font-black text-foreground">{periodStats.matchCount}</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Matches</p>
+                  </div>
+                  <div className="min-w-0 border-x border-muted">
+                    <p className="text-sm font-black text-ludu-gold truncate px-1 leading-7">{bestPlayer ? `👑 ${bestPlayer.name}` : "—"}</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Leader</p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-black text-foreground">{isCurrent ? daysLeft : "—"}</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Days Left</p>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* All stats at a glance */}
             <div className="grid grid-cols-2 gap-3">
@@ -913,6 +938,26 @@ function Dashboard() {
                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Due</p>
               </div>
             </div>
+            {(() => {
+              const dueN = dues.filter(d => d.due > 0).length;
+              const clearN = dues.filter(d => d.due === 0).length;
+              const advN = dues.filter(d => d.due < 0).length;
+              const total = Math.max(dues.length, 1);
+              return (
+                <div className="rounded-3xl bg-card p-4 border-2 border-muted card-shadow space-y-2">
+                  <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted/30">
+                    <div className="bg-ludu-red" style={{ width: `${(dueN / total) * 100}%` }} />
+                    <div className="bg-ludu-green" style={{ width: `${(clearN / total) * 100}%` }} />
+                    <div className="bg-ludu-blue" style={{ width: `${(advN / total) * 100}%` }} />
+                  </div>
+                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                    <span className="text-ludu-red">● Due {dueN}</span>
+                    <span className="text-ludu-green">● Clear {clearN}</span>
+                    <span className="text-ludu-blue">● Advance {advN}</span>
+                  </div>
+                </div>
+              );
+            })()}
             {dueTotals.totalAdvance > 0 && (
               <div className="rounded-3xl bg-card p-4 border-2 border-ludu-blue/20 card-shadow flex items-center justify-between">
                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Total Advance (auto-deducts from future fines)</p>
@@ -1162,34 +1207,44 @@ function Dashboard() {
             <div className="space-y-4">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-1">Player Ranking</h3>
 
-              {/* Best Player Card */}
-              {bestPlayer && (
-                <Card className="border-2 border-ludu-gold/30 bg-gradient-to-br from-ludu-gold/15 to-ludu-gold/5 card-shadow overflow-hidden">
-                  <CardContent className="p-5 flex items-center gap-4">
-                    <div className="relative">
-                      <PlayerAvatar name={bestPlayer.name} size="lg" className="ring-4 ring-ludu-gold ring-offset-2" />
-                      <span className="absolute -top-2 -right-2 text-xl">👑</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[9px] font-black text-ludu-gold uppercase tracking-widest">
-                        {selectedDate ? "Best of the Day" : selectedMonth === "All-Time" ? "Best Player (All Time)" : `Best of ${selectedMonth}`}
+              {/* Podium */}
+              {bestPlayer && (() => {
+                const top = playerRankings.filter(r => r.eligible && r.matches > 0).slice(0, 3);
+                const order = [top[1], top[0], top[2]];
+                const styles = [
+                  { h: "h-16", ring: "ring-muted-foreground/60", bg: "from-muted-foreground/25 to-muted-foreground/5", medal: "🥈" },
+                  { h: "h-24", ring: "ring-ludu-gold", bg: "from-ludu-gold/35 to-ludu-gold/5", medal: "👑" },
+                  { h: "h-12", ring: "ring-ludu-red/60", bg: "from-ludu-red/25 to-ludu-red/5", medal: "🥉" },
+                ];
+                return (
+                  <Card className="border-2 border-ludu-gold/30 bg-gradient-to-b from-ludu-gold/10 to-transparent card-shadow overflow-hidden">
+                    <CardContent className="p-5">
+                      <p className="text-center text-[10px] font-black text-ludu-gold uppercase tracking-widest mb-4">
+                        {selectedDate ? "Best of the Day" : selectedMonth === "All-Time" ? "Best Players (All Time)" : `Best of ${selectedMonth}`}
                       </p>
-                      <p className="text-lg font-black text-foreground truncate">{bestPlayer.name}</p>
-                      <p className="text-[10px] font-bold text-muted-foreground">
-                        {bestPlayer.avgPoints.toFixed(2)} avg pts • {bestPlayer.matches} matches
-                      </p>
-                    </div>
-                    <div className="flex gap-1.5 shrink-0">
-                      {([1, 2, 3, 4] as const).map(pos => (
-                        <div key={pos} className="flex flex-col items-center">
-                          <span className="text-xs">{["🥇", "🥈", "🥉", "4️⃣"][pos - 1]}</span>
-                          <span className="text-[10px] font-black">{[bestPlayer.first, bestPlayer.second, bestPlayer.third, bestPlayer.fourth][pos - 1]}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+                      <div className="grid grid-cols-3 items-end gap-2">
+                        {order.map((p, i) => (
+                          <div key={i} className="flex flex-col items-center gap-1.5 min-w-0">
+                            {p ? (
+                              <>
+                                <span className="text-lg">{styles[i].medal}</span>
+                                <PlayerAvatar name={p.name} size={i === 1 ? "lg" : "md"} className={cn("ring-4 ring-offset-2 ring-offset-card", styles[i].ring)} />
+                                <p className="text-xs font-black truncate max-w-full">{p.name}</p>
+                                <p className="text-[10px] font-black text-ludu-gold">{p.avgPoints.toFixed(2)} pts</p>
+                                <div className={cn("w-full rounded-t-2xl bg-gradient-to-b flex items-start justify-center pt-1.5", styles[i].h, styles[i].bg)}>
+                                  <span className="text-sm font-black text-foreground/80">{p.rank}</span>
+                                </div>
+                              </>
+                            ) : (
+                              <div className={cn("w-full rounded-t-2xl bg-muted/10", styles[i].h)} />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })()}
 
               {/* Ranking List */}
               <Card className="border-2 border-muted/50 card-shadow overflow-hidden">
@@ -1222,6 +1277,17 @@ function Dashboard() {
                         <p className="text-[9px] font-bold text-muted-foreground">
                           {r.matches} matches • 🥇{r.first} 🥈{r.second} 🥉{r.third} 4️⃣{r.fourth}
                         </p>
+                        {!r.eligible && !r.isIrregular && r.requiredMatches > 0 && (
+                          <div className="mt-1.5 flex items-center gap-2">
+                            <div className="h-1.5 flex-1 rounded-full bg-muted/40 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-ludu-blue transition-all"
+                                style={{ width: `${Math.min(100, (r.matches / r.requiredMatches) * 100)}%` }}
+                              />
+                            </div>
+                            <span className="text-[9px] font-black text-muted-foreground shrink-0">{r.matches}/{r.requiredMatches}</span>
+                          </div>
+                        )}
                       </div>
                       <div className="text-right shrink-0">
                         {r.eligible ? (
@@ -1236,15 +1302,21 @@ function Dashboard() {
                     </div>
                   ))}
                   {playerRankings.every(r => r.matches === 0) && (
-                    <p className="text-center text-xs font-bold text-muted-foreground py-6">No matches in this period yet.</p>
+                    <div className="flex flex-col items-center gap-2 py-6">
+                      <img src="/icon-192.png" alt="" className="h-14 w-14 opacity-40" />
+                      <p className="text-center text-xs font-bold text-muted-foreground">No matches in this period yet.</p>
+                    </div>
                   )}
                 </CardContent>
               </Card>
 
-              {/* How it works */}
-              <Card className="border-2 border-muted/50 card-shadow overflow-hidden">
-                <CardContent className="p-4 space-y-2">
-                  <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">কিভাবে হিসাব হয়</p>
+              {/* How it works (collapsible) */}
+              <details className="group rounded-3xl border-2 border-muted/50 bg-card card-shadow overflow-hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between p-4 [&::-webkit-details-marker]:hidden">
+                  <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">কিভাবে হিসাব হয়</span>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="px-4 pb-4 space-y-2">
                   <div className="flex gap-2">
                     {([1, 2, 3, 4] as const).map(pos => (
                       <div key={pos} className="flex-1 rounded-xl bg-muted/20 py-2 flex flex-col items-center">
@@ -1256,8 +1328,8 @@ function Dashboard() {
                   <p className="text-[10px] font-bold text-muted-foreground leading-relaxed">
                     Score = মোট পয়েন্ট ÷ মোট ম্যাচ। Best Player ক্রাউন ও স্কোর পেতে এই সময়ের মোট ম্যাচের কমপক্ষে {Math.round(MIN_MATCH_RATIO * 100)}% খেলতে হবে — কম খেললে নাম তালিকার নিচে থাকবে, স্কোর দেখাবে না। প্রতি মাসের ১ তারিখ থেকে হিসাব নতুন করে শুরু হয় — মাস ফিল্টার বদলে সেই মাসের best দেখুন।
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+              </details>
             </div>
           </motion.div>
         )}
