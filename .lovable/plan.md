@@ -1,46 +1,46 @@
-# Ludu Hisab — UI Improvement Plan
+# Ludu Hisab — UI উন্নতির পরিকল্পনা
 
-The ranking rule is already changed to 30% participation. Below are the proposed UI upgrades — pick the ones you want.
+Ranking-এর নিয়ম ইতিমধ্যে ৩০% করা হয়েছে — এখন মোট ম্যাচের কমপক্ষে ৩০% খেললেই স্কোর আসবে। নিচে UI উন্নতির প্রস্তাবগুলো দেওয়া হলো — যেগুলো চান বেছে নিন।
 
-## 1. Home / Overview
-- Month switcher as a swipeable pill row (prev / current / next) right under the header, instead of a dropdown.
-- "This Month at a glance" strip: matches played, current leader, days left in month.
-- Count-up animation on Fund and stat numbers when a month changes.
+## ১. হোম / Overview
+- মাস বদলানোর জন্য ড্রপডাউনের বদলে হেডারের নিচে সোয়াইপ করা যায় এমন পিল (আগের / চলতি / পরের মাস)।
+- "এই মাস এক নজরে" স্ট্রিপ: কয়টা ম্যাচ হয়েছে, এখন কে এগিয়ে, মাস শেষ হতে কত দিন বাকি।
+- মাস বদলালে Fund ও অন্যান্য সংখ্যা গুনে গুনে বাড়ার অ্যানিমেশন।
 
-## 2. Tabs and navigation
-- Sticky tab bar (Overview, Matches, Money, Due, Insights, Ranking) that stays visible while scrolling, with icons.
-- Swipe left/right between tabs on mobile.
-- Bigger center "+" button in the bottom bar opening a sheet: Add Match, Add Expense, Add Payment.
+## ২. ট্যাব ও নেভিগেশন
+- ট্যাব বার (Overview, Matches, Money, Due, Insights, Ranking) স্ক্রল করলেও উপরে আটকে থাকবে, সাথে আইকন।
+- মোবাইলে ডানে-বামে সোয়াইপ করে ট্যাব বদলানো।
+- নিচের বারে মাঝখানে বড় "+" বাটন — চাপলে Add Match, Add Expense, Add Payment একসাথে আসবে।
 
-## 3. Player Ranking
-- Top-3 podium card (gold / silver / bronze) with avatars above the list.
-- Progress bar for players not yet eligible: "4 / 6 matches to qualify".
-- Collapsible "How it's calculated" box so it doesn't take space.
+## ৩. Player Ranking
+- তালিকার উপরে সেরা ৩ জনের পোডিয়াম কার্ড (সোনা / রুপা / ব্রোঞ্জ) ছবিসহ।
+- যারা এখনো যোগ্য হয়নি তাদের জন্য প্রগ্রেস বার: "৪ / ৬ ম্যাচ খেলা হয়েছে"।
+- "কিভাবে হিসাব হয়" বক্সটা ভাঁজ করে রাখা যাবে, জায়গা কম নেবে।
 
-## 4. Due & Payment
-- Colored status per player: Due (red), Clear (green), Advance (blue) with a single summary bar.
-- Tap a player to expand their ledger instead of showing everything at once.
+## ৪. Due ও Payment
+- প্রতি খেলোয়াড়ের রঙিন অবস্থা: বকেয়া (লাল), পরিশোধিত (সবুজ), অগ্রিম (নীল), উপরে একটা সারসংক্ষেপ বার।
+- খেলোয়াড়ের নামে ট্যাপ করলে তার হিসাবের বিস্তারিত খুলবে — সব একসাথে দেখাবে না।
 
-## 5. Matches / History
-- Group matches by day with date headers ("Today", "Yesterday", "12 Oct").
-- Compact match card: winner avatar large, others small with position colors.
-- Filter chips: by player, by position.
+## ৫. Matches / History
+- দিন অনুযায়ী ম্যাচ সাজানো, উপরে তারিখের শিরোনাম ("আজ", "গতকাল", "১২ অক্টোবর")।
+- ছোট ও পরিষ্কার ম্যাচ কার্ড: বিজয়ীর ছবি বড়, বাকিরা ছোট — পজিশনের রঙে।
+- ফিল্টার চিপ: খেলোয়াড় ও পজিশন অনুযায়ী।
 
-## 6. Head to Head / Insights
-- Side-by-side player cards with avatars, a "VS" badge, and win bars.
-- Chart cards with a small legend and empty-state illustration when a month has no data.
+## ৬. Head to Head / Insights
+- দুই খেলোয়াড়ের কার্ড পাশাপাশি, মাঝে "VS" ব্যাজ ও জয়ের বার।
+- চার্টে ছোট লেজেন্ড; কোনো মাসে ডেটা না থাকলে সুন্দর খালি-অবস্থার ছবি।
 
-## 7. General polish
-- Consistent empty states with the Ludu King crest ("No matches yet this month").
-- Player profile page: tap any name to see that player's month stats.
-- Unified spacing and card sizes across all pages.
+## ৭. সাধারণ পলিশ
+- সব জায়গায় একই রকম খালি-অবস্থা, Ludu King লোগোসহ ("এই মাসে এখনো কোনো ম্যাচ হয়নি")।
+- খেলোয়াড় প্রোফাইল পেজ: যেকোনো নামে ট্যাপ করলে সেই খেলোয়াড়ের মাসের হিসাব।
+- সব পেজে কার্ডের আকার ও ফাঁকা জায়গা একরকম করা।
 
-## Suggested order
-1. Ranking podium + progress bars (3)
-2. Sticky tabs + center "+" button (2)
-3. Due status colors + expandable ledger (4)
-4. History grouping (5), then the rest
+## প্রস্তাবিত ক্রম
+১. Ranking পোডিয়াম + প্রগ্রেস বার (৩)
+২. আটকে থাকা ট্যাব + মাঝের "+" বাটন (২)
+৩. Due-র রঙিন অবস্থা + খোলা যায় এমন হিসাব (৪)
+৪. History সাজানো (৫), তারপর বাকিগুলো
 
 ## Technical notes
-- Frontend-only changes in src/routes/index.tsx, history.tsx, BottomNavBar, plus small new components under src/components/ludu.
-- No database changes; existing design tokens reused.
+- শুধু দেখার অংশে পরিবর্তন: src/routes/index.tsx, history.tsx, BottomNavBar এবং src/components/ludu-তে কিছু নতুন ছোট কম্পোনেন্ট।
+- ডাটাবেসে কোনো পরিবর্তন নেই; বর্তমান রঙ ও ডিজাইন টোকেনই ব্যবহার হবে।
