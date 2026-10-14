@@ -389,7 +389,7 @@ function Dashboard() {
           <button
             aria-label="Previous month"
             disabled={!!selectedDate || selectedMonth === "All-Time" || availableMonths.indexOf(selectedMonth) >= availableMonths.length - 1}
-            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i + 1]); }}
+            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i + 1] ?? selectedMonth); }}
             className="flex items-center justify-center rounded-2xl border-2 border-muted bg-card px-3 active-scale disabled:opacity-30"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -458,7 +458,7 @@ function Dashboard() {
           <button
             aria-label="Next month"
             disabled={!!selectedDate || selectedMonth === "All-Time" || availableMonths.indexOf(selectedMonth) <= 0}
-            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i - 1]); }}
+            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i - 1] ?? selectedMonth); }}
             className="flex items-center justify-center rounded-2xl border-2 border-muted bg-card px-3 active-scale disabled:opacity-30"
           >
             <ChevronRight className="h-5 w-5" />
@@ -1232,7 +1232,7 @@ function Dashboard() {
               {bestPlayer && (() => {
                 const top = playerRankings.filter(r => r.eligible && r.matches > 0).slice(0, 3);
                 const order = [top[1], top[0], top[2]];
-                const styles = [
+                const styles: { h: string; ring: string; bg: string; medal: string }[] = [
                   { h: "h-16", ring: "ring-muted-foreground/60", bg: "from-muted-foreground/25 to-muted-foreground/5", medal: "🥈" },
                   { h: "h-24", ring: "ring-ludu-gold", bg: "from-ludu-gold/35 to-ludu-gold/5", medal: "👑" },
                   { h: "h-12", ring: "ring-ludu-red/60", bg: "from-ludu-red/25 to-ludu-red/5", medal: "🥉" },
