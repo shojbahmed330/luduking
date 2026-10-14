@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useMemo, useRef } from "react";
+import brandLogo from "@/assets/ludu-king-logo.png";
 import { fireChampionConfetti } from "@/lib/confetti";
 import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, eachMonthOfInterval } from "date-fns";
@@ -1070,6 +1071,12 @@ function Dashboard() {
             <div className="rounded-3xl bg-card p-6 card-shadow border-2 border-muted">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">1st Place Wins (Count)</h3>
               <div className="h-[200px] w-full">
+                {matches.length === 0 ? (
+                  <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-muted">
+                    <img src={brandLogo} alt="" className="h-16 w-16 object-contain opacity-60" />
+                    <p className="text-xs font-bold text-muted-foreground">No matches this month yet</p>
+                  </div>
+                ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={winRateTrendData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.08)" />
@@ -1102,6 +1109,7 @@ function Dashboard() {
                     ))}
                   </LineChart>
                 </ResponsiveContainer>
+                )}
               </div>
             </div>
 
@@ -1156,9 +1164,8 @@ function Dashboard() {
                           </div>
                         </div>
 
-                        <div className="flex flex-col items-center">
-                          <span className="text-[10px] font-black text-muted-foreground uppercase tracking-tighter mb-1">VS</span>
-                          <div className="h-0.5 w-12 bg-muted rounded-full" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-ludu-gold to-ludu-red text-sm font-black text-white shadow-lg shadow-ludu-gold/30 ring-4 ring-card">
+                          VS
                         </div>
 
                         <div className="text-center space-y-2">

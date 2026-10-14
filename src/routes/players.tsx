@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
 import { ArrowLeft, UserPlus, Pencil, Trash2, Check, X, Users, Archive, ArchiveRestore } from "lucide-react";
@@ -192,7 +192,7 @@ function PlayersPage() {
                 />
               ) : (
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-foreground truncate">{player.name}</p>
+                  <Link to="/player/$playerId" params={{ playerId: player.id }} className="block font-black text-foreground truncate hover:text-ludu-gold">{player.name}</Link>
                   <p className="text-[11px] font-bold text-muted-foreground">
                     {stats[player.id]?.matches || 0} matches · {stats[player.id]?.fines || 0} ৳ fines
                   </p>

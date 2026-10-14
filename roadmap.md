@@ -8,7 +8,7 @@
 - [x] Overview "at a glance" strip
 
 ## Next
-- [ ] History grouped by day + filter chips
-- [ ] Head-to-Head VS cards, chart empty states
+- [x] History grouped by day + filter chips
+- [x] Head-to-Head VS cards, chart empty states
 - [ ] Swipe between tabs, count-up numbers
-- [ ] Player profile page
+- [x] Player profile page
