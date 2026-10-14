@@ -1,10 +1,14 @@
-# Roadmap — UI/UX Polish (D) + Player Archive (E)
+# Roadmap — UI উন্নতি (Oct 2026)
 
-## Tasks
-- [x] Migration: players.is_archived boolean (default false)
-- [x] players.tsx: archive/unarchive toggle (admin), archived section
-- [x] Filter archived players out of add-match
-- [x] Skeleton loading cards matching dashboard layout
-- [x] Online/offline banner in __root (navigator.onLine)
-- [x] Confetti on match save / payment save / champion announcement
-- [x] Verify: tsgo + build log
+## Done
+- [x] Ranking 30% participation
+- [x] Podium, progress bars, collapsible how-it-works
+- [x] Sticky tabs, prev/next month arrows, center "+" add menu
+- [x] Due status summary bar
+- [x] Overview "at a glance" strip
+
+## Next
+- [ ] History grouped by day + filter chips
+- [ ] Head-to-Head VS cards, chart empty states
+- [ ] Swipe between tabs, count-up numbers
+- [ ] Player profile page

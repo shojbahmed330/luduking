@@ -389,7 +389,7 @@ function Dashboard() {
           <button
             aria-label="Previous month"
             disabled={!!selectedDate || selectedMonth === "All-Time" || availableMonths.indexOf(selectedMonth) >= availableMonths.length - 1}
-            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i + 1]); }}
+            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i + 1] ?? selectedMonth); }}
             className="flex items-center justify-center rounded-2xl border-2 border-muted bg-card px-3 active-scale disabled:opacity-30"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -458,7 +458,7 @@ function Dashboard() {
           <button
             aria-label="Next month"
             disabled={!!selectedDate || selectedMonth === "All-Time" || availableMonths.indexOf(selectedMonth) <= 0}
-            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i - 1]); }}
+            onClick={() => { const i = availableMonths.indexOf(selectedMonth); setSelectedMonth(availableMonths[i - 1] ?? selectedMonth); }}
             className="flex items-center justify-center rounded-2xl border-2 border-muted bg-card px-3 active-scale disabled:opacity-30"
           >
             <ChevronRight className="h-5 w-5" />
@@ -1232,7 +1232,7 @@ function Dashboard() {
               {bestPlayer && (() => {
                 const top = playerRankings.filter(r => r.eligible && r.matches > 0).slice(0, 3);
                 const order = [top[1], top[0], top[2]];
-                const styles = [
+                const styles: { h: string; ring: string; bg: string; medal: string }[] = [
                   { h: "h-16", ring: "ring-muted-foreground/60", bg: "from-muted-foreground/25 to-muted-foreground/5", medal: "🥈" },
                   { h: "h-24", ring: "ring-ludu-gold", bg: "from-ludu-gold/35 to-ludu-gold/5", medal: "👑" },
                   { h: "h-12", ring: "ring-ludu-red/60", bg: "from-ludu-red/25 to-ludu-red/5", medal: "🥉" },
@@ -1244,23 +1244,23 @@ function Dashboard() {
                         {selectedDate ? "Best of the Day" : selectedMonth === "All-Time" ? "Best Players (All Time)" : `Best of ${selectedMonth}`}
                       </p>
                       <div className="grid grid-cols-3 items-end gap-2">
-                        {order.map((p, i) => (
+                        {order.map((p, i) => { const st = styles[i]!; return (
                           <div key={i} className="flex flex-col items-center gap-1.5 min-w-0">
                             {p ? (
                               <>
-                                <span className="text-lg">{styles[i].medal}</span>
-                                <PlayerAvatar name={p.name} size={i === 1 ? "lg" : "md"} className={cn("ring-4 ring-offset-2 ring-offset-card", styles[i].ring)} />
+                                <span className="text-lg">{st.medal}</span>
+                                <PlayerAvatar name={p.name} size={i === 1 ? "lg" : "md"} className={cn("ring-4 ring-offset-2 ring-offset-card", st.ring)} />
                                 <p className="text-xs font-black truncate max-w-full">{p.name}</p>
                                 <p className="text-[10px] font-black text-ludu-gold">{p.avgPoints.toFixed(2)} pts</p>
-                                <div className={cn("w-full rounded-t-2xl bg-gradient-to-b flex items-start justify-center pt-1.5", styles[i].h, styles[i].bg)}>
+                                <div className={cn("w-full rounded-t-2xl bg-gradient-to-b flex items-start justify-center pt-1.5", st.h, st.bg)}>
                                   <span className="text-sm font-black text-foreground/80">{p.rank}</span>
                                 </div>
                               </>
                             ) : (
-                              <div className={cn("w-full rounded-t-2xl bg-muted/10", styles[i].h)} />
+                              <div className={cn("w-full rounded-t-2xl bg-muted/10", st.h)} />
                             )}
                           </div>
-                        ))}
+                        );})}
                       </div>
                     </CardContent>
                   </Card>
