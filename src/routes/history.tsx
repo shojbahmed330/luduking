@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay } from "date-fns";
+import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay, isToday, isYesterday } from "date-fns";
 import { 
   History as HistoryIcon, 
   Calendar, 
@@ -63,6 +63,7 @@ function HistoryPage() {
   const [players, setPlayers] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [playerFilter, setPlayerFilter] = useState<string | null>(null);
   
   // Delete dialog state
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: Tab; id: string } | null>(null);
@@ -106,9 +107,9 @@ function HistoryPage() {
       result = matches.filter(m => isWithinInterval(parseISO(m.match_date), { start, end }));
     }
     
-    // Further group by day to show daily sectioning
+    if (playerFilter) result = result.filter(m => m.match_results?.some((r: any) => r.player_id === playerFilter));
     return result;
-  }, [matches, selectedMonth]);
+  }, [matches, selectedMonth, selectedDate, playerFilter]);
 
   const filteredExpenses = useMemo(() => {
     let result = expenses;
@@ -317,6 +318,22 @@ function HistoryPage() {
 
       {/* List Content */}
       <div className="space-y-4">
+        {activeTab === "matches" && players.length > 0 && (
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+            {[{ id: null, name: "All" }, ...players].map((p: any) => (
+              <button
+                key={p.id ?? "all"}
+                onClick={() => setPlayerFilter(p.id)}
+                className={cn(
+                  "shrink-0 rounded-full border-2 px-3 py-1.5 text-[11px] font-black active-scale",
+                  playerFilter === p.id ? "border-ludu-gold bg-ludu-gold text-white" : "border-muted bg-card text-muted-foreground"
+                )}
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        )}
         {activeTab === "matches" ? (
           filteredMatches.length === 0 ? (
             <div className="rounded-3xl bg-card p-12 text-center border-2 border-dashed border-muted">
@@ -337,7 +354,7 @@ function HistoryPage() {
                 <div className="flex items-center gap-2 px-1 sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2">
                   <div className="h-px flex-1 bg-muted" />
                   <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/40 px-2 py-0.5 rounded-full">
-                    {format(parseISO(day), "EEEE, MMM d")}
+                    {isToday(parseISO(day)) ? "Today" : isYesterday(parseISO(day)) ? "Yesterday" : format(parseISO(day), "EEEE, MMM d")}
                   </span>
                   <div className="h-px flex-1 bg-muted" />
                 </div>
@@ -423,7 +440,7 @@ function HistoryPage() {
                 <div className="flex items-center gap-2 px-1 sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2">
                   <div className="h-px flex-1 bg-muted" />
                   <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/40 px-2 py-0.5 rounded-full">
-                    {format(parseISO(day), "EEEE, MMM d")}
+                    {isToday(parseISO(day)) ? "Today" : isYesterday(parseISO(day)) ? "Yesterday" : format(parseISO(day), "EEEE, MMM d")}
                   </span>
                   <div className="h-px flex-1 bg-muted" />
                 </div>
@@ -502,7 +519,7 @@ function HistoryPage() {
                 <div className="flex items-center gap-2 px-1 sticky top-0 bg-background/95 backdrop-blur-sm z-10 py-2">
                   <div className="h-px flex-1 bg-muted" />
                   <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest bg-muted/40 px-2 py-0.5 rounded-full">
-                    {format(parseISO(day), "EEEE, MMM d")}
+                    {isToday(parseISO(day)) ? "Today" : isYesterday(parseISO(day)) ? "Yesterday" : format(parseISO(day), "EEEE, MMM d")}
                   </span>
                   <div className="h-px flex-1 bg-muted" />
                 </div>

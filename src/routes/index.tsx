@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useMemo, useRef } from "react";
+import brandLogo from "@/assets/ludu-king-logo.png";
 import { fireChampionConfetti } from "@/lib/confetti";
 import { motion } from "framer-motion";
 import { format, parseISO, startOfMonth, endOfMonth, isWithinInterval, isSameDay, subMonths, eachMonthOfInterval } from "date-fns";
@@ -1070,7 +1071,7 @@ function Dashboard() {
             <div className="rounded-3xl bg-card p-6 card-shadow border-2 border-muted">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">1st Place Wins (Count)</h3>
               <div className="h-[200px] w-full">
-                {winRateTrendData.length === 0 ? (
+                {matches.length === 0 ? (
                   <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-muted">
                     <img src={brandLogo} alt="" className="h-16 w-16 object-contain opacity-60" />
                     <p className="text-xs font-bold text-muted-foreground">No matches this month yet</p>
