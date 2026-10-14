@@ -1244,23 +1244,23 @@ function Dashboard() {
                         {selectedDate ? "Best of the Day" : selectedMonth === "All-Time" ? "Best Players (All Time)" : `Best of ${selectedMonth}`}
                       </p>
                       <div className="grid grid-cols-3 items-end gap-2">
-                        {order.map((p, i) => (
+                        {order.map((p, i) => { const st = styles[i]!; return (
                           <div key={i} className="flex flex-col items-center gap-1.5 min-w-0">
                             {p ? (
                               <>
-                                <span className="text-lg">{styles[i].medal}</span>
-                                <PlayerAvatar name={p.name} size={i === 1 ? "lg" : "md"} className={cn("ring-4 ring-offset-2 ring-offset-card", styles[i].ring)} />
+                                <span className="text-lg">{st.medal}</span>
+                                <PlayerAvatar name={p.name} size={i === 1 ? "lg" : "md"} className={cn("ring-4 ring-offset-2 ring-offset-card", st.ring)} />
                                 <p className="text-xs font-black truncate max-w-full">{p.name}</p>
                                 <p className="text-[10px] font-black text-ludu-gold">{p.avgPoints.toFixed(2)} pts</p>
-                                <div className={cn("w-full rounded-t-2xl bg-gradient-to-b flex items-start justify-center pt-1.5", styles[i].h, styles[i].bg)}>
+                                <div className={cn("w-full rounded-t-2xl bg-gradient-to-b flex items-start justify-center pt-1.5", st.h, st.bg)}>
                                   <span className="text-sm font-black text-foreground/80">{p.rank}</span>
                                 </div>
                               </>
                             ) : (
-                              <div className={cn("w-full rounded-t-2xl bg-muted/10", styles[i].h)} />
+                              <div className={cn("w-full rounded-t-2xl bg-muted/10", st.h)} />
                             )}
                           </div>
-                        ))}
+                        );})}
                       </div>
                     </CardContent>
                   </Card>
