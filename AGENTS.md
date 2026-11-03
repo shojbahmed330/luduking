@@ -10,3 +10,7 @@
 <!-- LOVABLE:END -->
 
 Use the uploaded transparent Ludu King crest as the single source for app branding; derive PWA and favicon PNGs from it so the installed icon and in-app identity stay consistent.
+
+Keep dashboard swipe recognition separate from data logic and exclude charts, controls, vertical scrolling and browser edges to prevent accidental navigation.
+Use AnimatedNumber for count-up presentation only; calculations always use unanimated source values.
+Player participation switches update only is_irregular through the authenticated client; existing admin-only RLS enforces access and preserves history.

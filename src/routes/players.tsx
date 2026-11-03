@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { Switch } from "@/components/ui/switch";
 
 export const Route = createFileRoute("/players")({
   head: () => ({
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/players")({
   component: PlayersPage,
 });
 
-type Player = { id: string; name: string; created_at: string; is_archived?: boolean | null };
+type Player = { id: string; name: string; created_at: string; is_archived?: boolean | null; is_irregular?: boolean | null };
 type Stat = { matches: number; fines: number };
 
 function PlayersPage() {
@@ -41,6 +42,16 @@ function PlayersPage() {
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
+  const [statusSaving, setStatusSaving] = useState<string | null>(null);
+  const handleRegularChange = async (player: Player, regular: boolean) => {
+    if (!isAdmin || statusSaving) return;
+    setStatusSaving(player.id);
+    const { data, error } = await supabase.from("players").update({ is_irregular: !regular }).eq("id", player.id).select("id, is_irregular").single();
+    setStatusSaving(null);
+    if (error || !data) { toast.error("Could not update player status"); return; }
+    setPlayers(current => current.map(p => p.id === player.id ? { ...p, is_irregular: data.is_irregular } : p));
+    toast.success(`${player.name} is now ${regular ? "regular" : "irregular"}`);
+  };
 
   const load = async () => {
     const [{ data: playerData }, { data: resultData }] = await Promise.all([
@@ -180,7 +191,7 @@ function PlayersPage() {
           {!loading && activePlayers.map((player) => (
             <div
               key={player.id}
-              className="flex items-center gap-3 rounded-3xl border-2 border-muted bg-card p-3 card-shadow"
+              className="flex flex-wrap items-center gap-3 rounded-3xl border-2 border-muted bg-card p-3 card-shadow"
             >
               <PlayerAvatar name={player.name} size="sm" />
               {editingId === player.id ? (
@@ -244,6 +255,10 @@ function PlayersPage() {
                   )}
                 </div>
               )}
+              <div className="flex w-full items-center justify-between border-t border-muted pt-2">
+                <span className="text-xs font-bold text-muted-foreground">{player.is_irregular ? "Irregular" : "Regular"}</span>
+                {isAdmin && <Switch aria-label={`Regular player: ${player.name}`} checked={!player.is_irregular} disabled={statusSaving !== null} onCheckedChange={regular => handleRegularChange(player, regular)} />}
+              </div>
             </div>
           ))}
         </div>
