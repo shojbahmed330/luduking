@@ -47,6 +47,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { computeDues, type DuePayment } from "@/lib/dues";
 import { computeRanking, getBestPlayer, POSITION_POINTS, MIN_MATCH_RATIO } from "@/lib/ranking";
+import { useDashboardSwipe } from "@/hooks/useDashboardSwipe";
+import { type DashboardTab } from "@/lib/dashboard-swipe";
+import { AnimatedNumber } from "@/components/ludu/AnimatedNumber";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -83,7 +86,12 @@ function Dashboard() {
     format(new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" })), "MMMM yyyy"),
   );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<"overview" | "matches" | "leaderboard" | "money" | "chanasta" | "dues" | "analytics">("overview");
+  const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
+  const swipeHandlers = useDashboardSwipe(activeTab, setActiveTab);
+  const tabBarRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    tabBarRef.current?.querySelector(`[data-tab="${activeTab}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "auto" });
+  }, [activeTab]);
   const [loading, setLoading] = useState(true);
   const [moneyView, setMoneyView] = useState<"total" | "daily">("total");
   const [comparisonPlayer1Id, setComparisonPlayer1Id] = useState<string | null>(null);
@@ -470,7 +478,7 @@ function Dashboard() {
 
       {/* Tabs Navigation */}
       <div className="sticky top-0 z-40 -mx-1 px-1 py-2 bg-background/95 backdrop-blur-md">
-      <div className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar">
+      <div ref={tabBarRef} className="relative flex p-1 bg-muted/30 rounded-2xl shrink-0 overflow-x-auto no-scrollbar" role="tablist" aria-label="Dashboard sections">
         <div 
           className="absolute h-[calc(100%-8px)] bg-card rounded-xl shadow-sm ring-1 ring-white/10 transition-all duration-300 ease-out z-0"
           style={{
@@ -489,6 +497,10 @@ function Dashboard() {
         ].map((tab) => (
           <button
             key={tab.id}
+            data-tab={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            aria-controls="dashboard-panel"
             onClick={() => setActiveTab(tab.id as any)}
             className={cn(
               "relative z-10 flex-1 min-w-[60px] flex flex-col items-center justify-center gap-1 px-1 py-2.5 rounded-xl text-[10px] font-black transition-all active-scale",
@@ -505,7 +517,7 @@ function Dashboard() {
       </div>
 
       {/* Tab Content */}
-      <div className="min-h-[400px]">
+      <div id="dashboard-panel" role="tabpanel" aria-label={activeTab} className="min-h-[400px]" {...swipeHandlers}>
         {activeTab === 'overview' && (
           <motion.div 
             key="overview"
@@ -521,7 +533,7 @@ function Dashboard() {
               </div>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Current Fund Balance</p>
               <p className="mt-1 text-4xl font-black tracking-tight text-ludu-gold">
-                {allTimeBalance} <span className="text-xl">৳</span>
+                <AnimatedNumber value={allTimeBalance} /> <span className="text-xl">৳</span>
               </p>
               <p className="mt-1 text-[11px] font-bold text-muted-foreground">All-Time · Fines − Expenses</p>
             </div>
@@ -534,7 +546,7 @@ function Dashboard() {
               return (
                 <div className="grid grid-cols-3 gap-2 rounded-3xl border-2 border-muted bg-card p-3 card-shadow text-center">
                   <div>
-                    <p className="text-lg font-black text-foreground">{periodStats.matchCount}</p>
+                    <p className="text-lg font-black text-foreground"><AnimatedNumber value={periodStats.matchCount} /></p>
                     <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Matches</p>
                   </div>
                   <div className="min-w-0 border-x border-muted">
@@ -1070,7 +1082,7 @@ function Dashboard() {
             {/* Win Rate Trend Chart */}
             <div className="rounded-3xl bg-card p-6 card-shadow border-2 border-muted">
               <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-6">1st Place Wins (Count)</h3>
-              <div className="h-[200px] w-full">
+              <div className="h-[200px] w-full" data-no-swipe>
                 {matches.length === 0 ? (
                   <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-muted">
                     <img src={brandLogo} alt="" className="h-16 w-16 object-contain opacity-60" />

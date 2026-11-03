@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { AnimatedNumber } from "./AnimatedNumber";
 
 interface StatCardProps {
   label: string;
@@ -53,7 +54,7 @@ export function StatCard({ label, value, icon, className, subValue, trend, varia
             </div>
           )}
           <div className="flex flex-col items-center">
-            <div className="text-2xl font-black text-foreground tracking-tight">{value}</div>
+            <div className="text-2xl font-black text-foreground tracking-tight"><AnimatedNumber value={value} /></div>
             {subValue && (
               <div className="text-[10px] font-black text-muted-foreground -mt-1 mb-1">
                 {subValue}
