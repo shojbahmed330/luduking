@@ -952,6 +952,7 @@ function Dashboard() {
               </div>
               <Link
                 to="/add-payment"
+                search={{ month: selectedMonth === "All-Time" ? undefined : format(new Date(selectedMonth), "yyyy-MM") }}
                 className="rounded-2xl bg-ludu-green text-white px-4 py-2.5 text-xs font-black shadow-lg shadow-ludu-green/20 active-scale"
               >
                 + Payment
@@ -1052,7 +1053,7 @@ function Dashboard() {
                         )}
                         <Link
                           to="/add-payment"
-                          search={{ playerId: player.id }}
+                          search={{ playerId: player.id, month: selectedMonth === "All-Time" ? undefined : format(new Date(selectedMonth), "yyyy-MM") }}
                           className="mt-2 flex w-full items-center justify-center rounded-2xl bg-ludu-green text-white font-black py-3 text-sm shadow-lg shadow-ludu-green/20 active-scale"
                         >
                           {player.due > 0 ? `Pay ${player.due} ৳` : "Add Advance Payment"}
