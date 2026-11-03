@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useState, useEffect, useMemo } from "react";
-import { format } from "date-fns";
+import { format, endOfMonth } from "date-fns";
 import { Wallet, Calendar, ArrowLeft, Check } from "lucide-react";
 import { PrimaryButton } from "@/components/ludu/PrimaryButton";
 import { PlayerAvatar } from "@/components/ludu/PlayerAvatar";
@@ -16,6 +16,7 @@ import { z } from "zod";
 const paymentSearchSchema = z.object({
   editId: z.string().optional(),
   playerId: z.string().optional(),
+  month: z.string().regex(/^\d{4}-\d{2}$/).optional(),
 });
 
 export const Route = createFileRoute("/add-payment")({
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/add-payment")({
 
 function AddPayment() {
   const navigate = useNavigate();
-  const { editId, playerId } = useSearch({ from: "/add-payment" });
+  const { editId, playerId, month } = useSearch({ from: "/add-payment" });
 
   const [players, setPlayers] = useState<any[]>([]);
   const [matches, setMatches] = useState<any[]>([]);
@@ -43,7 +44,12 @@ function AddPayment() {
   const [payments, setPayments] = useState<any[]>([]);
 
   const [selectedPlayerId, setSelectedPlayerId] = useState<string>(playerId || "");
-  const [date, setDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const todayDhaka = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Dhaka" }).slice(0, 10);
+  // Paying for a past month: record the payment on that month's last day so it settles that month's due.
+  const defaultDate = month && month !== todayDhaka.slice(0, 7)
+    ? format(endOfMonth(new Date(`${month}-01T00:00:00`)), "yyyy-MM-dd")
+    : todayDhaka;
+  const [date, setDate] = useState(defaultDate);
   const [amount, setAmount] = useState<string>("");
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,15 +84,15 @@ function AddPayment() {
     load();
   }, [editId]);
 
-  // Dues reset every month (Bangladesh time): only the current month counts.
+  // Dues are per month: use the month of the payment date (e.g. October payment settles October due).
+  const monthKey = date.slice(0, 7);
   const dues = useMemo(() => {
-    const monthKey = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Dhaka" }).slice(0, 7);
     const mMatches = matches.filter((m: { match_date: string }) => m.match_date.startsWith(monthKey));
     const ids = new Set(mMatches.map((m: { id: string }) => m.id));
     const mResults = matchResults.filter((r: { match_id: string }) => ids.has(r.match_id));
     const mPayments = payments.filter((p: { paid_date: string }) => p.paid_date.startsWith(monthKey));
     return computeDues(players, mMatches, mResults, mPayments);
-  }, [players, matches, matchResults, payments]);
+  }, [players, matches, matchResults, payments, monthKey]);
 
   const selectedDue = dues.find((d) => d.id === selectedPlayerId);
   // When editing, the old amount is already counted as paid — add it back.
@@ -204,6 +210,9 @@ function AddPayment() {
           <div className="space-y-2">
             <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2 px-1">
               <Calendar className="h-3.5 w-3.5" /> Payment Date
+              <span className="ml-auto text-ludu-gold normal-case tracking-normal">
+                Due of {format(new Date(`${monthKey}-01T00:00:00`), "MMMM yyyy")}
+              </span>
             </label>
             <input
               type="date"
