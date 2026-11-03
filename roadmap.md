@@ -11,4 +11,5 @@
 - [x] History grouped by day + filter chips
 - [x] Head-to-Head VS cards, chart empty states
 - [ ] Swipe between tabs, count-up numbers
+- [ ] Admin regular/irregular control; preserve all existing records
 - [x] Player profile page
